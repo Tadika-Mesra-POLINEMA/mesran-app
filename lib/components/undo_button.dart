@@ -3,22 +3,28 @@ import 'package:mesran_app/themes.dart';
 
 class UndoButton extends StatelessWidget {
   final VoidCallback onPressed;
+  final String? label;
 
-  const UndoButton({super.key, required this.onPressed});
+  const UndoButton({super.key, required this.onPressed, this.label});
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-        onPressed: () => onPressed(),
-        style: ElevatedButton.styleFrom(
-            shape: const CircleBorder(),
-            padding: const EdgeInsets.all(2),
-            shadowColor: Colors.transparent,
-            side: BorderSide(color: neutral20),
-            backgroundColor: white),
-        child: Icon(
-          Icons.chevron_left,
-          color: neutralBase,
-        ));
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        decoration: BoxDecoration(
+          color: white,
+          shape: BoxShape.circle,
+          border: Border.all(color: neutral20),
+        ),
+        child: Center(
+          child: Icon(
+            Icons.chevron_left,
+            color: neutralBase,
+            size: 32,
+          ),
+        ),
+      ),
+    );
   }
 }

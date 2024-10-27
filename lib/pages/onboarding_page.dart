@@ -41,7 +41,12 @@ class OnboardingPage extends StatelessWidget {
                     style: headingOneMedium.copyWith(color: white),
                   ),
                   Text(
-                    'Selamat datang di Mesran! Kami senang Anda bergabung dengan kami.',
+                    'Selamat datang di Mesran! Kami senang Anda',
+                    style: titleOneLight.copyWith(color: white),
+                    textAlign: TextAlign.center,
+                  ),
+                  Text(
+                    'bergabung dengan kami.',
                     style: titleOneLight.copyWith(color: white),
                     textAlign: TextAlign.center,
                   ),
