@@ -1,8 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:mesran_app/themes.dart';
+import 'package:mesran_app/utils/icons.dart';
+import 'package:mesran_app/utils/themes.dart';
 
-class BottomNavigation extends StatelessWidget {
+class BottomNavigation extends StatefulWidget {
   const BottomNavigation({super.key});
+
+  @override
+  State<BottomNavigation> createState() => _BottomNavigationState();
+}
+
+class _BottomNavigationState extends State<BottomNavigation> {
+  String path = "home";
+
+  void _setCurrentPath(String newPath) {
+    setState(() {
+      path = newPath;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,57 +34,65 @@ class BottomNavigation extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.home_outlined,
-                  color: primaryBase,
-                ),
-                Text(
-                  'Beranda ',
-                  style: titleTwoMedium.copyWith(color: primaryBase),
-                ),
-              ],
+            InkWell(
+              onTap: () => _setCurrentPath('home'),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  home.copyWith(
+                      color: path == "home" ? primaryBase : neutral40),
+                  Text(
+                    'Beranda ',
+                    style: titleTwoMedium.copyWith(
+                        color: path == "home" ? primaryBase : neutral40),
+                  ),
+                ],
+              ),
             ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.assignment_outlined,
-                  color: neutral40,
-                ),
-                Text(
-                  'Acara',
-                  style: titleTwoMedium.copyWith(color: neutral40),
-                ),
-              ],
+            InkWell(
+              onTap: () => _setCurrentPath('event'),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  document.copyWith(
+                      color: path == "event" ? primaryBase : neutral40),
+                  Text(
+                    'Acara',
+                    style: titleTwoMedium.copyWith(
+                        color: path == "event" ? primaryBase : neutral40),
+                  ),
+                ],
+              ),
             ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.chat_bubble_outline,
-                  color: neutral40,
-                ),
-                Text(
-                  'Pesan',
-                  style: titleTwoMedium.copyWith(color: neutral40),
-                ),
-              ],
+            InkWell(
+              onTap: () => _setCurrentPath('message'),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  bubbleChat.copyWith(
+                      color: path == "message" ? primaryBase : neutral40),
+                  Text(
+                    'Pesan',
+                    style: titleTwoMedium.copyWith(
+                        color: path == "message" ? primaryBase : neutral40),
+                  ),
+                ],
+              ),
             ),
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(
-                  Icons.person_outline,
-                  color: neutral40,
-                ),
-                Text(
-                  'Profil',
-                  style: titleTwoMedium.copyWith(color: neutral40),
-                ),
-              ],
+            InkWell(
+              onTap: () => _setCurrentPath('profile'),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  profile.copyWith(
+                      color: path == "profile" ? primaryBase : neutral40),
+                  Text(
+                    'Profil',
+                    style: titleTwoMedium.copyWith(
+                        color: path == "profile" ? primaryBase : neutral40),
+                  ),
+                ],
+              ),
             ),
           ],
         ),

@@ -4,7 +4,7 @@ import 'package:mesran_app/components/auth/register_bottom_bar.dart';
 import 'package:mesran_app/components/auth/register_form.dart';
 import 'package:mesran_app/components/undo_button.dart';
 import 'package:mesran_app/models/user.dart';
-import 'package:mesran_app/themes.dart';
+import 'package:mesran_app/utils/themes.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mesran_app/themes.dart';
+import 'package:mesran_app/utils/themes.dart';
 
 class CardTemplate extends StatelessWidget {
   const CardTemplate({super.key});

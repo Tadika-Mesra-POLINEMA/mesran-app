@@ -4,7 +4,7 @@ import 'package:mesran_app/components/auth/login_bottom_bar.dart';
 import 'package:mesran_app/components/auth/login_email_form.dart';
 import 'package:mesran_app/components/auth/login_phone_number_form.dart';
 import 'package:mesran_app/components/undo_button.dart';
-import 'package:mesran_app/themes.dart';
+import 'package:mesran_app/utils/themes.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -30,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.only(left: 16, top: 16),
           child: UndoButton(onPressed: () => context.pop()),
         ),
+        leadingWidth: double.infinity,
         backgroundColor: white,
         automaticallyImplyLeading: false,
       ),

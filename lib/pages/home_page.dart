@@ -1,8 +1,10 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:mesran_app/components/bottom_navigation.dart';
 import 'package:mesran_app/components/card_template.dart';
-import 'package:mesran_app/themes.dart';
+import 'package:mesran_app/utils/icons.dart';
+import 'package:mesran_app/utils/themes.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -23,10 +25,7 @@ class HomePage extends StatelessWidget {
                     'Halo, Selamat Datang!',
                     style: headingTwoSemiBold,
                   ),
-                  const Icon(
-                    Icons.notifications_outlined,
-                    size: 24,
-                  )
+                  bell.copyWith(color: neutralBase)
                 ]),
           )),
       body: SingleChildScrollView(
@@ -72,7 +71,7 @@ class HomePage extends StatelessWidget {
                               ),
                             ),
                             ElevatedButton(
-                                onPressed: () {},
+                                onPressed: () => context.push('/events/create'),
                                 style: ElevatedButton.styleFrom(
                                     backgroundColor: primaryBase),
                                 child: Padding(
