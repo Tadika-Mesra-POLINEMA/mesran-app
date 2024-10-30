@@ -18,7 +18,7 @@ class CreateEventPage extends StatelessWidget {
             label: 'Buat Acara',
           ),
         ),
-        leadingWidth: 150,
+        leadingWidth: double.infinity,
         backgroundColor: white,
         automaticallyImplyLeading: false,
       ),

@@ -8,6 +8,7 @@ import 'package:mesran_app/pages/event/create_activities_page.dart';
 import 'package:mesran_app/pages/event/create_event_page.dart';
 import 'package:mesran_app/pages/event/event_activities_page.dart';
 import 'package:mesran_app/pages/home_page.dart';
+import 'package:mesran_app/pages/notifikasi_page.dart';
 import 'package:mesran_app/pages/onboarding_page.dart';
 import 'package:mesran_app/pages/splash_screen.dart';
 
@@ -50,4 +51,8 @@ final List<GoRoute> routes = [
   GoRoute(
       path: '/events/activities/create',
       builder: (context, state) => const CreateActivitiesPage()),
+
+  // Notifikasi
+  GoRoute(path: '/notifications',
+  builder: (context, state) => const NotifikasiPage()),
 ];

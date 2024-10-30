@@ -41,7 +41,7 @@ class UndoButton extends StatelessWidget {
               const SizedBox(width: 8),
               Text(
                 label ?? '',
-                style: titleTwoSemiBold.copyWith(color: neutralBase),
+                style: headingTwoSemiBold.copyWith(color: neutralBase),
               ),
             ],
           ),

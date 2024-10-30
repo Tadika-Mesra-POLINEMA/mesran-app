@@ -25,7 +25,9 @@ class HomePage extends StatelessWidget {
                     'Halo, Selamat Datang!',
                     style: headingTwoSemiBold,
                   ),
-                  bell.copyWith(color: neutralBase)
+                  InkWell(
+                      onTap: () => context.push('/notifications'),
+                      child: bell.copyWith(color: neutralBase))
                 ]),
           )),
       body: SingleChildScrollView(
