@@ -11,6 +11,8 @@ import 'package:mesran_app/pages/home_page.dart';
 import 'package:mesran_app/pages/notifikasi_page.dart';
 import 'package:mesran_app/pages/onboarding_page.dart';
 import 'package:mesran_app/pages/splash_screen.dart';
+import 'package:mesran_app/pages/message/personal_message_page.dart';
+import 'package:mesran_app/pages/message/chat_detail_page.dart';
 
 final List<GoRoute> routes = [
   GoRoute(path: '/', builder: (context, state) => const SplashScreen()),
@@ -53,6 +55,12 @@ final List<GoRoute> routes = [
       builder: (context, state) => const CreateActivitiesPage()),
 
   // Notifikasi
-  GoRoute(path: '/notifications',
-  builder: (context, state) => const NotifikasiPage()),
+  GoRoute(
+      path: '/notifications',
+      builder: (context, state) => const NotifikasiPage()),
+  // Personal Message
+  GoRoute(path: '/message', builder: (context, state) => ChatPage()),
+  // Detail Message
+  GoRoute(
+      path: '/detailmessage', builder: (context, state) => ChatDetailPage()),
 ];
