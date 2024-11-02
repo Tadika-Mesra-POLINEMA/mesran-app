@@ -131,7 +131,13 @@ class ChatTabContent extends StatelessWidget {
               return ListTile(
                 leading: GestureDetector(
                   onTap: () {
-                    context.go('/profile'); // Navigate to the profile page
+                    if (isGroupChat) {
+                      context.go('/profileGroup');
+                      //'/groupDetailMessage/${chat.id}'); // Navigate to group detail page
+                    } else {
+                      context.go('/profile');
+                      //'/detailMessage/${chat.id}'); // Navigate to personal detail message page
+                    }
                   },
                   child: CircleAvatar(
                     backgroundImage: AssetImage(chat.profileImage),
