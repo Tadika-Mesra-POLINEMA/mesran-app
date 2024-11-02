@@ -8,6 +8,7 @@ import 'package:mesran_app/pages/event/create_activities_page.dart';
 import 'package:mesran_app/pages/event/create_event_page.dart';
 import 'package:mesran_app/pages/event/event_activities_page.dart';
 import 'package:mesran_app/pages/home_page.dart';
+import 'package:mesran_app/pages/message/chat_detail_grup_page.dart';
 import 'package:mesran_app/pages/message/profile_page.dart';
 import 'package:mesran_app/pages/notifikasi_page.dart';
 import 'package:mesran_app/pages/onboarding_page.dart';
@@ -60,13 +61,20 @@ final List<GoRoute> routes = [
   GoRoute(
       path: '/notifications',
       builder: (context, state) => const NotifikasiPage()),
-  // Personal Message
+
+  // Chat Pages
   GoRoute(path: '/message', builder: (context, state) => ChatPage()),
-  // Personal Message
   GoRoute(path: '/adamessage', builder: (context, state) => AdaChatPage()),
-  // Detail Message
+
+  // Detail Message Pribadi
   GoRoute(
-      path: '/detailmessage', builder: (context, state) => ChatDetailPage()),
-  // Detail Message
+      path: '/detailMessage', builder: (context, state) => ChatDetailPage()),
+
+  // Detail Message Group
+  GoRoute(
+      path: '/detailMessageGroup',
+      builder: (context, state) => GroupChatDetailPage()),
+
+  // Profile Page
   GoRoute(path: '/profile', builder: (context, state) => ProfilePage()),
 ];

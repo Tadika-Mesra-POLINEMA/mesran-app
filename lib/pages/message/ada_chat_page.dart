@@ -78,13 +78,13 @@ class AdaChatPage extends StatelessWidget {
                     Tab(
                       child: Text(
                         "Pribadi",
-                        style: titleOneMedium, // Apply your style here
+                        style: titleOneMedium,
                       ),
                     ),
                     Tab(
                       child: Text(
                         "Grup",
-                        style: titleOneMedium, // Apply your style here
+                        style: titleOneMedium,
                       ),
                     ),
                   ],
@@ -95,8 +95,8 @@ class AdaChatPage extends StatelessWidget {
         ),
         body: const TabBarView(
           children: [
-            ChatTabContent(),
-            Center(child: Text("Tidak ada percakapan grup")),
+            ChatTabContent(isGroupChat: false), // Personal chat
+            ChatTabContent(isGroupChat: true), // Group chat
           ],
         ),
         bottomNavigationBar: const BottomNavigation(),
@@ -106,12 +106,14 @@ class AdaChatPage extends StatelessWidget {
 }
 
 class ChatTabContent extends StatelessWidget {
-  const ChatTabContent({super.key});
+  final bool isGroupChat;
+
+  const ChatTabContent({super.key, required this.isGroupChat});
 
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<List<ChatItem>>(
-      future: fetchChatItems(),
+      future: fetchChatItems(isGroupChat),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Center(child: CircularProgressIndicator());
@@ -138,14 +140,19 @@ class ChatTabContent extends StatelessWidget {
                 title: Text(chat.name,
                     style: titleOneMedium), // Use titleOneMedium style
                 subtitle: Text(chat.lastMessage,
-                    style: titleTwoMedium), // Use titleTwoMedium style
+                    style: titleTwoRegular.copyWith(
+                        color: neutral40)), // Use titleTwoMedium style
                 trailing: Text(chat.time,
                     style: titleTwoMedium.copyWith(
-                        color:
-                            Colors.grey)), // Use titleTwoMedium style for time
+                        color: neutral40)), // Use titleTwoMedium style for time
                 onTap: () {
-                  context
-                      .go('/detailmessage'); // Navigate to detail message page
+                  if (isGroupChat) {
+                    context.go('/detailMessageGroup');
+                    //'/groupDetailMessage/${chat.id}'); // Navigate to group detail page
+                  } else {
+                    context.go('/detailMessage');
+                    //'/detailMessage/${chat.id}'); // Navigate to personal detail message page
+                  }
                 },
               );
             },
@@ -155,32 +162,55 @@ class ChatTabContent extends StatelessWidget {
     );
   }
 
-  Future<List<ChatItem>> fetchChatItems() async {
+  Future<List<ChatItem>> fetchChatItems(bool isGroupChat) async {
     await Future.delayed(Duration(seconds: 2)); // Simulate network delay
-    return [
-      ChatItem(
-        profileImage: 'assets/images/profile1.png',
-        name: 'John Doe',
-        lastMessage: 'Hey, how are you?',
-        time: '10:30 AM',
-      ),
-      ChatItem(
-        profileImage: 'assets/images/profile2.png',
-        name: 'Jane Smith',
-        lastMessage: 'See you later!',
-        time: '09:15 AM',
-      ),
-    ];
+    if (isGroupChat) {
+      return [
+        ChatItem(
+          id: 'group1', // Unique ID for the group
+          profileImage: 'assets/images/avatar.jpeg',
+          name: 'Group Chat 1',
+          lastMessage: 'Hello everyone!',
+          time: '10:00 AM',
+        ),
+        ChatItem(
+          id: 'group2', // Unique ID for the group
+          profileImage: 'assets/images/avatar.jpeg',
+          name: 'Group Chat 2',
+          lastMessage: 'Let’s meet at 5 PM.',
+          time: '08:30 AM',
+        ),
+      ];
+    } else {
+      return [
+        ChatItem(
+          id: 'user1', // Unique ID for the user
+          profileImage: 'assets/images/avatar.jpeg',
+          name: 'John Doe',
+          lastMessage: 'Hey, how are you?',
+          time: '10:30 AM',
+        ),
+        ChatItem(
+          id: 'user2', // Unique ID for the user
+          profileImage: 'assets/images/avatar.jpeg',
+          name: 'Jane Smith',
+          lastMessage: 'See you later!',
+          time: '09:15 AM',
+        ),
+      ];
+    }
   }
 }
 
 class ChatItem {
+  final String id; // Unique identifier for chat items
   final String profileImage;
   final String name;
   final String lastMessage;
   final String time;
 
   ChatItem({
+    required this.id,
     required this.profileImage,
     required this.name,
     required this.lastMessage,

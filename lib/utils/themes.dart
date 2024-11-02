@@ -128,6 +128,7 @@ TextStyle titleTwoBold = baseTextStyle(14, FontWeight.bold);
 TextStyle titleTwoSemiBold = baseTextStyle(14, FontWeight.w600);
 TextStyle titleTwoMedium = baseTextStyle(14, FontWeight.w500);
 TextStyle titleTwoLight = baseTextStyle(14, FontWeight.w300);
+TextStyle titleTwoRegular = baseTextStyle(14, FontWeight.w400);
 
 TextStyle titleThree = baseTextStyle(14, FontWeight.normal);
 TextStyle titleThreeBold = baseTextStyle(14, FontWeight.bold);
@@ -141,3 +142,4 @@ TextStyle paragraphOneBold = baseTextStyle(14, FontWeight.bold);
 TextStyle paragraphOneSemiBold = baseTextStyle(14, FontWeight.w600);
 TextStyle paragraphOneMedium = baseTextStyle(14, FontWeight.w500);
 TextStyle paragraphOneLight = baseTextStyle(14, FontWeight.w300);
+TextStyle paragraphOneNotBold = baseTextStyle(12, FontWeight.w600);
