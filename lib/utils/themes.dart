@@ -121,6 +121,7 @@ TextStyle titleOneBold = baseTextStyle(16, FontWeight.bold);
 TextStyle titleOneSemiBold = baseTextStyle(16, FontWeight.w600);
 TextStyle titleOneMedium = baseTextStyle(16, FontWeight.w500);
 TextStyle titleOneLight = baseTextStyle(16, FontWeight.w300);
+TextStyle titleOneRegular = baseTextStyle(16, FontWeight.w400);
 
 TextStyle titleTwo = baseTextStyle(14, FontWeight.normal);
 TextStyle titleTwoBold = baseTextStyle(14, FontWeight.bold);
