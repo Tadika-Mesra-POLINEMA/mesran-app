@@ -13,6 +13,8 @@ import 'package:mesran_app/pages/message/profile_group_page.dart';
 import 'package:mesran_app/pages/message/profile_page.dart';
 import 'package:mesran_app/pages/notifikasi_page.dart';
 import 'package:mesran_app/pages/onboarding_page.dart';
+import 'package:mesran_app/pages/riwayat/detail_undangan_page.dart';
+import 'package:mesran_app/pages/riwayat/riwayat_page.dart';
 import 'package:mesran_app/pages/splash_screen.dart';
 import 'package:mesran_app/pages/message/personal_message_page.dart';
 import 'package:mesran_app/pages/message/chat_detail_page.dart';
@@ -81,4 +83,10 @@ final List<GoRoute> routes = [
   // Profile Group Page
   GoRoute(
       path: '/profileGroup', builder: (context, state) => ProfileGroupPage()),
+
+  // Riwayat Page
+  GoRoute(path: '/riwayat', builder: (context, state) => RiwayatPage()),
+
+  // Detail Undangan Page
+  GoRoute(path: '/detailUndangan', builder: (context, state) => DetailUndanganPage()),
 ];

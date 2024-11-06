@@ -30,6 +30,12 @@ class NotifikasiPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                const SizedBox(height: 20),
+                SvgPicture.asset(
+                  '/assets/images/no-email.svg', // Gambar SVG jika tidak ada percakapan
+                  height: 150,
+                ),
+                const SizedBox(height: 20),
                 // SvgPicture.asset(
                 //   '/assets/images/no-email.svg',
                 //   width: 230,
@@ -39,7 +45,7 @@ class NotifikasiPage extends StatelessWidget {
                   'Tidak ada notifikasi',
                   style: headingThreeSemiBold,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 6,
                 ),
                 Text(
@@ -49,8 +55,7 @@ class NotifikasiPage extends StatelessWidget {
                 ),
               ],
             ),
-          )
-      ),
+          )),
       backgroundColor: white,
     );
   }
