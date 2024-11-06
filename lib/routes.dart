@@ -8,6 +8,7 @@ import 'package:mesran_app/pages/event/create_activities_page.dart';
 import 'package:mesran_app/pages/event/create_event_page.dart';
 import 'package:mesran_app/pages/event/event_activities_page.dart';
 import 'package:mesran_app/pages/event/pakaian_tema_page.dart';
+import 'package:mesran_app/pages/event/popup_berhasil_page.dart';
 import 'package:mesran_app/pages/home_page.dart';
 import 'package:mesran_app/pages/message/chat_detail_grup_page.dart';
 import 'package:mesran_app/pages/message/profile_group_page.dart';
@@ -67,6 +68,8 @@ final List<GoRoute> routes = [
   GoRoute(
       path: '/events/pakaiantema',
       builder: (context, state) => PakaianTemaPage()),
+// Events Pop up berhasil
+  GoRoute(path: '/events/berhasil', builder: (context, state) => SuccessPage()),
   // Notifikasi
   GoRoute(
       path: '/notifications',
