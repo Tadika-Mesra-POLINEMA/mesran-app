@@ -14,6 +14,7 @@ import 'package:mesran_app/pages/message/profile_page.dart';
 import 'package:mesran_app/pages/notifikasi_page.dart';
 import 'package:mesran_app/pages/onboarding_page.dart';
 import 'package:mesran_app/pages/riwayat/detail_undangan_page.dart';
+import 'package:mesran_app/pages/riwayat/face_recognition_page.dart';
 import 'package:mesran_app/pages/riwayat/riwayat_page.dart';
 import 'package:mesran_app/pages/splash_screen.dart';
 import 'package:mesran_app/pages/message/personal_message_page.dart';
@@ -66,8 +67,9 @@ final List<GoRoute> routes = [
       builder: (context, state) => const NotifikasiPage()),
 
   // Chat Pages
-  GoRoute(path: '/message', builder: (context, state) => ChatPage()),
-  GoRoute(path: '/adamessage', builder: (context, state) => AdaChatPage()),
+  GoRoute(path: '/message', builder: (context, state) => const ChatPage()),
+  GoRoute(
+      path: '/adamessage', builder: (context, state) => const AdaChatPage()),
 
   // Detail Message Pribadi
   GoRoute(
@@ -79,14 +81,22 @@ final List<GoRoute> routes = [
       builder: (context, state) => GroupChatDetailPage()),
 
   // Profile Page
-  GoRoute(path: '/profile', builder: (context, state) => ProfilePage()),
+  GoRoute(path: '/profile', builder: (context, state) => const ProfilePage()),
   // Profile Group Page
   GoRoute(
-      path: '/profileGroup', builder: (context, state) => ProfileGroupPage()),
+      path: '/profileGroup',
+      builder: (context, state) => const ProfileGroupPage()),
 
   // Riwayat Page
-  GoRoute(path: '/riwayat', builder: (context, state) => RiwayatPage()),
+  GoRoute(path: '/riwayat', builder: (context, state) => const RiwayatPage()),
 
   // Detail Undangan Page
-  GoRoute(path: '/detailUndangan', builder: (context, state) => DetailUndanganPage()),
+  GoRoute(
+      path: '/detailUndangan',
+      builder: (context, state) => const DetailUndanganPage()),
+
+  // Face Recognation
+  GoRoute(
+      path: '/faceRecognation',
+      builder: (context, state) => const FaceRecognitionPage()),
 ];

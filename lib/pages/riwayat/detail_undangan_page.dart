@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mesran_app/components/common/button.dart';
 import 'package:mesran_app/components/undo_button.dart';
+import 'package:mesran_app/utils/buttons.dart';
 import 'package:mesran_app/utils/icons.dart';
 import 'package:mesran_app/utils/themes.dart';
 
@@ -50,12 +53,12 @@ class DetailUndanganPage extends StatelessWidget {
                   children: [
                     Text('Ulang Tahun',
                         style: headingOneSemiBold.copyWith(color: neutralBase)),
-                    const SizedBox(height: 8),
+                    const Gap(8),
                     Text(
                       'Jangan lupa datang di acara ulang tahunku ya! aku menanti kehadiran kalian semuanya. See you',
                       style: titleOneRegular.copyWith(color: neutral40),
                     ),
-                    const SizedBox(height: 8),
+                    const Gap(8),
                   ],
                 ),
               ),
@@ -71,7 +74,7 @@ class DetailUndanganPage extends StatelessWidget {
                           'Tanggal',
                           style: titleOneRegular.copyWith(color: neutral40),
                         ),
-                        const SizedBox(height: 4),
+                        const Gap(4),
                         Row(
                           children: [
                             date.copyWith(
@@ -79,7 +82,7 @@ class DetailUndanganPage extends StatelessWidget {
                               width: 20,
                               height: 20,
                             ),
-                            const SizedBox(width: 8),
+                            const Gap(8),
                             Text('20/10/2024',
                                 style: titleOneMedium.copyWith(
                                     color: neutralBase)),
@@ -96,7 +99,7 @@ class DetailUndanganPage extends StatelessWidget {
                           'Waktu',
                           style: titleOneRegular.copyWith(color: neutral40),
                         ),
-                        const SizedBox(height: 4),
+                        const Gap(4),
                         Row(
                           children: [
                             date.copyWith(
@@ -104,7 +107,7 @@ class DetailUndanganPage extends StatelessWidget {
                               width: 20,
                               height: 20,
                             ),
-                            const SizedBox(width: 8),
+                            const Gap(8),
                             Text('20/10/2024',
                                 style: titleOneMedium.copyWith(
                                     color: neutralBase)),
@@ -135,7 +138,7 @@ class DetailUndanganPage extends StatelessWidget {
                       )
                     ],
                   ),
-                  const SizedBox(height: 8),
+                  const Gap(8),
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
@@ -166,7 +169,7 @@ class DetailUndanganPage extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              const SizedBox(width: 12),
+                              const Gap(12),
                               Column(
                                 children: [
                                   Image.asset(
@@ -181,7 +184,7 @@ class DetailUndanganPage extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              const SizedBox(width: 12),
+                              const Gap(12),
                               Column(
                                 children: [
                                   Image.asset(
@@ -196,7 +199,7 @@ class DetailUndanganPage extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              const SizedBox(width: 12),
+                              const Gap(12),
                               Column(
                                 children: [
                                   Image.asset(
@@ -211,7 +214,7 @@ class DetailUndanganPage extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              const SizedBox(width: 12),
+                              const Gap(12),
                               Column(
                                 children: [
                                   Image.asset(
@@ -226,7 +229,7 @@ class DetailUndanganPage extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              const SizedBox(width: 12),
+                              const Gap(12),
                               Column(
                                 children: [
                                   Image.asset(
@@ -241,7 +244,7 @@ class DetailUndanganPage extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              const SizedBox(width: 12),
+                              const Gap(12),
                               Column(
                                 children: [
                                   Image.asset(
@@ -256,7 +259,7 @@ class DetailUndanganPage extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              const SizedBox(width: 12),
+                              const Gap(12),
                               Column(
                                 children: [
                                   Image.asset(
@@ -271,13 +274,17 @@ class DetailUndanganPage extends StatelessWidget {
                                   )
                                 ],
                               ),
-                              const SizedBox(width: 12),
+                              const Gap(12),
                             ],
                           ),
                         ),
-                        // UndoButton(
-                        //   onPressed: () {},
-                        // )
+                        const Gap(16),
+                        Button(
+                          onPressed: () {},
+                          style: buttonPrimaryBase,
+                          child: Text('Lihat Semua',
+                              style: titleOneSemiBold.copyWith(color: white)),
+                        )
                       ],
                     ),
                   )

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mesran_app/components/event/create_event_form.dart';
 import 'package:mesran_app/components/undo_button.dart';
@@ -30,12 +31,12 @@ class NotifikasiPage extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 20),
+                const Gap(20),
                 SvgPicture.asset(
                   '/assets/images/no-email.svg', // Gambar SVG jika tidak ada percakapan
                   height: 150,
                 ),
-                const SizedBox(height: 20),
+                const Gap(20),
                 // SvgPicture.asset(
                 //   '/assets/images/no-email.svg',
                 //   width: 230,
@@ -45,9 +46,7 @@ class NotifikasiPage extends StatelessWidget {
                   'Tidak ada notifikasi',
                   style: headingThreeSemiBold,
                 ),
-                const SizedBox(
-                  height: 6,
-                ),
+                const Gap(6),
                 Text(
                   'Saat ini, tidak ada notifikasi baru. Semua informasi penting akan muncul di sini ketika tersedia.',
                   style: titleTwo.copyWith(color: neutral40),
