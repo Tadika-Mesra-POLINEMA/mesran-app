@@ -46,7 +46,7 @@ class _CustomSvgIconState extends State<CustomSvgIcon> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: widget.padding ?? const EdgeInsets.all(12),
+      padding: widget.padding ?? const EdgeInsets.all(0),
       decoration: widget.decoration,
       child: SvgPicture.asset(
         widget.assetName,

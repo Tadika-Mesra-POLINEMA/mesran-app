@@ -7,6 +7,7 @@ import 'package:mesran_app/pages/auth/verify_otp_page.dart';
 import 'package:mesran_app/pages/event/create_activities_page.dart';
 import 'package:mesran_app/pages/event/create_event_page.dart';
 import 'package:mesran_app/pages/event/event_activities_page.dart';
+import 'package:mesran_app/pages/event/event_upcoming_history_page.dart';
 import 'package:mesran_app/pages/home_page.dart';
 import 'package:mesran_app/pages/message/chat_detail_grup_page.dart';
 import 'package:mesran_app/pages/message/profile_group_page.dart';
@@ -62,6 +63,8 @@ final List<GoRoute> routes = [
   GoRoute(
       path: '/events/activities/create',
       builder: (context, state) => const CreateActivitiesPage()),
+//Event Upcoming History
+  GoRoute(path: '/events', builder: (context, state) => const EventPage()),
 
   // Notifikasi
   GoRoute(
