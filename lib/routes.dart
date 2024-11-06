@@ -11,9 +11,11 @@ import 'package:mesran_app/pages/home_page.dart';
 import 'package:mesran_app/pages/message/chat_detail_grup_page.dart';
 import 'package:mesran_app/pages/message/profile_group_page.dart';
 import 'package:mesran_app/pages/message/profile_page.dart';
-import 'package:mesran_app/pages/notifikasi_page.dart';
+import 'package:mesran_app/pages/notifikasi_default_page.dart';
+import 'package:mesran_app/pages/notifikasi_empty_page.dart';
 import 'package:mesran_app/pages/onboarding_page.dart';
 import 'package:mesran_app/pages/riwayat/detail_undangan_page.dart';
+import 'package:mesran_app/pages/riwayat/edit_acara_page.dart';
 import 'package:mesran_app/pages/riwayat/face_recognition_page.dart';
 import 'package:mesran_app/pages/riwayat/riwayat_page.dart';
 import 'package:mesran_app/pages/splash_screen.dart';
@@ -61,10 +63,15 @@ final List<GoRoute> routes = [
       path: '/events/activities/create',
       builder: (context, state) => const CreateActivitiesPage()),
 
-  // Notifikasi
+  // Notifikasi Kosong
   GoRoute(
       path: '/notifications',
-      builder: (context, state) => const NotifikasiPage()),
+      builder: (context, state) => const NotifikasiEmptyPage()),
+
+  // Notifikasi Terisi
+  GoRoute(
+      path: '/notificationsDefault',
+      builder: (context, state) => const NotifikasiDefaultPage()),
 
   // Chat Pages
   GoRoute(path: '/message', builder: (context, state) => const ChatPage()),
@@ -99,4 +106,8 @@ final List<GoRoute> routes = [
   GoRoute(
       path: '/faceRecognation',
       builder: (context, state) => const FaceRecognitionPage()),
+
+  // Edit Acara
+  GoRoute(
+      path: '/editAcara', builder: (context, state) => const EditAcaraPage()),
 ];

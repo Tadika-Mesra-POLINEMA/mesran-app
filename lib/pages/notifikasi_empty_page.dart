@@ -6,15 +6,15 @@ import 'package:mesran_app/components/event/create_event_form.dart';
 import 'package:mesran_app/components/undo_button.dart';
 import 'package:mesran_app/utils/themes.dart';
 
-class NotifikasiPage extends StatelessWidget {
-  const NotifikasiPage({super.key});
+class NotifikasiEmptyPage extends StatelessWidget {
+  const NotifikasiEmptyPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         leading: Padding(
-          padding: const EdgeInsets.only(top: 8),
+          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
           child: UndoButton(
             onPressed: () => context.pop(),
             label: 'Notifikasi',
@@ -25,23 +25,18 @@ class NotifikasiPage extends StatelessWidget {
         automaticallyImplyLeading: false,
       ),
       body: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 const Gap(20),
-                SvgPicture.asset(
-                  '/assets/images/no-email.svg', // Gambar SVG jika tidak ada percakapan
-                  height: 150,
+                Image.asset(
+                  'assets/images/no-email.png',
+                  scale: 2,
                 ),
                 const Gap(20),
-                // SvgPicture.asset(
-                //   '/assets/images/no-email.svg',
-                //   width: 230,
-                //   height: 230,
-                // ),
                 Text(
                   'Tidak ada notifikasi',
                   style: headingThreeSemiBold,

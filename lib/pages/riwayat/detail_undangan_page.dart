@@ -471,45 +471,47 @@ class DetailUndanganPage extends StatelessWidget {
                 ],
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
-                  Expanded(
-                    child: Container(
-                      height: 43,
-                      decoration: BoxDecoration(
-                          color: white,
-                          borderRadius: BorderRadius.circular(64),
-                          border: Border.all(
-                            color: neutral20,
-                          )),
-                      child: Center(
-                        child: Text(
-                          'Edit',
-                          style: titleOneSemiBold.copyWith(color: neutralBase),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  Expanded(
-                    child: Container(
-                      height: 43,
-                      decoration: BoxDecoration(
-                          color: neutral10,
-                          borderRadius: BorderRadius.circular(64)),
-                      child: Center(
-                        child: Text(
-                          'Absen',
-                          style: titleOneSemiBold.copyWith(color: neutral40),
-                        ),
-                      ),
-                    ),
-                  )
-                ],
-              ),
-              const SizedBox(height: 34),
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(16),
+        color: white,
+        child: Row(
+          children: [
+            Expanded(
+              child: Container(
+                height: 43,
+                decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: BorderRadius.circular(64),
+                    border: Border.all(
+                      color: neutral20,
+                    )),
+                child: Center(
+                  child: Text(
+                    'Edit',
+                    style: titleOneSemiBold.copyWith(color: neutralBase),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Container(
+                height: 43,
+                decoration: BoxDecoration(
+                    color: neutral10, borderRadius: BorderRadius.circular(64)),
+                child: Center(
+                  child: Text(
+                    'Absen',
+                    style: titleOneSemiBold.copyWith(color: neutral40),
+                  ),
+                ),
+              ),
+            )
+          ],
         ),
       ),
     );

@@ -86,15 +86,17 @@ class FaceRecognitionPage extends StatelessWidget {
                   ),
                 ],
               ),
-              const Gap(32),
-              Button(
-                onPressed: () {},
-                style: buttonPrimaryBase,
-                child: Text('Absen',
-                    style: titleOneSemiBold.copyWith(color: white)),
-              )
             ],
           ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        padding: const EdgeInsets.all(16),
+        color: white,
+        child: Button(
+          onPressed: () {},
+          style: buttonPrimaryBase,
+          child: Text('Absen', style: titleOneSemiBold.copyWith(color: white)),
         ),
       ),
     );

@@ -14,9 +14,9 @@ class HomePage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: Colors.transparent,
+          backgroundColor: white,
           title: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10),
+            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 4),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -57,8 +57,7 @@ class HomePage extends StatelessWidget {
                                 children: [
                                   Image.asset(
                                     'assets/images/advertising.png',
-                                    width: 200,
-                                    height: 200,
+                                    scale: 2,
                                   ),
                                   Text(
                                     'Buat acara Anda disini!',
@@ -90,39 +89,6 @@ class HomePage extends StatelessWidget {
                     )),
               ),
               const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.only(left: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Template',
-                      style: headingThreeMedium.copyWith(color: neutralBase),
-                      textAlign: TextAlign.start,
-                    ),
-                    const SizedBox(height: 12),
-                    const SizedBox(
-                      height: 250,
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: [
-                            CardTemplate(),
-                            SizedBox(width: 12),
-                            CardTemplate(),
-                            SizedBox(width: 12),
-                            CardTemplate(),
-                            SizedBox(width: 12),
-                            CardTemplate(),
-                            SizedBox(width: 12),
-                            CardTemplate(),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
             ],
           ),
         ),
