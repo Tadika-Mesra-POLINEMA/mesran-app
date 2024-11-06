@@ -15,6 +15,9 @@ import 'package:mesran_app/pages/notifikasi_page.dart';
 import 'package:mesran_app/pages/onboarding_page.dart';
 import 'package:mesran_app/pages/riwayat/detail_undangan_page.dart';
 import 'package:mesran_app/pages/riwayat/riwayat_page.dart';
+import 'package:mesran_app/pages/profile/account_profile_page.dart';
+import 'package:mesran_app/pages/profile/create_profile_akun.dart';
+import 'package:mesran_app/pages/profile/create_profile_pribadi.dart';
 import 'package:mesran_app/pages/splash_screen.dart';
 import 'package:mesran_app/pages/message/personal_message_page.dart';
 import 'package:mesran_app/pages/message/chat_detail_page.dart';
@@ -84,9 +87,22 @@ final List<GoRoute> routes = [
   GoRoute(
       path: '/profileGroup', builder: (context, state) => ProfileGroupPage()),
 
+  // Account
+  GoRoute(
+      path: '/account/profile',
+      builder: (context, state) => const AccountProfilePage()),
+
+  GoRoute(
+      path: '/account/profile/akun',
+      builder: (context, state) => const CreateProfileAkun()),
+  GoRoute(
+      path: '/account/profile/pribadi',
+      builder: (context, state) => const CreateProfilePribadi()),
   // Riwayat Page
   GoRoute(path: '/riwayat', builder: (context, state) => RiwayatPage()),
 
   // Detail Undangan Page
-  GoRoute(path: '/detailUndangan', builder: (context, state) => DetailUndanganPage()),
+  GoRoute(
+      path: '/detailUndangan',
+      builder: (context, state) => DetailUndanganPage()),
 ];

@@ -33,3 +33,12 @@ const CustomSvgIcon date = CustomSvgIcon(
 const CustomSvgIcon dot = CustomSvgIcon(
   assetName: 'assets/icons/dot.svg',
 );
+const CustomSvgIcon setting =CustomSvgIcon(
+  assetName: 'assets/icons/setting.svg',
+);
+const CustomSvgIcon invite = CustomSvgIcon(
+  assetName: 'assets/icons/invite.svg',
+);
+const CustomSvgIcon device = CustomSvgIcon(
+  assetName: 'assets/icons/device.svg',
+);
