@@ -30,3 +30,6 @@ const CustomSvgIcon member = CustomSvgIcon(
 const CustomSvgIcon date = CustomSvgIcon(
   assetName: 'assets/icons/date.svg',
 );
+const CustomSvgIcon dot = CustomSvgIcon(
+  assetName: 'assets/icons/dot.svg',
+);

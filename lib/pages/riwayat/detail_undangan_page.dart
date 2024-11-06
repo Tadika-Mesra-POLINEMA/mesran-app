@@ -21,16 +21,18 @@ class DetailUndanganPage extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              InkWell(
-                  onTap: () => context.push('/notifications'),
-                  child: bell.copyWith(color: neutralBase)),
+              UndoButton(
+                onPressed: () => context.pop(),
+              ),
               Text(
                 'Undangan',
-                style: headingTwoSemiBold,
+                style: headingTwoSemiBold.copyWith(color: neutralBase),
               ),
-              InkWell(
-                  onTap: () => context.push('/notifications'),
-                  child: bell.copyWith(color: neutralBase)),
+              dot.copyWith(
+                color: neutralBase,
+                width: 24,
+                height: 24,
+              ),
             ],
           ),
         ),
