@@ -15,7 +15,7 @@ class AdaChatPage extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
-          backgroundColor: white,
+          backgroundColor: Colors.transparent,
           title: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Row(
@@ -51,11 +51,17 @@ class AdaChatPage extends StatelessWidget {
                             ),
                             child: Row(
                               children: [
-                                Icon(Icons.search, color: neutralBase),
+                                Icon(Icons.search,
+                                    color: Color.fromARGB(255, 0, 0, 0)),
                                 const SizedBox(width: 8),
-                                Text('Cari',
-                                    style: titleOneRegular.copyWith(
-                                        color: neutral40)),
+                                Text(
+                                  'Cari',
+                                  style: TextStyle(
+                                    fontFamily: 'SF-Pro-Display',
+                                    color: neutral40,
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ],
                             ),
                           ),
@@ -87,15 +93,11 @@ class AdaChatPage extends StatelessWidget {
             ),
           ),
         ),
-        // Set the body background color to white
-        body: Container(
-          color: Colors.white, // Set the background color of the body
-          child: const TabBarView(
-            children: [
-              ChatTabContent(isGroupChat: false), // Personal chat
-              ChatTabContent(isGroupChat: true), // Group chat
-            ],
-          ),
+        body: const TabBarView(
+          children: [
+            ChatTabContent(isGroupChat: false), // Personal chat
+            ChatTabContent(isGroupChat: true), // Group chat
+          ],
         ),
         bottomNavigationBar: const BottomNavigation(),
       ),
@@ -131,24 +133,31 @@ class ChatTabContent extends StatelessWidget {
                   onTap: () {
                     if (isGroupChat) {
                       context.go('/profileGroup');
+                      //'/groupDetailMessage/${chat.id}'); // Navigate to group detail page
                     } else {
                       context.go('/profile');
+                      //'/detailMessage/${chat.id}'); // Navigate to personal detail message page
                     }
                   },
                   child: CircleAvatar(
                     backgroundImage: AssetImage(chat.profileImage),
                   ),
                 ),
-                title: Text(chat.name, style: titleOneMedium),
+                title: Text(chat.name,
+                    style: titleOneMedium), // Use titleOneMedium style
                 subtitle: Text(chat.lastMessage,
-                    style: titleTwoRegular.copyWith(color: neutral40)),
+                    style: titleTwoRegular.copyWith(
+                        color: neutral40)), // Use titleTwoMedium style
                 trailing: Text(chat.time,
-                    style: titleTwoMedium.copyWith(color: neutral40)),
+                    style: titleTwoMedium.copyWith(
+                        color: neutral40)), // Use titleTwoMedium style for time
                 onTap: () {
                   if (isGroupChat) {
                     context.go('/detailMessageGroup');
+                    //'/groupDetailMessage/${chat.id}'); // Navigate to group detail page
                   } else {
                     context.go('/detailMessage');
+                    //'/detailMessage/${chat.id}'); // Navigate to personal detail message page
                   }
                 },
               );
@@ -164,14 +173,14 @@ class ChatTabContent extends StatelessWidget {
     if (isGroupChat) {
       return [
         ChatItem(
-          id: 'group1',
+          id: 'group1', // Unique ID for the group
           profileImage: 'assets/images/avatar.jpeg',
           name: 'Group Chat 1',
           lastMessage: 'Hello everyone!',
           time: '10:00 AM',
         ),
         ChatItem(
-          id: 'group2',
+          id: 'group2', // Unique ID for the group
           profileImage: 'assets/images/avatar.jpeg',
           name: 'Group Chat 2',
           lastMessage: 'Let’s meet at 5 PM.',
@@ -181,14 +190,14 @@ class ChatTabContent extends StatelessWidget {
     } else {
       return [
         ChatItem(
-          id: 'user1',
+          id: 'user1', // Unique ID for the user
           profileImage: 'assets/images/avatar.jpeg',
           name: 'John Doe',
           lastMessage: 'Hey, how are you?',
           time: '10:30 AM',
         ),
         ChatItem(
-          id: 'user2',
+          id: 'user2', // Unique ID for the user
           profileImage: 'assets/images/avatar.jpeg',
           name: 'Jane Smith',
           lastMessage: 'See you later!',
@@ -200,7 +209,7 @@ class ChatTabContent extends StatelessWidget {
 }
 
 class ChatItem {
-  final String id;
+  final String id; // Unique identifier for chat items
   final String profileImage;
   final String name;
   final String lastMessage;

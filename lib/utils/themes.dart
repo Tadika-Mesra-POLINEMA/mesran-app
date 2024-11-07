@@ -135,6 +135,7 @@ TextStyle titleThreeBold = baseTextStyle(14, FontWeight.bold);
 TextStyle titleThreeSemiBold = baseTextStyle(14, FontWeight.w600);
 TextStyle titleThreeMedium = baseTextStyle(14, FontWeight.w500);
 TextStyle titleThreeLight = baseTextStyle(14, FontWeight.w300);
+TextStyle titleThreeRegular = baseTextStyle(12, FontWeight.w400);
 
 // Paragraph Styles
 TextStyle paragraphOne = baseTextStyle(14, FontWeight.normal);

@@ -7,6 +7,8 @@ import 'package:mesran_app/pages/auth/verify_otp_page.dart';
 import 'package:mesran_app/pages/event/create_activities_page.dart';
 import 'package:mesran_app/pages/event/create_event_page.dart';
 import 'package:mesran_app/pages/event/event_activities_page.dart';
+import 'package:mesran_app/pages/event/pakaian_tema_page.dart';
+import 'package:mesran_app/pages/event/popup_berhasil_page.dart';
 import 'package:mesran_app/pages/home_page.dart';
 import 'package:mesran_app/pages/message/chat_detail_grup_page.dart';
 import 'package:mesran_app/pages/message/profile_group_page.dart';
@@ -18,6 +20,9 @@ import 'package:mesran_app/pages/riwayat/detail_undangan_page.dart';
 import 'package:mesran_app/pages/riwayat/edit_acara_page.dart';
 import 'package:mesran_app/pages/riwayat/face_recognition_page.dart';
 import 'package:mesran_app/pages/riwayat/riwayat_page.dart';
+import 'package:mesran_app/pages/profile/account_profile_page.dart';
+import 'package:mesran_app/pages/profile/create_profile_akun.dart';
+import 'package:mesran_app/pages/profile/create_profile_pribadi.dart';
 import 'package:mesran_app/pages/splash_screen.dart';
 import 'package:mesran_app/pages/message/personal_message_page.dart';
 import 'package:mesran_app/pages/message/chat_detail_page.dart';
@@ -62,8 +67,12 @@ final List<GoRoute> routes = [
   GoRoute(
       path: '/events/activities/create',
       builder: (context, state) => const CreateActivitiesPage()),
-
-  // Notifikasi Kosong
+ GoRoute(
+      path: '/events/pakaiantema',
+      builder: (context, state) => PakaianTemaPage()),
+// Events Pop up berhasil
+  GoRoute(path: '/events/berhasil', builder: (context, state) => SuccessPage()),
+  // Notifikasi
   GoRoute(
       path: '/notifications',
       builder: (context, state) => const NotifikasiEmptyPage()),
@@ -94,20 +103,20 @@ final List<GoRoute> routes = [
       path: '/profileGroup',
       builder: (context, state) => const ProfileGroupPage()),
 
+  // Account
+  GoRoute(
+      path: '/account/profile',
+      builder: (context, state) => const AccountProfilePage()),
+
+  GoRoute(
+      path: '/account/profile/akun',
+      builder: (context, state) => const CreateProfileAkun()),
+  GoRoute(
+      path: '/account/profile/pribadi',
+      builder: (context, state) => const CreateProfilePribadi()),
   // Riwayat Page
   GoRoute(path: '/riwayat', builder: (context, state) => const RiwayatPage()),
 
   // Detail Undangan Page
-  GoRoute(
-      path: '/detailUndangan',
-      builder: (context, state) => const DetailUndanganPage()),
-
-  // Face Recognation
-  GoRoute(
-      path: '/faceRecognation',
-      builder: (context, state) => const FaceRecognitionPage()),
-
-  // Edit Acara
-  GoRoute(
-      path: '/editAcara', builder: (context, state) => const EditAcaraPage()),
+  GoRoute(path: '/detailUndangan', builder: (context, state) => DetailUndanganPage()),
 ];
