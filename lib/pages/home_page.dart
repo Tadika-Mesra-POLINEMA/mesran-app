@@ -65,7 +65,8 @@ class HomePage extends StatelessWidget {
                                   ),
                                   Text(
                                     'Rencanakan acara Anda dengan mudah disini. Isi form dan kelola semuanya dalam satu tempat!',
-                                    style: titleTwo,
+                                    style: titleTwoRegular.copyWith(
+                                        color: neutral40),
                                     textAlign: TextAlign.center,
                                   )
                                 ],
@@ -80,7 +81,8 @@ class HomePage extends StatelessWidget {
                                       horizontal: 18, vertical: 10),
                                   child: Text(
                                     'Buat Acara',
-                                    style: titleOne.copyWith(color: white),
+                                    style:
+                                        titleOneSemiBold.copyWith(color: white),
                                   ),
                                 ))
                           ],
