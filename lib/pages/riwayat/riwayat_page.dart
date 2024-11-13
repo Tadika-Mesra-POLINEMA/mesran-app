@@ -1,6 +1,7 @@
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mesran_app/components/undo_button.dart';
 import 'package:mesran_app/utils/icons.dart';
@@ -38,7 +39,7 @@ class RiwayatPage extends StatelessWidget {
           child: Center(
             child: Column(
               children: [
-                const SizedBox(height: 16),
+                const Gap(16),
                 Container(
                   width: double.infinity,
                   padding: const EdgeInsets.symmetric(),
@@ -60,11 +61,11 @@ class RiwayatPage extends StatelessWidget {
                             Text('Happy Birthday',
                                 style: titleOneMedium.copyWith(
                                     color: neutralBase)),
-                            const SizedBox(height: 4),
+                            const Gap(4),
                             Text('Sep 16, 2024',
                                 style:
                                     titleTwoRegular.copyWith(color: neutral40)),
-                            const SizedBox(height: 4),
+                            const Gap(4),
                             Text(
                                 'Lorem ipsum dolor sit amet consectetur. Lorem ipsum dolor sit amet.',
                                 style:
@@ -101,7 +102,7 @@ class RiwayatPage extends StatelessWidget {
                                       color: neutralBase,
                                       width: 18,
                                       height: 18),
-                                  const SizedBox(width: 8),
+                                  const Gap(8),
                                   Text('16 Anggota',
                                       style: titleTwoMedium.copyWith(
                                           color: neutralBase))

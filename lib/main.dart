@@ -6,8 +6,7 @@ void main() {
   runApp(const MyApp());
 }
 
-final GoRouter router =
-    GoRouter(initialLocation: '/account/profile', routes: routes);
+final GoRouter router = GoRouter(initialLocation: '/home', routes: routes);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

@@ -14,9 +14,12 @@ import 'package:mesran_app/pages/home_page.dart';
 import 'package:mesran_app/pages/message/chat_detail_grup_page.dart';
 import 'package:mesran_app/pages/message/profile_group_page.dart';
 import 'package:mesran_app/pages/message/profile_page.dart';
-import 'package:mesran_app/pages/notifikasi_page.dart';
+import 'package:mesran_app/pages/notifikasi_default_page.dart';
+import 'package:mesran_app/pages/notifikasi_empty_page.dart';
 import 'package:mesran_app/pages/onboarding_page.dart';
 import 'package:mesran_app/pages/riwayat/detail_undangan_page.dart';
+import 'package:mesran_app/pages/riwayat/edit_acara_page.dart';
+import 'package:mesran_app/pages/riwayat/face_recognition_page.dart';
 import 'package:mesran_app/pages/riwayat/riwayat_page.dart';
 import 'package:mesran_app/pages/profile/account_profile_page.dart';
 import 'package:mesran_app/pages/profile/create_profile_akun.dart';
@@ -65,8 +68,7 @@ final List<GoRoute> routes = [
   GoRoute(
       path: '/events/activities/create',
       builder: (context, state) => const CreateActivitiesPage()),
-// Events Pakaian dan Tema
-  GoRoute(
+ GoRoute(
       path: '/events/pakaiantema',
       builder: (context, state) => PakaianTemaPage()),
 // Events Status berhasil
@@ -76,11 +78,17 @@ final List<GoRoute> routes = [
   // Notifikasi
   GoRoute(
       path: '/notifications',
-      builder: (context, state) => const NotifikasiPage()),
+      builder: (context, state) => const NotifikasiEmptyPage()),
+
+  // Notifikasi Terisi
+  GoRoute(
+      path: '/notificationsDefault',
+      builder: (context, state) => const NotifikasiDefaultPage()),
 
   // Chat Pages
-  GoRoute(path: '/message', builder: (context, state) => ChatPage()),
-  GoRoute(path: '/adamessage', builder: (context, state) => AdaChatPage()),
+  GoRoute(path: '/message', builder: (context, state) => const ChatPage()),
+  GoRoute(
+      path: '/adamessage', builder: (context, state) => const AdaChatPage()),
 
   // Detail Message Pribadi
   GoRoute(
@@ -92,10 +100,11 @@ final List<GoRoute> routes = [
       builder: (context, state) => GroupChatDetailPage()),
 
   // Profile Page
-  GoRoute(path: '/profile', builder: (context, state) => ProfilePage()),
+  GoRoute(path: '/profile', builder: (context, state) => const ProfilePage()),
   // Profile Group Page
   GoRoute(
-      path: '/profileGroup', builder: (context, state) => ProfileGroupPage()),
+      path: '/profileGroup',
+      builder: (context, state) => const ProfileGroupPage()),
 
   // Account
   GoRoute(
@@ -109,10 +118,8 @@ final List<GoRoute> routes = [
       path: '/account/profile/pribadi',
       builder: (context, state) => const CreateProfilePribadi()),
   // Riwayat Page
-  GoRoute(path: '/riwayat', builder: (context, state) => RiwayatPage()),
+  GoRoute(path: '/riwayat', builder: (context, state) => const RiwayatPage()),
 
   // Detail Undangan Page
-  GoRoute(
-      path: '/detailUndangan',
-      builder: (context, state) => DetailUndanganPage()),
+  GoRoute(path: '/detailUndangan', builder: (context, state) => DetailUndanganPage()),
 ];
