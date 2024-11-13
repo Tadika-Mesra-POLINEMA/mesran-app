@@ -7,6 +7,7 @@ import 'package:mesran_app/pages/auth/verify_otp_page.dart';
 import 'package:mesran_app/pages/event/create_activities_page.dart';
 import 'package:mesran_app/pages/event/create_event_page.dart';
 import 'package:mesran_app/pages/event/event_activities_page.dart';
+import 'package:mesran_app/pages/event/hapus_acara_page.dart';
 import 'package:mesran_app/pages/event/pakaian_tema_page.dart';
 import 'package:mesran_app/pages/event/popup_berhasil_page.dart';
 import 'package:mesran_app/pages/home_page.dart';
@@ -68,8 +69,10 @@ final List<GoRoute> routes = [
   GoRoute(
       path: '/events/pakaiantema',
       builder: (context, state) => PakaianTemaPage()),
-// Events Pop up berhasil
-  GoRoute(path: '/events/berhasil', builder: (context, state) => SuccessPage()),
+// Events Status berhasil
+  GoRoute(path: '/events/success', builder: (context, state) => SuccessPage()),
+  // Hapus Events
+  GoRoute(path: '/events/delete', builder: (context, state) => DeletePage()),
   // Notifikasi
   GoRoute(
       path: '/notifications',
