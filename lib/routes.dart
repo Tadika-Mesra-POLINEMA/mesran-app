@@ -16,6 +16,7 @@ import 'package:mesran_app/pages/message/profile_page.dart';
 import 'package:mesran_app/pages/notifikasi_default_page.dart';
 import 'package:mesran_app/pages/notifikasi_empty_page.dart';
 import 'package:mesran_app/pages/onboarding_page.dart';
+import 'package:mesran_app/pages/profile/detail_undangan1_page.dart';
 import 'package:mesran_app/pages/riwayat/detail_undangan_page.dart';
 import 'package:mesran_app/pages/riwayat/edit_acara_page.dart';
 import 'package:mesran_app/pages/riwayat/face_recognition_page.dart';
@@ -67,7 +68,7 @@ final List<GoRoute> routes = [
   GoRoute(
       path: '/events/activities/create',
       builder: (context, state) => const CreateActivitiesPage()),
- GoRoute(
+  GoRoute(
       path: '/events/pakaiantema',
       builder: (context, state) => PakaianTemaPage()),
 // Events Pop up berhasil
@@ -118,5 +119,12 @@ final List<GoRoute> routes = [
   GoRoute(path: '/riwayat', builder: (context, state) => const RiwayatPage()),
 
   // Detail Undangan Page
-  GoRoute(path: '/detailUndangan', builder: (context, state) => DetailUndanganPage()),
+  GoRoute(
+      path: '/detailUndangan',
+      builder: (context, state) => DetailUndanganPage()),
+
+  // Detail Undangan Page profil
+  GoRoute(
+      path: '/detailUndangan1',
+      builder: (context, state) => DetailUndangan1Page()),
 ];
