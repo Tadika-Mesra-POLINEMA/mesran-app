@@ -7,6 +7,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -16,6 +18,8 @@ class MyApp extends StatelessWidget {
 }
 
 class PakaianTemaPage extends StatefulWidget {
+  const PakaianTemaPage({super.key});
+
   @override
   _PakaianTemaPageState createState() => _PakaianTemaPageState();
 }
@@ -68,8 +72,7 @@ class _PakaianTemaPageState extends State<PakaianTemaPage> {
             TextFormField(
               decoration: InputDecoration(
                 hintText: 'Masukkan tema',
-                hintStyle: titleOneRegular?.copyWith(color: neutral40) ??
-                    TextStyle(color: Colors.grey),
+                hintStyle: titleOneRegular.copyWith(color: neutral40),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(8),
                   borderSide: BorderSide(

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mesran_app/src/shared/presentation/widgets/form/button.dart';
 import 'package:mesran_app/utils/themes.dart';
 
-class AuthenticationSuccessPage extends StatelessWidget {
-  final String title;
-
-  const AuthenticationSuccessPage({super.key, required this.title});
+class VerificationSuccessPage extends StatelessWidget {
+  const VerificationSuccessPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,23 +13,22 @@ class AuthenticationSuccessPage extends StatelessWidget {
       backgroundColor: white,
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
+          padding: EdgeInsets.fromLTRB(16, 16, 16, 34),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
+              Spacer(),
               Image.asset('assets/images/login-success.png'),
-              const SizedBox(
-                height: 24,
-              ),
+              Gap(24),
               Column(
                 children: [
                   Text(
-                    title,
+                    'Berhasil masuk ke akun Anda!',
                     style: headingThreeSemiBold.copyWith(color: neutralBase),
                     textAlign: TextAlign.center,
                   ),
-                  const SizedBox(height: 8),
+                  Gap(8),
                   Text(
                     'Anda berhasil masuk ke akun. Nikmati semua fitur yang tersedia!',
                     style: titleTwo.copyWith(color: neutral40),
@@ -37,28 +36,12 @@ class AuthenticationSuccessPage extends StatelessWidget {
                   ),
                 ],
               ),
+              Spacer(),
+              Button(
+                  onPressed: () => context.go('/home'),
+                  child: Text('Lanjut ke Beranda',
+                      style: titleOneSemiBold.copyWith(color: white)))
             ],
-          ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: white,
-        child: ElevatedButton(
-          onPressed: () => context.replace('/home'),
-          style: ElevatedButton.styleFrom(
-            backgroundColor: primaryBase,
-            elevation: 0,
-            minimumSize: const Size(double.infinity, 48),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(64),
-            ),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(12),
-            child: Text(
-              'Lanjut ke Beranda',
-              style: titleOneSemiBold.copyWith(color: white),
-            ),
           ),
         ),
       ),

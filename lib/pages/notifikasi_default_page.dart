@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mesran_app/components/undo_button.dart';
-import 'package:mesran_app/routes.dart';
 import 'package:mesran_app/utils/themes.dart';
 
 class NotifikasiDefaultPage extends StatelessWidget {

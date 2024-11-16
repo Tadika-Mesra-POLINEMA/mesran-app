@@ -34,7 +34,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            InkWell(
+            GestureDetector(
               onTap: () => _setCurrentPath('home'),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -49,7 +49,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 ],
               ),
             ),
-            InkWell(
+            GestureDetector(
               onTap: () => _setCurrentPath('event'),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -64,7 +64,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 ],
               ),
             ),
-            InkWell(
+            GestureDetector(
               onTap: () => _setCurrentPath('message'),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -79,7 +79,7 @@ class _BottomNavigationState extends State<BottomNavigation> {
                 ],
               ),
             ),
-            InkWell(
+            GestureDetector(
               onTap: () => _setCurrentPath('profile'),
               child: Column(
                 mainAxisSize: MainAxisSize.min,

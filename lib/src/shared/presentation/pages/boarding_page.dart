@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/utils/themes.dart';
+import 'package:mesran_app/src/config/styles/texts/light.dart';
+import 'package:mesran_app/src/config/styles/texts/medium.dart';
+import 'package:mesran_app/src/config/styles/texts/regular.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 
-class OnboardingPage extends StatelessWidget {
-  const OnboardingPage({super.key});
+class BoardingPage extends StatelessWidget {
+  const BoardingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +59,7 @@ class OnboardingPage extends StatelessWidget {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      context.push('/home');
+                      context.go('/login');
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: white,
