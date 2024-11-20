@@ -37,6 +37,9 @@ class Button extends StatelessWidget {
 
       case ButtonType.secondary:
         return white;
+
+      case ButtonType.secondaryFill:
+        return neutral10;
     }
   }
 
@@ -46,8 +49,11 @@ class Button extends StatelessWidget {
       // None
       case ButtonType.secondary:
         return neutral20;
+
+      case ButtonType.secondaryFill:
+        return neutral10;
     }
   }
 }
 
-enum ButtonType { primary, secondary }
+enum ButtonType { primary, secondary, secondaryFill }

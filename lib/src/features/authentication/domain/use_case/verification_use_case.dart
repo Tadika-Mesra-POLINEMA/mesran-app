@@ -3,16 +3,13 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mesran_app/src/features/authentication/data/repository/verification_repository_impl.dart';
 import 'package:mesran_app/src/features/authentication/domain/entity/verification_request.dart';
 import 'package:mesran_app/src/features/authentication/domain/failures/auth_failure.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class VerificationUseCase {
   final FlutterSecureStorage _secureStorage;
-  final SharedPreferences _pref;
   final int defaultVerificationKeyTimestamp = (5 * 60 * 1000);
   final VerificationRepositoryImpl _verificationRepositoryImpl;
 
-  VerificationUseCase(
-      this._verificationRepositoryImpl, this._pref, this._secureStorage);
+  VerificationUseCase(this._verificationRepositoryImpl, this._secureStorage);
 
   Future<Either<Either<AuthFailure, Null>, bool>> verify(String otp) async {
     try {
@@ -45,8 +42,8 @@ class VerificationUseCase {
           final refreshToken = success.data?.refreshToken;
 
           if (accessToken != null && refreshToken != null) {
-            _pref.setString('accessToken', accessToken);
-            _pref.setString('refreshToken', refreshToken);
+            _secureStorage.write(key: 'accessToken', value: accessToken);
+            _secureStorage.write(key: 'refreshToken', value: refreshToken);
 
             return Right(true);
           }

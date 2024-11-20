@@ -10,11 +10,13 @@ class InputField extends StatelessWidget {
   final TextEditingController? controller;
   final InputDecoration? decoration;
   final Function(String)? onChanged;
+  final TextInputType? keyboardType;
 
   const InputField({
     super.key,
     required this.prefixIcon,
     required this.hintText,
+    this.keyboardType,
     this.decoration,
     this.onChanged,
     this.controller,
@@ -25,9 +27,10 @@ class InputField extends StatelessWidget {
     return TextField(
       onChanged: onChanged,
       controller: controller,
+      keyboardType: keyboardType ?? TextInputType.text,
       decoration: decoration ??
           InputDecoration(
-            prefixIcon: prefixIcon,
+            prefixIcon: prefixIcon.copyWith(color: neutralBase),
             hintText: hintText,
             hintStyle: titleOne.copyWith(color: neutral40),
             enabledBorder: OutlineInputBorder(

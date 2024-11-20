@@ -9,6 +9,7 @@ import 'package:mesran_app/src/features/authentication/presentation/blocs/auth_b
 import 'package:mesran_app/src/features/authentication/presentation/widgets/auth_email_form.dart';
 import 'package:mesran_app/src/features/authentication/presentation/widgets/auth_phone_form.dart';
 import 'package:mesran_app/src/features/authentication/presentation/widgets/auth_type.dart';
+import 'package:mesran_app/src/shared/presentation/widgets/custom_app_bar.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({super.key});
@@ -29,10 +30,7 @@ class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: white,
-        elevation: 0,
-      ),
+      appBar: CustomAppBar(),
       backgroundColor: white,
       body: Padding(
         padding: const EdgeInsets.all(16),

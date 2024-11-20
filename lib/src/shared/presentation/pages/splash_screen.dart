@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mesran_app/src/config/injector.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -12,6 +14,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   SharedPreferences? _prefs;
+  late FlutterSecureStorage _secureStorage;
 
   @override
   void initState() {
@@ -21,7 +24,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   Future<void> _initializePreferences() async {
     await Future.delayed(const Duration(seconds: 2));
-    _prefs = await SharedPreferences.getInstance();
+    _prefs = getIt<SharedPreferences>();
+    _secureStorage = getIt<FlutterSecureStorage>();
     _navigateAfterSplash();
   }
 
@@ -32,10 +36,10 @@ class _SplashScreenState extends State<SplashScreen> {
       _prefs?.setBool('first_time_access', false);
       context.push('/boarding');
     } else {
-      // Check if already logged in
-      final isLoggedIn = _prefs?.getString('accessToken');
+      // Check if already logged in in secure storage
+      final isLoggedIn = _secureStorage.read(key: 'accessToken') as String;
 
-      if (isLoggedIn != null && isLoggedIn.isNotEmpty) {
+      if (isLoggedIn.isNotEmpty) {
         context.go('/home');
       } else {
         context.go('/login');

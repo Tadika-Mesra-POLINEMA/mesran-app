@@ -1,8 +1,8 @@
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/pages/auth/register_page.dart';
 import 'package:mesran_app/src/features/authentication/presentation/pages/auth_page.dart';
 import 'package:mesran_app/src/features/authentication/presentation/pages/verification_page.dart';
 import 'package:mesran_app/src/features/authentication/presentation/pages/verification_success_page.dart';
+import 'package:mesran_app/src/features/users/presentation/pages/register_page.dart';
 
 List<GoRoute> authRoutes = [
   GoRoute(

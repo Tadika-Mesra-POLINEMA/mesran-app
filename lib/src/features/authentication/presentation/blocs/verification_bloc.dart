@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mesran_app/src/features/authentication/domain/failures/auth_failure.dart';
 import 'package:mesran_app/src/features/authentication/domain/use_case/verification_use_case.dart';
@@ -44,10 +42,5 @@ class OtpVerificationBloc
           emit(OtpFailure(AuthStatusType.fail, message: error.toString())),
       (_) => emit(OtpSuccess()),
     );
-  }
-
-  @override
-  Future<void> close() {
-    return super.close();
   }
 }

@@ -77,6 +77,10 @@ class _AuthEmailFormState extends State<AuthEmailForm> {
                       ),
                       TextButton(
                         onPressed: () => context.push('/register'),
+                        style: ButtonStyle(
+                          overlayColor:
+                              WidgetStateProperty.all(Colors.transparent),
+                        ),
                         child: Text(
                           'Daftar',
                           style: titleOneMedium.copyWith(color: primaryBase),

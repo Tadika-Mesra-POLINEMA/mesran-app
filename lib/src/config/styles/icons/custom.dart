@@ -42,3 +42,12 @@ const Icon invite = Icon(
 const Icon device = Icon(
   assetName: 'assets/icons/device.svg',
 );
+const Icon angleLeft = Icon(
+  assetName: 'assets/icons/arrow.svg',
+);
+const Icon share = Icon(
+  assetName: 'assets/icons/share.svg',
+);
+const Icon trash = Icon(
+  assetName: 'assets/icons/trash.svg',
+);

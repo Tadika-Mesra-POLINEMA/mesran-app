@@ -10,7 +10,7 @@ void main() async {
 }
 
 final GoRouter router =
-    GoRouter(initialLocation: '/', routes: Routes().getRoutes());
+    GoRouter(initialLocation: '/register', routes: Routes().getRoutes());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
