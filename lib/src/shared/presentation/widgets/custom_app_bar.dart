@@ -71,7 +71,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             if (dropdownItems != null && dropdownItems!.isNotEmpty)
               PopupMenu(items: dropdownItems!),
             if (endSection != null) endSection!,
-            if (dropdownItems == null && endSection == null) const SizedBox(),
+            if (dropdownItems == null &&
+                dropdownItems!.isEmpty &&
+                endSection == null)
+              const SizedBox(),
           ],
         ),
       ),
