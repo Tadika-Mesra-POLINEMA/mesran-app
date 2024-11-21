@@ -8,8 +8,8 @@ class ProfileGroupPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Sample data for the group
-    final String groupName = "Group Name"; // Replace with actual group name
-    final int memberCount = 10; // Replace with actual member count
+    const String groupName = "Group Name"; // Replace with actual group name
+    const int memberCount = 10; // Replace with actual member count
     final List<Map<String, String>> members = [
       {'name': 'Alice', 'profileImage': 'assets/images/avatar.jpeg'},
       {'name': 'Bob', 'profileImage': 'assets/images/avatar.jpeg'},

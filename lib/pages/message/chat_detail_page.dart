@@ -14,6 +14,8 @@ class ChatDetailPage extends StatelessWidget {
     }, // Marked as not read
   ];
 
+  ChatDetailPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
