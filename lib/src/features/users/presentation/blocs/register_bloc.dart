@@ -1,16 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mesran_app/src/features/authentication/domain/entity/auth_request.dart';
 import 'package:mesran_app/src/features/authentication/domain/use_case/auth_use_case.dart';
 import 'package:mesran_app/src/features/users/domain/entity/register_request.dart';
 import 'package:mesran_app/src/features/users/domain/usecases/register_use_case.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_event.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterUseCase registerUseCase;
   final AuthUseCase authUseCase;
+  final SharedPreferences sharedPreferences;
 
-  RegisterBloc(this.registerUseCase, this.authUseCase)
+  RegisterBloc(this.registerUseCase, this.authUseCase, this.sharedPreferences)
       : super(const RegisterState()) {
     on<RegisterEmailChanged>(_onEmailChanged);
     on<RegisterPasswordChanged>(_onPasswordChanged);
@@ -29,7 +30,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     emit(state.copyWith(
       email: email,
       isEmailValid: isEmailValid,
-      errorMessage: null,
+      errorMessage: 'Email Anda tidak valid',
     ));
   }
 
@@ -42,7 +43,8 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     emit(state.copyWith(
       password: password,
       isPasswordValid: isPasswordValid,
-      errorMessage: null,
+      errorMessage:
+          'Password harus mengandung huruf besar, huruf kecil, dan angka',
     ));
   }
 
@@ -57,7 +59,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     );
     emit(state.copyWith(
       isConfirmPasswordValid: isConfirmPasswordValid,
-      errorMessage: null,
+      errorMessage: 'Konfirmasi kata sandi tidak sama',
     ));
   }
 
@@ -70,7 +72,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     emit(state.copyWith(
       username: username,
       isUsernameValid: isUsernameValid,
-      errorMessage: null,
+      errorMessage: 'Nama harus lebih dari 3 karakter',
     ));
   }
 
@@ -83,7 +85,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     emit(state.copyWith(
       phone: phone,
       isPhoneValid: isPhoneValid,
-      errorMessage: null,
+      errorMessage: 'Nomor telepon tidak valid',
     ));
   }
 
@@ -94,18 +96,30 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
     if (state.isFormValid) {
       emit(state.copyWith(status: RegisterStatus.loading));
       try {
-        await registerUseCase.call(RegisterRequest(
+        final response = await registerUseCase.call(RegisterRequest(
           email: state.email,
           password: state.password,
           username: state.username,
           phone: state.phone,
         ));
 
+        if (response.isLeft()) {
+          emit(state.copyWith(
+            status: RegisterStatus.failure,
+            errorMessage: 'Gagal mendaftar',
+          ));
+          return;
+        }
+
         // Jika register berhasil, selanjutnya bisa dilakukan login
-        authUseCase.login(AuthRequest(
-          email: state.email,
-          password: state.password,
-        ));
+
+        // This is uneccessary because the user will be automatically logged in after registration
+        // authUseCase.login(AuthRequest(
+        //   email: state.email,
+        //   password: state.password,
+        // ));
+
+        sharedPreferences.setBool('is_registered_face', false);
 
         emit(state.copyWith(status: RegisterStatus.success));
       } catch (e) {

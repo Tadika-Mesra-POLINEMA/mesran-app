@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:mesran_app/src/config/styles/icons/custom.dart';
+import 'package:mesran_app/src/config/styles/texts/regular.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_bloc.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_event.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_state.dart';
@@ -62,13 +64,28 @@ class _UsernameInput extends StatelessWidget {
           previous.username != current.username ||
           previous.isUsernameValid != current.isUsernameValid,
       builder: (context, state) {
-        return InputField(
-          prefixIcon: profile,
-          keyboardType: TextInputType.text,
-          hintText: 'Masukkan nama Anda',
-          onChanged: (username) => context
-              .read<RegisterBloc>()
-              .add(RegisterUsernameChanged(username)),
+        final isUsernameError =
+            (state.username.isNotEmpty && !state.isUsernameValid);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InputField(
+              prefixIcon: profile,
+              keyboardType: TextInputType.text,
+              hintText: 'Masukkan nama Anda',
+              isError: isUsernameError,
+              onChanged: (username) => context
+                  .read<RegisterBloc>()
+                  .add(RegisterUsernameChanged(username)),
+            ),
+            if (isUsernameError) Gap(8),
+            if (isUsernameError)
+              Text(
+                '*${state.errorMessage}',
+                style: titleTwo.copyWith(color: primaryBase),
+              ),
+          ],
         );
       },
     );
@@ -83,12 +100,26 @@ class _EmailInput extends StatelessWidget {
           previous.email != current.email ||
           previous.isEmailValid != current.isEmailValid,
       builder: (context, state) {
-        return InputField(
-          prefixIcon: email,
-          keyboardType: TextInputType.emailAddress,
-          hintText: 'Masukkan email Anda',
-          onChanged: (email) =>
-              context.read<RegisterBloc>().add(RegisterEmailChanged(email)),
+        final isEmailError = (state.email.isNotEmpty && !state.isEmailValid);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InputField(
+              prefixIcon: email,
+              keyboardType: TextInputType.emailAddress,
+              hintText: 'Masukkan email Anda',
+              isError: isEmailError,
+              onChanged: (email) =>
+                  context.read<RegisterBloc>().add(RegisterEmailChanged(email)),
+            ),
+            if (isEmailError) Gap(8),
+            if (isEmailError)
+              Text(
+                '*${state.errorMessage}',
+                style: titleTwo.copyWith(color: primaryBase),
+              ),
+          ],
         );
       },
     );
@@ -103,12 +134,27 @@ class _PhoneInput extends StatelessWidget {
           previous.phone != current.phone ||
           previous.isPhoneValid != current.isPhoneValid,
       builder: (context, state) {
-        return InputField(
-            prefixIcon: mobileDevice,
-            hintText: 'Masukkan email Anda',
-            keyboardType: TextInputType.phone,
-            onChanged: (phone) =>
-                context.read<RegisterBloc>().add(RegisterPhoneChanged(phone)));
+        final isPhoneError = (state.phone.isNotEmpty && !state.isPhoneValid);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InputField(
+                prefixIcon: mobileDevice,
+                hintText: 'Masukkan email Anda',
+                keyboardType: TextInputType.phone,
+                isError: isPhoneError,
+                onChanged: (phone) => context
+                    .read<RegisterBloc>()
+                    .add(RegisterPhoneChanged(phone))),
+            if (isPhoneError) Gap(8),
+            if (isPhoneError)
+              Text(
+                '*${state.errorMessage}',
+                style: titleTwo.copyWith(color: primaryBase),
+              ),
+          ],
+        );
       },
     );
   }
@@ -122,11 +168,26 @@ class _PasswordInput extends StatelessWidget {
           previous.password != current.password ||
           previous.isPasswordValid != current.isPasswordValid,
       builder: (context, state) {
-        return InputPasswordField(
-            hintText: 'Buat kata sandi',
-            onChanged: (password) => context
-                .read<RegisterBloc>()
-                .add(RegisterPasswordChanged(password)));
+        final isPasswordError =
+            (state.password.isNotEmpty && !state.isPasswordValid);
+
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InputPasswordField(
+                hintText: 'Buat kata sandi',
+                isError: isPasswordError,
+                onChanged: (password) => context
+                    .read<RegisterBloc>()
+                    .add(RegisterPasswordChanged(password))),
+            if (isPasswordError) Gap(8),
+            if (isPasswordError)
+              Text(
+                '*${state.errorMessage}',
+                style: titleTwo.copyWith(color: primaryBase),
+              ),
+          ],
+        );
       },
     );
   }
@@ -139,11 +200,17 @@ class _ConfirmPasswordInput extends StatelessWidget {
       buildWhen: (previous, current) =>
           previous.isConfirmPasswordValid != current.isConfirmPasswordValid,
       builder: (context, state) {
-        return InputPasswordField(
-          hintText: 'Buat kata sandi',
-          onChanged: (confirmPassword) => context
-              .read<RegisterBloc>()
-              .add(RegisterConfirmPasswordChanged(confirmPassword)),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            InputPasswordField(
+              hintText: 'Buat kata sandi',
+              isError: !state.isConfirmPasswordValid,
+              onChanged: (confirmPassword) => context
+                  .read<RegisterBloc>()
+                  .add(RegisterConfirmPasswordChanged(confirmPassword)),
+            ),
+          ],
         );
       },
     );
