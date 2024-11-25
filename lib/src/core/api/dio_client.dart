@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class DioClient {
   final Dio _dio;
+  final FlutterSecureStorage _secureStorage;
 
-  DioClient({required String baseUrl})
+  DioClient(this._secureStorage, {required String baseUrl})
       : _dio = Dio(BaseOptions(
           baseUrl: baseUrl,
           connectTimeout: const Duration(seconds: 60),
@@ -23,69 +24,55 @@ class DioClient {
         final response = error.response;
 
         if (response != null && response.statusCode == 401) {
-          // AccessToken expired, attempt to refresh
           final isRefreshed = await _refreshToken();
           if (isRefreshed) {
-            // Retry the failed request
             final newRequest = await _retryRequest(error.requestOptions);
             return handler.resolve(newRequest);
           }
         }
 
-        handler.next(error); // Pass the error if refreshing fails
+        handler.next(error);
       },
     ));
   }
 
-  /// Add Authorization header to requests
   Future<void> _addAuthorizationHeader(RequestOptions options) async {
-    final prefs = await SharedPreferences.getInstance();
-    final token = prefs.getString('accessToken');
+    final token = await _secureStorage.read(key: 'accessToken');
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
     }
   }
 
-  /// Refresh access token
   Future<bool> _refreshToken() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final refreshToken = prefs.getString('refreshToken');
+      final refreshToken = await _secureStorage.read(key: 'refreshToken');
 
       if (refreshToken == null) {
-        // No refresh token found, user needs to log in again
         return false;
       }
 
-      // Send refresh token to server
       final response = await _dio.post(
         '/api/authentications/refresh',
         data: {'refreshToken': refreshToken},
       );
 
-      // Save the new accessToken
       final newAccessToken = response.data['accessToken'];
-      prefs.setString('accessToken', newAccessToken);
+      _secureStorage.write(key: 'accessToken', value: newAccessToken);
 
       return true;
     } catch (e) {
-      // Handle refresh failure
       return false;
     }
   }
 
-  /// Retry the failed request with the new accessToken
   Future<Response<dynamic>> _retryRequest(RequestOptions requestOptions) async {
-    final prefs = await SharedPreferences.getInstance();
-    final newToken = prefs.getString('accessToken');
+    final newToken = await _secureStorage.read(key: 'accessToken');
     final headers = Map<String, dynamic>.from(requestOptions.headers);
 
-    // Update Authorization header
     if (newToken != null) {
       headers['Authorization'] = 'Bearer $newToken';
     }
 
-    // Retry the original request
     final options = Options(
       method: requestOptions.method,
       headers: headers,

@@ -15,6 +15,7 @@ class SplashScreen extends StatefulWidget {
 class _SplashScreenState extends State<SplashScreen> {
   SharedPreferences? _prefs;
   late FlutterSecureStorage _secureStorage;
+  bool _mounted = true; // Untuk memastikan widget masih aktif
 
   @override
   void initState() {
@@ -22,24 +23,42 @@ class _SplashScreenState extends State<SplashScreen> {
     _initializePreferences();
   }
 
+  @override
+  void dispose() {
+    _mounted = false;
+    super.dispose();
+  }
+
   Future<void> _initializePreferences() async {
-    await Future.delayed(const Duration(seconds: 2));
-    _prefs = getIt<SharedPreferences>();
-    _secureStorage = getIt<FlutterSecureStorage>();
-    _navigateAfterSplash();
+    try {
+      await Future.delayed(const Duration(seconds: 2));
+      _prefs = getIt<SharedPreferences>();
+      _secureStorage = getIt<FlutterSecureStorage>();
+
+      if (_mounted) {
+        await _navigateAfterSplash();
+      }
+    } catch (e) {
+      debugPrint('Error initializing preferences: $e');
+    }
   }
 
   Future<void> _navigateAfterSplash() async {
+    if (!mounted) return;
     bool? isFirstTimeAccess = _prefs?.getBool('first_time_access');
+
+    await _secureStorage.write(key: 'test', value: 'test');
+    final res = await _secureStorage.read(key: 'test');
+
+    debugPrint('Result ${res}');
 
     if (isFirstTimeAccess == null || isFirstTimeAccess) {
       _prefs?.setBool('first_time_access', false);
       context.push('/boarding');
     } else {
-      // Check if already logged in in secure storage
-      final isLoggedIn = _secureStorage.read(key: 'accessToken') as String;
+      final isLoggedIn = await _secureStorage.read(key: 'accessToken');
 
-      if (isLoggedIn.isNotEmpty) {
+      if (isLoggedIn != null && isLoggedIn.isNotEmpty) {
         context.go('/home');
       } else {
         context.go('/login');

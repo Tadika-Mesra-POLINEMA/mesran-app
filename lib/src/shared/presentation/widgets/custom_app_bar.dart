@@ -57,7 +57,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   SizedBox(
-                    width: 100,
+                    width: 300,
                     child: Text(
                       middleText!,
                       textAlign: TextAlign.center,
@@ -68,7 +68,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               ),
             dropdownItems != null && dropdownItems!.isNotEmpty
                 ? PopupMenu(items: dropdownItems!)
-                : const SizedBox(),
+                : const SizedBox(
+                    width: 20,
+                  ),
           ],
         ),
       ),

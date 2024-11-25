@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mesran_app/src/config/styles/icons/custom.dart';
 import 'package:mesran_app/src/config/styles/texts/medium.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/error.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 
@@ -9,13 +10,15 @@ class InputPasswordField extends StatefulWidget {
   final Function(String)? onChanged;
   final TextInputType? keyboardType;
   final TextEditingController? controller;
+  final bool? isError;
 
   const InputPasswordField(
       {super.key,
       required this.hintText,
       this.controller,
       this.keyboardType,
-      this.onChanged});
+      this.onChanged,
+      this.isError = false});
 
   @override
   State<InputPasswordField> createState() => _InputPasswordFieldState();
@@ -52,7 +55,10 @@ class _InputPasswordFieldState extends State<InputPasswordField> {
         hintText: widget.hintText,
         hintStyle: titleOneMedium.copyWith(color: neutral40),
         enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: neutral20),
+          borderSide: BorderSide(
+              color: widget.isError != null && widget.isError == true
+                  ? errorBase
+                  : neutral20),
           borderRadius: BorderRadius.circular(12),
         ),
         focusedBorder: OutlineInputBorder(

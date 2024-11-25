@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mesran_app/src/core/api/dio_client.dart';
+import 'package:mesran_app/src/core/api/ml_client.dart';
 import 'package:mesran_app/src/core/utils/options.dart';
 import 'package:mesran_app/src/features/authentication/data/data_source/auth_data_source.dart';
 import 'package:mesran_app/src/features/authentication/data/data_source/verification_data_source.dart';
@@ -12,8 +13,10 @@ import 'package:mesran_app/src/features/authentication/presentation/blocs/auth_b
 import 'package:mesran_app/src/features/authentication/presentation/blocs/verification_bloc.dart';
 import 'package:mesran_app/src/features/users/data/data_source/user_data_source.dart';
 import 'package:mesran_app/src/features/users/data/repository/user_repository_impl.dart';
+import 'package:mesran_app/src/features/users/domain/usecases/register_face_use_case.dart';
 import 'package:mesran_app/src/features/users/domain/usecases/register_use_case.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_bloc.dart';
+import 'package:mesran_app/src/features/users/presentation/blocs/register_face_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 final getIt = GetIt.instance;
@@ -22,10 +25,11 @@ Future<void> setupInjection() async {
   /*******************************************************************/
   /*****************************  GLOBAL *****************************/
   /*******************************************************************/
-  getIt.registerLazySingleton(() => DioClient(baseUrl: Options.baseUrl)); //==> Dio Client
+  getIt.registerLazySingleton(() => ML(baseUrl: Options.mlBaseUrl)); //==> ML Client
   getIt.registerLazySingleton(() => FlutterSecureStorage()); //==> Secure Storage
   final sharedPreferences = await SharedPreferences.getInstance(); //==> Shared Preference
   getIt.registerLazySingleton(() => sharedPreferences);
+  getIt.registerLazySingleton(() => DioClient(getIt<FlutterSecureStorage>(), baseUrl: Options.baseUrl)); //==> Dio Client
 
   /****************************************************************************/
   /*****************************  AUTHENTICATIONS *****************************/
@@ -44,10 +48,14 @@ Future<void> setupInjection() async {
   /******************************************************************/
   /*****************************  USERS *****************************/
   /******************************************************************/
-  getIt.registerLazySingleton(() => UserDataSource(getIt<DioClient>()));
+  getIt.registerLazySingleton(() => UserDataSource(getIt<DioClient>(), getIt<SharedPreferences>()));
   getIt.registerLazySingleton(() => UserRepositoryImpl(getIt<UserDataSource>()));
 
   //==> User Registration <==//
-  getIt.registerLazySingleton(() => RegisterUseCase(getIt<UserRepositoryImpl>()));
-  getIt.registerLazySingleton(() => RegisterBloc(getIt<RegisterUseCase>(), getIt<AuthUseCase>()));
+  getIt.registerLazySingleton(() => RegisterUseCase(getIt<UserRepositoryImpl>(), getIt<FlutterSecureStorage>()));
+  getIt.registerLazySingleton(() => RegisterBloc(getIt<RegisterUseCase>(), getIt<AuthUseCase>(), getIt<SharedPreferences>()));
+
+  //==> Register Face <==//
+  getIt.registerLazySingleton(() => RegisterFaceUseCase(getIt<UserRepositoryImpl>()));
+  getIt.registerLazySingleton(() => RegisterFaceBloc(getIt<ML>(), getIt<RegisterFaceUseCase>(), getIt<SharedPreferences>()));
 }

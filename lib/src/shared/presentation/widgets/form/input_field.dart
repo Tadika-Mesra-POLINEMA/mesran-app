@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mesran_app/src/config/styles/icons/template.dart' as ic;
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/error.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 
@@ -11,6 +12,7 @@ class InputField extends StatelessWidget {
   final InputDecoration? decoration;
   final Function(String)? onChanged;
   final TextInputType? keyboardType;
+  final bool? isError;
 
   const InputField({
     super.key,
@@ -20,6 +22,7 @@ class InputField extends StatelessWidget {
     this.decoration,
     this.onChanged,
     this.controller,
+    this.isError = false,
   });
 
   @override
@@ -34,7 +37,10 @@ class InputField extends StatelessWidget {
             hintText: hintText,
             hintStyle: titleOne.copyWith(color: neutral40),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: neutral20),
+              borderSide: BorderSide(
+                  color: isError != null && isError == true
+                      ? errorBase
+                      : neutral20),
               borderRadius: BorderRadius.circular(12),
             ),
             focusedBorder: OutlineInputBorder(
