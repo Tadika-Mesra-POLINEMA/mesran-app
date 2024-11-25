@@ -1,4 +1,3 @@
-// register_state.dart
 import 'package:equatable/equatable.dart';
 
 enum RegisterStatus { initial, loading, success, failure }

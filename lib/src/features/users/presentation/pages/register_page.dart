@@ -61,7 +61,7 @@ class BottomRegisterPage extends StatelessWidget {
     return BlocConsumer<RegisterBloc, RegisterState>(
         listener: (context, state) {
       if (state.status == RegisterStatus.success) {
-        context.go('/verify');
+        context.go('/register/faces/verify');
       }
     }, builder: (context, state) {
       return BottomAppBar(
@@ -94,7 +94,7 @@ class BottomRegisterPage extends StatelessWidget {
                   style: titleOne.copyWith(color: neutral40),
                 ),
                 TextButton(
-                  onPressed: () => context.push('/register'),
+                  onPressed: () => context.push('/login'),
                   style: ButtonStyle(
                     overlayColor: WidgetStateProperty.all(Colors.transparent),
                   ),
