@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:mesran_app/utils/themes.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mesran_app/utils/themes.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
@@ -12,7 +12,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: PakaianTemaPage(),
+      home: const PakaianTemaPage(),
     );
   }
 }
@@ -25,8 +25,7 @@ class PakaianTemaPage extends StatefulWidget {
 }
 
 class _PakaianTemaPageState extends State<PakaianTemaPage> {
-  int _selectedIndex = 0;
-
+  int _selectedIndex = -1; // Tidak ada pilihan yang dipilih di awal
   final List<Map<String, dynamic>> _items = [
     {'label': 'Formal', 'icon': Icons.checkroom},
     {'label': 'Kasual', 'icon': Icons.safety_check},
@@ -36,9 +35,27 @@ class _PakaianTemaPageState extends State<PakaianTemaPage> {
     {'label': 'Anime', 'icon': Icons.child_friendly},
   ];
 
+  final TextEditingController _customDresscodeController =
+      TextEditingController();
+
+  void _addCustomDresscode() {
+    final customDresscode = _customDresscodeController.text.trim();
+    if (customDresscode.isNotEmpty) {
+      setState(() {
+        _items
+            .add({'label': customDresscode, 'icon': Icons.add_circle_outline});
+        _customDresscodeController.clear(); // Bersihkan input
+      });
+    }
+  }
+
   void _onSave() {
-    final selectedTheme = _items[_selectedIndex]['label'];
-    print('Selected theme: $selectedTheme');
+    if (_selectedIndex >= 0) {
+      final selectedTheme = _items[_selectedIndex]['label'];
+      print('Selected theme: $selectedTheme');
+    } else {
+      print('No theme selected');
+    }
   }
 
   @override
@@ -86,8 +103,30 @@ class _PakaianTemaPageState extends State<PakaianTemaPage> {
               ),
             ),
             const SizedBox(height: 24),
-            Text('Pilih Pakaian', style: titleOneMedium),
+            Text('Pilih atau Tambahkan Pakaian', style: titleOneMedium),
             const SizedBox(height: 8),
+            TextFormField(
+              controller: _customDresscodeController,
+              decoration: InputDecoration(
+                hintText: 'Tambahkan pakaian custom',
+                hintStyle: titleOneRegular.copyWith(color: neutral40),
+                suffixIcon: IconButton(
+                  icon: const Icon(Icons.add, color: Colors.blue),
+                  onPressed: _addCustomDresscode,
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                      color: neutral20), // Warna abu-abu saat tidak aktif
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(8),
+                  borderSide: BorderSide(
+                      color: primaryBase), // Warna abu-abu saat aktif (fokus)
+                ),
+              ),
+            ),
+            const SizedBox(height: 16),
             Expanded(
               child: GridView.builder(
                 itemCount: _items.length,

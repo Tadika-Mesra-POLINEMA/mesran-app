@@ -54,7 +54,7 @@ class AppBarHomePage extends StatelessWidget {
               style: headingTwoSemiBold,
             ),
             InkWell(
-                onTap: () => context.push('/notifications'),
+                onTap: () => context.push('/notifications/empty'),
                 child: bell.copyWith(color: neutralBase))
           ]),
     );
