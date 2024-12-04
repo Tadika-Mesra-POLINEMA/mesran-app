@@ -280,9 +280,9 @@ class DetailUndanganPage extends StatelessWidget {
                         const Gap(16),
                         Button(
                           onPressed: () {},
-                          style: buttonPrimaryBase,
+                          style: buttonSecondaryBase,
                           child: Text('Lihat Semua',
-                              style: titleOneSemiBold.copyWith(color: white)),
+                              style: titleOneSemiBold.copyWith(color: neutralBase)),
                         )
                       ],
                     ),
