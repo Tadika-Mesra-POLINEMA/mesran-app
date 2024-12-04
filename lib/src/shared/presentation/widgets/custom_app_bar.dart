@@ -10,12 +10,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String? leadingText;
   final String? middleText;
   final List<PopupItem>? dropdownItems;
+  final Widget? endSection;
 
   const CustomAppBar({
     super.key,
     this.leadingText,
     this.middleText,
     this.dropdownItems,
+    this.endSection,
   });
 
   @override
@@ -66,11 +68,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
                 ],
               ),
-            dropdownItems != null && dropdownItems!.isNotEmpty
-                ? PopupMenu(items: dropdownItems!)
-                : const SizedBox(
-                    width: 20,
-                  ),
+            if (dropdownItems != null && dropdownItems!.isNotEmpty)
+              PopupMenu(items: dropdownItems!),
+            if (endSection != null) endSection!,
+            if (dropdownItems == null && endSection == null) const SizedBox(),
           ],
         ),
       ),

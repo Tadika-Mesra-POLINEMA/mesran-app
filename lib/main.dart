@@ -7,9 +7,22 @@ import 'my_app.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await setupInjection();
-  final GoRouter router = GoRouter(
-    initialLocation: '/',
-    routes: Routes().getRoutes(),
-  );
-  runApp(MyApp(router: router));
+  runApp(const MyApp());
+}
+
+final GoRouter router =
+    GoRouter(initialLocation: '/register', routes: Routes().getRoutes());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      routerDelegate: router.routerDelegate,
+      routeInformationParser: router.routeInformationParser,
+      routeInformationProvider: router.routeInformationProvider,
+      debugShowCheckedModeBanner: false,
+    );
+  }
 }
