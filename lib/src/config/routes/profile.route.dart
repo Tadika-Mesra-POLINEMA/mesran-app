@@ -1,8 +1,12 @@
+import 'package:dartz/dartz.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/pages/profile/account_profile_page.dart';
-import 'package:mesran_app/pages/profile/create_profile_akun.dart';
-import 'package:mesran_app/pages/profile/create_profile_pribadi.dart';
-import 'package:mesran_app/pages/riwayat/riwayat_page.dart';
+// import 'package:mesran_app/pages/profile/account_profile_page.dart';
+import 'package:mesran_app/src/features/profiles/presentation/pages/create_profile_akun.dart';
+import 'package:mesran_app/src/features/profiles/presentation/pages/create_profile_pribadi.dart';
+// import 'package:mesran_app/src/features/profiles/presentation/pages/riwayat_page.dart';
+import 'package:mesran_app/src/features/profiles/presentation/pages/account_profile_page.dart';
+import 'package:mesran_app/src/features/profiles/presentation/pages/history_page.dart';
+import 'package:mesran_app/src/features/profiles/presentation/pages/invitation_page.dart';
 
 List<GoRoute> profileRoutes = [
   GoRoute(
@@ -16,5 +20,8 @@ List<GoRoute> profileRoutes = [
       builder: (context, state) => const CreateProfilePribadi()),
   GoRoute(
       path: '/account/history',
-      builder: (context, state) => const RiwayatPage()),
+      builder: (context, state) => const HistoryPage()),
+  GoRoute(
+      path: '/account/invitation',
+      builder: (context, state) => const InvitationPage()),
 ];
