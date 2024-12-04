@@ -45,9 +45,33 @@ const Icon device = Icon(
 const Icon angleLeft = Icon(
   assetName: 'assets/icons/arrow.svg',
 );
+const Icon angleRight = Icon(
+  assetName: 'assets/icons/arrow-2.svg',
+);
 const Icon share = Icon(
   assetName: 'assets/icons/share.svg',
 );
 const Icon trash = Icon(
   assetName: 'assets/icons/trash.svg',
+);
+const Icon clock = Icon(
+  assetName: 'assets/icons/clock.svg',
+);
+const Icon formalClothes = Icon(
+  assetName: 'assets/icons/formal.svg',
+);
+const Icon casualClothes = Icon(
+  assetName: 'assets/icons/casual.svg',
+);
+const Icon sport = Icon(
+  assetName: 'assets/icons/sport.svg',
+);
+const Icon traditional = Icon(
+  assetName: 'assets/icons/traditional.svg',
+);
+const Icon horror = Icon(
+  assetName: 'assets/icons/horror.svg',
+);
+const Icon anime = Icon(
+  assetName: 'assets/icons/anime.svg',
 );

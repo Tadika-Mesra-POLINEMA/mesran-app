@@ -6,23 +6,27 @@ import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 
 class InputField extends StatelessWidget {
-  final ic.Icon prefixIcon;
+  final ic.Icon? prefixIcon;
   final String hintText;
   final TextEditingController? controller;
   final InputDecoration? decoration;
   final Function(String)? onChanged;
   final TextInputType? keyboardType;
   final bool? isError;
+  final String? initialValue;
+  final int? maxLines;
 
   const InputField({
     super.key,
-    required this.prefixIcon,
+    this.prefixIcon,
     required this.hintText,
     this.keyboardType,
     this.decoration,
     this.onChanged,
     this.controller,
     this.isError = false,
+    this.initialValue,
+    this.maxLines,
   });
 
   @override
@@ -31,9 +35,10 @@ class InputField extends StatelessWidget {
       onChanged: onChanged,
       controller: controller,
       keyboardType: keyboardType ?? TextInputType.text,
+      maxLines: maxLines ?? 1,
       decoration: decoration ??
           InputDecoration(
-            prefixIcon: prefixIcon.copyWith(color: neutralBase),
+            prefixIcon: prefixIcon?.copyWith(color: neutralBase),
             hintText: hintText,
             hintStyle: titleOne.copyWith(color: neutral40),
             enabledBorder: OutlineInputBorder(
