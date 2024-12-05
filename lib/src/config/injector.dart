@@ -13,6 +13,11 @@ import 'package:mesran_app/src/features/authentication/domain/use_case/auth_use_
 import 'package:mesran_app/src/features/authentication/domain/use_case/verification_use_case.dart';
 import 'package:mesran_app/src/features/authentication/presentation/blocs/auth_bloc.dart';
 import 'package:mesran_app/src/features/authentication/presentation/blocs/verification_bloc.dart';
+import 'package:mesran_app/src/features/events/data/data_source/event_data_source.dart';
+import 'package:mesran_app/src/features/events/data/repository/event_repository_impl.dart';
+import 'package:mesran_app/src/features/events/domain/use_case/create_event_use_case.dart';
+import 'package:mesran_app/src/features/events/presentation/bloc/create_event_bloc.dart';
+import 'package:mesran_app/src/features/events/presentation/bloc/event_dresscode_bloc.dart';
 import 'package:mesran_app/src/features/users/data/data_source/user_data_source.dart';
 import 'package:mesran_app/src/features/users/data/repository/user_repository_impl.dart';
 import 'package:mesran_app/src/features/users/domain/usecases/register_face_use_case.dart';
@@ -61,4 +66,16 @@ Future<void> setupInjection() async {
   //==> Register Face <==//
   getIt.registerLazySingleton(() => RegisterFaceUseCase(getIt<UserRepositoryImpl>()));
   getIt.registerLazySingleton(() => RegisterFaceBloc(getIt<ML>(), getIt<RegisterFaceUseCase>()));
+
+  /*******************************************************************/
+  /*****************************  EVENTS *****************************/
+  /*******************************************************************/
+  getIt.registerLazySingleton(() => EventDataSource(getIt<DioClient>()));
+  getIt.registerLazySingleton(() => EventRepositoryImpl(getIt<EventDataSource>()));
+  getIt.registerLazySingleton(() => CreateEventUseCase(getIt<EventRepositoryImpl>(), getIt<SharedPreferences>()));
+  
+  getIt.registerLazySingleton(() => CreateEventBloc(getIt<SharedPreferences>(), getIt<CreateEventUseCase>()));
+
+  //==> Dresscode <==//
+  getIt.registerLazySingleton(() => EventDresscodeBloc(getIt<SharedPreferences>()));
 }

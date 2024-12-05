@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
 import 'package:mesran_app/src/features/authentication/data/data_source/auth_data_source.dart';
 import 'package:mesran_app/src/features/authentication/domain/entity/auth_request.dart';
 import 'package:mesran_app/src/features/authentication/domain/entity/auth_response.dart';

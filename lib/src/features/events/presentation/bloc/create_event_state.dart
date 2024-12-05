@@ -102,3 +102,56 @@ class CreateEventState extends Equatable {
         isDresscodeValid,
       ];
 }
+
+class CreateEventSuccess extends CreateEventState {
+  CreateEventSuccess()
+      : super(
+          // Reset semua nilai ke default
+          name: '',
+          description: '',
+          date: DateTime(
+              DateTime.now().year, DateTime.now().month, DateTime.now().day),
+          start: const TimeOfDay(hour: 0, minute: 0),
+          location: '',
+          theme: '',
+          dresscode: '',
+          errorMessage: '',
+          isNameValid: false,
+          isDescriptionValid: false,
+          isDateValid: false,
+          isStartValid: false,
+          isLocationValid: false,
+          isThemeValid: false,
+          isDresscodeValid: false,
+        );
+}
+
+class CreateEventFailed extends CreateEventState {
+  final String message;
+
+  CreateEventFailed(this.message);
+
+  @override
+  List<Object?> get props => [message];
+}
+
+class CreateEventFormNotValid extends CreateEventState {
+  CreateEventFormNotValid(CreateEventState state)
+      : super(
+          name: state.name,
+          description: state.description,
+          date: state.date,
+          start: state.start,
+          location: state.location,
+          theme: state.theme,
+          dresscode: state.dresscode,
+          errorMessage: 'Please fill all required fields correctly',
+          isNameValid: state.isNameValid,
+          isDescriptionValid: state.isDescriptionValid,
+          isDateValid: state.isDateValid,
+          isStartValid: state.isStartValid,
+          isLocationValid: state.isLocationValid,
+          isThemeValid: state.isThemeValid,
+          isDresscodeValid: state.isDresscodeValid,
+        );
+}

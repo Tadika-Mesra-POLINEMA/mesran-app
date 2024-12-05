@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mesran_app/src/features/events/domain/entities/pref/create_event_pref.dart';
 import 'package:mesran_app/src/features/events/domain/entities/req/create_event_request.dart';
 import 'package:mesran_app/src/features/events/domain/use_case/create_event_use_case.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/create_event_event.dart';
@@ -28,16 +29,13 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 
   void loadPreferences() {
     // Ambil data dari SharedPreferences
-    final name = _sharedPreferences.getString('create_event_name') ?? '';
-    final description =
-        _sharedPreferences.getString('create_event_description') ?? '';
-    final dateString = _sharedPreferences.getString('create_event_date');
-    final startTimeString = _sharedPreferences.getString('create_event_start');
-    final location =
-        _sharedPreferences.getString('create_event_location') ?? '';
-    final theme = _sharedPreferences.getString('create_event_theme') ?? '';
-    final dresscode =
-        _sharedPreferences.getString('create_event_dresscode') ?? '';
+    final name = _sharedPreferences.getString(CreateEventPref.name) ?? '';
+    final description = _sharedPreferences.getString(CreateEventPref.description) ?? '';
+    final dateString = _sharedPreferences.getString(CreateEventPref.date);
+    final startTimeString = _sharedPreferences.getString(CreateEventPref.start);
+    final location = _sharedPreferences.getString(CreateEventPref.location) ?? '';
+    final theme = _sharedPreferences.getString(CreateEventPref.theme) ?? '';
+    final dresscode = _sharedPreferences.getString(CreateEventPref.dresscode) ?? '';
 
     final today = DateTime.now();
 
@@ -72,7 +70,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     final name = event.name.trim();
     final isNameValid = _validateName(name);
 
-    _sharedPreferences.setString('create_event_name', event.name);
+    _sharedPreferences.setString(CreateEventPref.name, event.name);
 
     emit(state.copyWith(
       name: event.name,
@@ -86,7 +84,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
     final description = event.description.trim();
     final isDescriptionValid = _validateDescription(description);
 
-    _sharedPreferences.setString('create_event_description', event.description);
+    _sharedPreferences.setString(CreateEventPref.description, event.description);
 
     emit(state.copyWith(
       description: event.description,
@@ -146,50 +144,42 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
 
   Future<void> _onSubmitEvent(
       SubmitEvent event, Emitter<CreateEventState> emit) async {
+    debugPrint('IS FORM EVENT VALID: ${state.isFormValid}');
     if (state.isFormValid) {
       try {
+        final startTime = DateTime(state.date.year, state.date.month,
+            state.date.day, state.start.hour, state.start.minute, 0);
+
         // Submit data ke server
-        final response = await _createEventUseCase(CreateEventRequest(
+        final response = await _createEventUseCase.call(CreateEventRequest(
           name: state.name,
           description: state.description,
           date: state.date,
-          start: DateTime(
-            state.date.year,
-            state.date.month,
-            state.date.day,
-            state.start.hour,
-            state.start.minute,
-          ),
-          end: DateTime(
-            state.date.year,
-            state.date.month,
-            state.date.day,
-            state.start.hour,
-            state.start.minute,
-          ),
+          start: startTime,
           location: state.location,
           theme: state.theme,
           dress: state.dresscode,
         ));
 
-        emit(state.copyWith(errorMessage: ''));
+        return response.fold((error) {
+          print('Should not be here');
+          emit(CreateEventFailed(error.message));
+        }, (success) {
+          print('Should be in here');
+          emit(CreateEventSuccess());
+        });
       } catch (e) {
         emit(state.copyWith(errorMessage: e.toString()));
       }
     } else {
-      emit(state.copyWith(
-        errorMessage: 'Please fill all required fields correctly',
-      ));
+      emit(CreateEventFormNotValid(state));
     }
   }
 
   /// Validation
-  bool _validateName(String name) =>
-      name.trim().isNotEmpty && name.trim().length >= 3;
-  bool _validateDescription(String description) =>
-      description.trim().isNotEmpty && description.trim().length >= 10;
-  bool _validateLocation(String address) =>
-      address.trim().isNotEmpty && address.trim().length >= 3;
+  bool _validateName(String name) => name.trim().isNotEmpty && name.trim().length >= 3;
+  bool _validateDescription(String description) => description.trim().isNotEmpty && description.trim().length >= 10;
+  bool _validateLocation(String address) => address.trim().isNotEmpty && address.trim().length >= 3;
   bool _validateDate(DateTime date) {
     final today = DateTime.now();
     final dateToValidate = DateTime(today.year, today.month, today.day);

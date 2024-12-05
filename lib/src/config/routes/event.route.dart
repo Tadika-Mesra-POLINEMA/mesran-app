@@ -1,9 +1,9 @@
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/pages/event/create_activities_page.dart';
-import 'package:mesran_app/pages/event/create_event_page.dart';
-import 'package:mesran_app/pages/event/event_activities_page.dart';
-import 'package:mesran_app/pages/event/pakaian_tema_page.dart';
 import 'package:mesran_app/pages/event/popup_berhasil_page.dart';
+import 'package:mesran_app/src/features/events/presentation/pages/activities_event_page.dart';
+import 'package:mesran_app/src/features/events/presentation/pages/create_activity_page.dart';
+import 'package:mesran_app/src/features/events/presentation/pages/create_event_page.dart';
+import 'package:mesran_app/src/features/events/presentation/pages/event_dresscode_page.dart';
 
 List<GoRoute> eventRoutes = [
   GoRoute(
@@ -11,14 +11,14 @@ List<GoRoute> eventRoutes = [
     builder: (context, state) => const CreateEventPage()),
   GoRoute(
     path: '/events/activities',
-    builder: (context, state) => const EventActivitiesPage(itemCount: 3),
+    builder: (context, state) => const ActivitiesEventPage(),
   ),
   GoRoute(
     path: '/events/activities/create',
-    builder: (context, state) => const CreateActivitiesPage()),
+    builder: (context, state) => const CreateActivityPage()),
   GoRoute(
-    path: '/events/dress',
-    builder: (context, state) => PakaianTemaPage()
+    path: '/events/dresscode/create',
+    builder: (context, state) => EventDresscodePage()
   ),
   GoRoute(
     path: '/events/create/success',

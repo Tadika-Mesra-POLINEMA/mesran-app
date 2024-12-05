@@ -4,6 +4,7 @@ import 'package:mesran_app/src/config/injector.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/create_event_bloc.dart';
+import 'package:mesran_app/src/features/events/presentation/bloc/create_event_event.dart';
 import 'package:mesran_app/src/features/events/presentation/widgets/create_event_form.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/form/button.dart';
@@ -44,7 +45,9 @@ class BottomCreateEventPage extends StatelessWidget {
       child: Column(
         children: [
           Button(
-              onPressed: () {},
+              onPressed: () {
+                context.read<CreateEventBloc>().add(SubmitEvent());
+              },
               type: ButtonType.primary,
               child: Text(
                 'Buat',

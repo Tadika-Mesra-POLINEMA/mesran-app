@@ -27,25 +27,38 @@ class _CreateEventFormState extends State<CreateEventForm> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CreateEventBloc, CreateEventState>(
-        listener: (context, state) => {},
-        builder: (context, state) {
-          return const Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _InputEventName(),
-              Gap(16),
-              _InputEventDescription(),
-              Gap(16),
-              _InputEventLocation(),
-              Gap(16),
-              _InputEventDate(),
-              Gap(16),
-              _InputEventStart(),
-              Gap(16),
-              _InputDressActivities(),
-            ],
+        listener: (context, state) {
+      if (state is CreateEventSuccess) {
+        context.go('/home');
+      }
+      if (state is CreateEventFailed || state is CreateEventFormNotValid) {
+        ScaffoldMessenger.of(context)
+          ..hideCurrentSnackBar()
+          ..showSnackBar(
+            SnackBar(
+              content: Text(state.errorMessage),
+              backgroundColor: primaryBase,
+            ),
           );
-        });
+      }
+    }, builder: (context, state) {
+      return const Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _InputEventName(),
+          Gap(16),
+          _InputEventDescription(),
+          Gap(16),
+          _InputEventLocation(),
+          Gap(16),
+          _InputEventDate(),
+          Gap(16),
+          _InputEventStart(),
+          Gap(16),
+          _InputDressActivities(),
+        ],
+      );
+    });
   }
 }
 
