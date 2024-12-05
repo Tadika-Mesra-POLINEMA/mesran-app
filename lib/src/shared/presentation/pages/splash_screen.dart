@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mesran_app/src/config/injector.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
+import 'package:mesran_app/src/core/api/dio_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -14,8 +14,10 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   SharedPreferences? _prefs;
-  late FlutterSecureStorage _secureStorage;
-  bool _mounted = true; // Untuk memastikan widget masih aktif
+  late DioClient _dioClient;
+  late GoRouter _router;
+
+  bool _mounted = true;
 
   @override
   void initState() {
@@ -33,7 +35,8 @@ class _SplashScreenState extends State<SplashScreen> {
     try {
       await Future.delayed(const Duration(seconds: 2));
       _prefs = getIt<SharedPreferences>();
-      _secureStorage = getIt<FlutterSecureStorage>();
+      _dioClient = getIt<DioClient>();
+      _router = getIt<GoRouter>();
 
       if (_mounted) {
         await _navigateAfterSplash();
@@ -47,21 +50,27 @@ class _SplashScreenState extends State<SplashScreen> {
     if (!mounted) return;
     bool? isFirstTimeAccess = _prefs?.getBool('first_time_access');
 
-    await _secureStorage.write(key: 'test', value: 'test');
-    final res = await _secureStorage.read(key: 'test');
-
-    debugPrint('Result ${res}');
-
     if (isFirstTimeAccess == null || isFirstTimeAccess) {
       _prefs?.setBool('first_time_access', false);
-      context.push('/boarding');
+      context.go('/boarding');
     } else {
-      final isLoggedIn = await _secureStorage.read(key: 'accessToken');
+      try {
+        final res = await _dioClient.get('api/users/me');
 
-      if (isLoggedIn != null && isLoggedIn.isNotEmpty) {
-        context.go('/home');
-      } else {
-        context.go('/login');
+        if (res.statusCode == 200) {
+          final data = res.data['data']["is_face_registered"] as bool;
+
+          if (!data) {
+            _router.go('/register/faces/verify');
+          } else {
+            _router.go('/home');
+          }
+        } else {
+          _router.go('/login');
+        }
+      } catch (e) {
+        debugPrint('Error fetching user data: $e');
+        _router.go('/login');
       }
     }
   }

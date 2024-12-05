@@ -33,6 +33,12 @@ class _AuthEmailFormState extends State<AuthEmailForm> {
           context.go('/verify');
         } else if (state is AuthFailure) {
           // TODO: Implement error handling
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: errorBase,
+            ),
+          );
         }
       },
       builder: (context, state) {

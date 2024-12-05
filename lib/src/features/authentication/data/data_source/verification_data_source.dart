@@ -14,12 +14,8 @@ class VerificationDataSource {
   Future<Either<AuthFailure, BaseResponse<VerificationResponse>>> verifyLogin(
       VerificationRequest request) async {
     try {
-      print(request.toJson());
-
       final response = await _dioClient
           .post('/api/authentications/verify-login', data: request.toJson());
-
-      print(response);
 
       if (response.statusCode == 200) {
         return Right(BaseResponse.fromJson(

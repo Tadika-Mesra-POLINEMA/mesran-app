@@ -1,11 +1,13 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
 
 class DioClient {
   final Dio _dio;
   final FlutterSecureStorage _secureStorage;
+  final GoRouter _router;
 
-  DioClient(this._secureStorage, {required String baseUrl})
+  DioClient(this._secureStorage, this._router, {required String baseUrl})
       : _dio = Dio(BaseOptions(
           baseUrl: baseUrl,
           connectTimeout: const Duration(seconds: 60),
@@ -28,11 +30,20 @@ class DioClient {
           if (isRefreshed) {
             final newRequest = await _retryRequest(error.requestOptions);
             return handler.resolve(newRequest);
+          } else {
+            _router.go('/login');
           }
         }
 
         handler.next(error);
       },
+    ));
+    _dio.interceptors.add(LogInterceptor(
+      requestBody: true,
+      responseBody: true,
+      requestHeader: true,
+      responseHeader: true,
+      error: true,
     ));
   }
 
@@ -51,16 +62,21 @@ class DioClient {
         return false;
       }
 
-      final response = await _dio.post(
-        '/api/authentications/refresh',
+      final response = await _dio.put(
+        'api/authentications/refresh',
         data: {'refreshToken': refreshToken},
       );
 
-      final newAccessToken = response.data['accessToken'];
-      _secureStorage.write(key: 'accessToken', value: newAccessToken);
+      if (response.statusCode == 200) {
+        final newAccessToken = response.data['data']['accessToken'];
 
-      return true;
-    } catch (e) {
+        await _secureStorage.write(key: 'accessToken', value: newAccessToken);
+
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException {
       return false;
     }
   }

@@ -4,15 +4,12 @@ import 'package:mesran_app/src/core/api/ml_client.dart';
 import 'package:mesran_app/src/features/users/domain/usecases/register_face_use_case.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_face_event.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_face_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterFaceBloc extends Bloc<RegisterFaceEvent, RegisterFaceState> {
   final ML _mlClient;
   final RegisterFaceUseCase _registerFaceUseCase;
-  final SharedPreferences _sharedPreferences;
 
-  RegisterFaceBloc(
-      this._mlClient, this._registerFaceUseCase, this._sharedPreferences)
+  RegisterFaceBloc(this._mlClient, this._registerFaceUseCase)
       : super(RegisterFaceState()) {
     on<CaptureFace>(_onCaptureFace);
   }
@@ -29,7 +26,7 @@ class RegisterFaceBloc extends Bloc<RegisterFaceEvent, RegisterFaceState> {
       final response = await _mlClient.client.post(
         '/faces/validate',
         data: FormData.fromMap({
-          'face': await MultipartFile.fromFile(path),
+          'faces': await MultipartFile.fromFile(path),
         }),
       );
 
@@ -39,8 +36,6 @@ class RegisterFaceBloc extends Bloc<RegisterFaceEvent, RegisterFaceState> {
         if (paths.length == 5) {
           try {
             _registerFaceUseCase.call(paths);
-
-            _sharedPreferences.setBool('is_registered_face', true);
 
             emit(RegisterFaceSuccess());
           } catch (error) {

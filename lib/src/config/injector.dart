@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mesran_app/src/config/routes/routes.dart';
 import 'package:mesran_app/src/core/api/dio_client.dart';
 import 'package:mesran_app/src/core/api/ml_client.dart';
 import 'package:mesran_app/src/core/utils/options.dart';
@@ -26,10 +28,11 @@ Future<void> setupInjection() async {
   /*****************************  GLOBAL *****************************/
   /*******************************************************************/
   getIt.registerLazySingleton(() => ML(baseUrl: Options.mlBaseUrl)); //==> ML Client
+  getIt.registerLazySingleton(() => GoRouter(routes: Routes().getRoutes()));
   getIt.registerLazySingleton(() => FlutterSecureStorage()); //==> Secure Storage
   final sharedPreferences = await SharedPreferences.getInstance(); //==> Shared Preference
   getIt.registerLazySingleton(() => sharedPreferences);
-  getIt.registerLazySingleton(() => DioClient(getIt<FlutterSecureStorage>(), baseUrl: Options.baseUrl)); //==> Dio Client
+  getIt.registerLazySingleton(() => DioClient(getIt<FlutterSecureStorage>(), getIt<GoRouter>(), baseUrl: Options.baseUrl)); //==> Dio Client
 
   /****************************************************************************/
   /*****************************  AUTHENTICATIONS *****************************/
@@ -48,7 +51,7 @@ Future<void> setupInjection() async {
   /******************************************************************/
   /*****************************  USERS *****************************/
   /******************************************************************/
-  getIt.registerLazySingleton(() => UserDataSource(getIt<DioClient>(), getIt<SharedPreferences>()));
+  getIt.registerLazySingleton(() => UserDataSource(getIt<DioClient>()));
   getIt.registerLazySingleton(() => UserRepositoryImpl(getIt<UserDataSource>()));
 
   //==> User Registration <==//
@@ -57,5 +60,5 @@ Future<void> setupInjection() async {
 
   //==> Register Face <==//
   getIt.registerLazySingleton(() => RegisterFaceUseCase(getIt<UserRepositoryImpl>()));
-  getIt.registerLazySingleton(() => RegisterFaceBloc(getIt<ML>(), getIt<RegisterFaceUseCase>(), getIt<SharedPreferences>()));
+  getIt.registerLazySingleton(() => RegisterFaceBloc(getIt<ML>(), getIt<RegisterFaceUseCase>()));
 }

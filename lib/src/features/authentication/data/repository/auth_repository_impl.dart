@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:mesran_app/src/features/authentication/data/data_source/auth_data_source.dart';
 import 'package:mesran_app/src/features/authentication/domain/entity/auth_request.dart';
 import 'package:mesran_app/src/features/authentication/domain/entity/auth_response.dart';
@@ -17,8 +18,6 @@ class AuthRepositoryImpl extends AbstractAuthRepository {
       AuthRequest request) async {
     try {
       final response = await _authDataSource.login(request);
-
-      print(response);
 
       return response.fold(
         (error) =>
