@@ -18,6 +18,10 @@ import 'package:mesran_app/src/features/events/data/repository/event_repository_
 import 'package:mesran_app/src/features/events/domain/use_case/create_event_use_case.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/create_event_bloc.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/event_dresscode_bloc.dart';
+import 'package:mesran_app/src/features/home/data/data_source/home_data_source.dart';
+import 'package:mesran_app/src/features/home/data/repository/home_repository_impl.dart';
+import 'package:mesran_app/src/features/home/domain/use_case/get_home_events_use_case.dart';
+import 'package:mesran_app/src/features/home/presentation/bloc/home_page_bloc.dart';
 import 'package:mesran_app/src/features/users/data/data_source/user_data_source.dart';
 import 'package:mesran_app/src/features/users/data/repository/user_repository_impl.dart';
 import 'package:mesran_app/src/features/users/domain/usecases/register_face_use_case.dart';
@@ -78,4 +82,13 @@ Future<void> setupInjection() async {
 
   //==> Dresscode <==//
   getIt.registerLazySingleton(() => EventDresscodeBloc(getIt<SharedPreferences>()));
+
+  /*****************************************************************/
+  /*****************************  HOME *****************************/
+  /*****************************************************************/
+  getIt.registerLazySingleton(() => HomeDataSource(getIt<DioClient>()));
+  getIt.registerLazySingleton(() => HomeRepositoryImpl(getIt<HomeDataSource>()));
+  getIt.registerLazySingleton(() => GetHomeEventsUseCase(getIt<HomeRepositoryImpl>()));
+
+  getIt.registerLazySingleton(() => HomePageBloc(getIt<GetHomeEventsUseCase>()));
 }

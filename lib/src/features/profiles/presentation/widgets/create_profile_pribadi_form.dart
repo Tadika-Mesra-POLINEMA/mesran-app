@@ -6,6 +6,8 @@ import 'package:mesran_app/src/shared/presentation/widgets/form/input_label.dart
 
 class CreateProfilePribadiForm extends StatelessWidget {
   final TextEditingController namaController = TextEditingController();
+
+  CreateProfilePribadiForm({super.key});
   @override
   Widget build(BuildContext context) {
     return Column(

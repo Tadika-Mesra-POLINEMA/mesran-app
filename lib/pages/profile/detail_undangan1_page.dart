@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/components/common/button.dart';
 import 'package:mesran_app/components/undo_button.dart';
-import 'package:mesran_app/utils/buttons.dart';
 import 'package:mesran_app/utils/icons.dart';
 import 'package:mesran_app/utils/themes.dart';
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:go_router/go_router.dart';
-import 'package:mesran_app/components/undo_button.dart';
+import 'package:mesran_app/src/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:mesran_app/utils/themes.dart';
 
 class NotifikasiEmptyPage extends StatelessWidget {
@@ -10,17 +9,8 @@ class NotifikasiEmptyPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-          child: UndoButton(
-            onPressed: () => context.pop(),
-            label: 'Notifikasi',
-          ),
-        ),
-        leadingWidth: double.infinity,
-        backgroundColor: white,
-        automaticallyImplyLeading: false,
+      appBar: CustomAppBar(
+        leadingText: 'Notifikasi',
       ),
       body: Padding(
           padding: const EdgeInsets.all(16),

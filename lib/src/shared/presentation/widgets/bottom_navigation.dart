@@ -37,12 +37,13 @@ class BottomNavigation extends StatelessWidget {
             ),
             BottomNavigationItem(
               icon: document.copyWith(
-                color: _getColor(path, BottomNavigationPath.event),
+                color: _getColor(path, BottomNavigationPath.history),
                 padding: EdgeInsets.all(0),
               ),
               label: 'Riwayat',
-              onTap: () => _setCurrentPath(context, BottomNavigationPath.event),
-              color: _getColor(path, BottomNavigationPath.event),
+              onTap: () =>
+                  _setCurrentPath(context, BottomNavigationPath.history),
+              color: _getColor(path, BottomNavigationPath.history),
             ),
             BottomNavigationItem(
               icon: bubbleChat.copyWith(
@@ -75,14 +76,14 @@ class BottomNavigation extends StatelessWidget {
       case BottomNavigationPath.home:
         context.go('/home');
         break;
-      case BottomNavigationPath.event:
-        context.go('/events');
+      case BottomNavigationPath.history:
+        context.go('/history');
         break;
       case BottomNavigationPath.message:
         context.go('/messages');
         break;
       case BottomNavigationPath.profile:
-        context.go('/profile');
+        context.go('/account/profile');
         break;
     }
   }
@@ -126,7 +127,7 @@ class BottomNavigationItem extends StatelessWidget {
 
 enum BottomNavigationPath {
   home,
-  event,
+  history,
   message,
   profile,
 }

@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:mesran_app/utils/themes.dart';
 import 'package:mesran_app/src/features/notification/presentation/notification_view_model.dart';
 import 'package:mesran_app/src/features/notification/domain/notification_service.dart';
 import 'package:mesran_app/src/features/notification/data/notification_repository.dart';

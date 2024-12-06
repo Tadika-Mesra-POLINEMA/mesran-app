@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/components/bottom_navigation.dart';
 import 'package:mesran_app/src/config/styles/icons/custom.dart';
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
+import 'package:mesran_app/src/shared/presentation/widgets/bottom_navigation.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/form/button.dart';
 
 class AccountProfilePage extends StatelessWidget {
@@ -264,7 +264,9 @@ class AccountProfilePage extends StatelessWidget {
         ]),
       ),
       backgroundColor: white,
-      bottomNavigationBar: const BottomNavigation(),
+      bottomNavigationBar: BottomNavigation(
+        path: BottomNavigationPath.profile,
+      ),
     );
   }
 }

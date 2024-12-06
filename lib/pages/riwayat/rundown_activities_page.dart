@@ -8,6 +8,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,6 +37,8 @@ class RundownActivitiesPage extends StatelessWidget {
           'Pergi ke tempat yang belum pernah dikunjungi. Temukan keindahan di sana.',
     ),
   ];
+
+  RundownActivitiesPage({super.key});
 
   @override
   Widget build(BuildContext context) {
