@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import 'package:mesran_app/src/features/events/data/data_source/verify_face_data_source.dart';
 import 'package:mesran_app/src/features/events/domain/entities/res/verify_face_response.dart';
 import 'package:mesran_app/src/features/events/domain/repository/abstract_verify_face_repository.dart';
-import 'package:mesran_app/src/shared/domain/entities/base_response.dart';
 
 class VerifyFaceRepositoryImpl extends AbstractVerifyFaceRepository {
   final VerifyFaceDataSource _verifyFaceDataSource;
@@ -11,12 +10,9 @@ class VerifyFaceRepositoryImpl extends AbstractVerifyFaceRepository {
   VerifyFaceRepositoryImpl(this._verifyFaceDataSource);
 
   @override
-  Future<Either<Null, BaseResponse<VerifyFaceResponse>>> verifyFace(
-      String path) async {
+  Future<Either<Null, VerifyFaceResponse>> verifyFace(String path) async {
     try {
       final response = await _verifyFaceDataSource.verifyFace(path);
-
-      print('IMPL RESULT: $response');
 
       return response.fold(
         (error) => Left(null),

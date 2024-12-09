@@ -8,7 +8,6 @@ import 'package:gap/gap.dart';
 import 'package:mesran_app/src/config/injector.dart';
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
-import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/verify_face_bloc.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/verify_face_event.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/verify_face_state.dart';
@@ -27,9 +26,9 @@ class VerifyFacePage extends StatefulWidget {
 }
 
 class _VerifyFacePageState extends State<VerifyFacePage> {
-  // Controller for the camera, used to display the camera preview and capture images
   CameraController? _cameraController;
   Future<void>? _initializeControllerFuture;
+  final VerifyFaceBloc _verifyFaceBloc = getIt<VerifyFaceBloc>();
 
   @override
   void initState() {
@@ -39,10 +38,8 @@ class _VerifyFacePageState extends State<VerifyFacePage> {
 
   Future<void> _initializeCamera() async {
     _initializeControllerFuture = Future(() async {
-      // Cek permission dulu sebelum request
       var status = await Permission.camera.status;
 
-      // Jika belum granted, baru request
       if (!status.isGranted) {
         status = await Permission.camera.request();
       }
@@ -51,14 +48,9 @@ class _VerifyFacePageState extends State<VerifyFacePage> {
         try {
           final cameras = await availableCameras();
 
-          // Tambahkan log untuk debug
-          debugPrint('Available cameras: ${cameras.length}');
-
           final frontCamera = cameras.firstWhere(
             (camera) => camera.lensDirection == CameraLensDirection.back,
             orElse: () {
-              debugPrint(
-                  'Front camera not found, using first available camera');
               return cameras.first;
             },
           );
@@ -70,7 +62,6 @@ class _VerifyFacePageState extends State<VerifyFacePage> {
             imageFormatGroup: ImageFormatGroup.jpeg,
           );
 
-          // Tambahkan listener untuk error
           _cameraController!.addListener(() {
             if (_cameraController!.value.hasError) {
               debugPrint(
@@ -106,62 +97,136 @@ class _VerifyFacePageState extends State<VerifyFacePage> {
       return Container();
     }
 
-    final size = MediaQuery.of(context).size;
-    final deviceRatio = size.width / size.height;
-    final circleSize = size.width * 0.85;
-
-    return BlocConsumer<VerifyFaceBloc, VerifyFaceState>(
-      listener: (context, state) {},
-      builder: (context, state) {
-        debugPrint('Loading pada widget ${state.isLoading}');
-
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            Container(
-              width: circleSize,
-              height: circleSize,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: state.isLoading
-                    ? Colors.black.withOpacity(0.5)
-                    : Colors.transparent,
+    // Tampilkan preview kamera
+    return BlocProvider.value(
+      value: _verifyFaceBloc,
+      child: BlocConsumer<VerifyFaceBloc, VerifyFaceState>(
+        listener: (context, state) {
+          if (state is VerifyFaceSuccess) {
+            showModalBottomSheet(
+              context: context,
+              shape: const RoundedRectangleBorder(
+                borderRadius: BorderRadius.vertical(
+                  top: Radius.circular(16),
+                ),
               ),
-              child: ClipOval(
-                child: Transform.scale(
-                  scale: (_cameraController!.value.aspectRatio / deviceRatio) *
-                      0.5,
-                  child: Center(
-                    child: CameraPreview(_cameraController!),
+              isScrollControlled: true,
+              builder: (context) {
+                return Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                    color: white,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(16),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        'assets/images/login-success.png',
+                      ),
+                      Gap(16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text('Terdeteksi sebagai',
+                              style:
+                                  titleOneMedium.copyWith(color: neutralBase)),
+                          Gap(8),
+                          Text(
+                            '${state.response.firstName} ${state.response.lastName}',
+                            style:
+                                headingTwoSemiBold.copyWith(color: neutralBase),
+                          )
+                        ],
+                      ),
+                      Gap(16),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: Button(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              type: ButtonType.secondary,
+                              child: Text(
+                                'Tutup',
+                                style:
+                                    titleOneMedium.copyWith(color: neutralBase),
+                              ),
+                            ),
+                          ),
+                          const Gap(8),
+                          Expanded(
+                            child: Button(
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                              type: ButtonType.primary,
+                              child: Text(
+                                'Lanjutkan',
+                                style: titleOneMedium.copyWith(color: white),
+                              ),
+                            ),
+                          ),
+                        ],
+                      )
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+        },
+        builder: (context, state) {
+          final size = MediaQuery.of(context).size;
+          final deviceRatio = size.width / size.height;
+
+          return Stack(
+            alignment: Alignment.center,
+            children: [
+              Container(
+                width: size.width * 0.85,
+                height: size.width * 0.85,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: state.isLoading
+                      ? Colors.black.withOpacity(0.5)
+                      : Colors.transparent,
+                ),
+                child: ClipOval(
+                  child: Transform.scale(
+                    scale:
+                        (_cameraController!.value.aspectRatio / deviceRatio) *
+                            0.5,
+                    child: Center(
+                      child: CameraPreview(_cameraController!),
+                    ),
                   ),
                 ),
               ),
-            ),
-            if (state.isLoading)
-              Center(
-                child: CircularProgressIndicator(),
-              ),
-          ],
-        );
-      },
+              if (state.isLoading)
+                const Center(
+                  child: CircularProgressIndicator(),
+                ),
+            ],
+          );
+        },
+      ),
     );
   }
 
   Future<void> _captureImage(BuildContext context) async {
-    final verifyFaceBloc = getIt<VerifyFaceBloc>();
-
     if (_cameraController != null && _cameraController!.value.isInitialized) {
       try {
         await _cameraController!
             .lockCaptureOrientation(DeviceOrientation.portraitUp);
         final XFile image = await _cameraController!.takePicture();
-
-        // ignore: use_build_context_synchronously
-        verifyFaceBloc.add(CaptureFace(image.path));
-
-        setState(() {});
+        _verifyFaceBloc.add(CaptureFace(image.path));
       } catch (e) {
-        // ignore: avoid_debugPrint
         debugPrint("Error capturing image: $e");
       }
     }
@@ -169,107 +234,68 @@ class _VerifyFacePageState extends State<VerifyFacePage> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => getIt<VerifyFaceBloc>(),
+    return BlocProvider.value(
+      value: _verifyFaceBloc,
       child: Scaffold(
         backgroundColor: white,
         appBar: CustomAppBar(
           middleText: 'Cek Wajah',
         ),
-        body: BlocConsumer<VerifyFaceBloc, VerifyFaceState>(
-          listener: (context, state) {
-            if (state is VerifyFaceSuccess) {
-              showModalBottomSheet(
-                context: context,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.vertical(
-                    top: Radius.circular(16),
-                  ),
-                ),
-                isScrollControlled: true,
-                builder: (context) {
-                  return Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(16),
+        body: FutureBuilder<void>(
+          future: _initializeControllerFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              if (_cameraController != null &&
+                  _cameraController!.value.isInitialized) {
+                return Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      Center(child: _buildCircularCameraPreview()),
+                      const Gap(24),
+                      Text(
+                        'Ambil gambar wajah Anda!',
+                        style:
+                            headingThreeSemiBold.copyWith(color: neutralBase),
+                        textAlign: TextAlign.center,
                       ),
-                    ),
-                    color: white,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'Wajah Anda berhasil diverifikasi!',
-                          style: titleOneMedium.copyWith(color: white),
-                        ),
-                      ],
-                    ),
-                  );
-                },
-              );
-            } else if (state is VerifyFaceFailure) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Verifikasi gagal: ${state.errorMessage}',
-                    style: titleOneMedium.copyWith(color: white),
+                      const Gap(8),
+                      Text(
+                        'Kami akan mengambil wajah Anda sekarang agar nanti bisa digunakan untuk masuk ke acara saat hadir!',
+                        style: paragraphOne.copyWith(color: neutral40),
+                        textAlign: TextAlign.center,
+                      ),
+                      const Spacer(),
+                      BlocBuilder<VerifyFaceBloc, VerifyFaceState>(
+                        builder: (context, state) {
+                          return RegisterFaceAlert(
+                            text: state is VerifyFaceFailure
+                                ? '${state.errorMessage}'
+                                : 'Posisikan wajah Anda dengan benar',
+                            type: state is VerifyFaceFailure
+                                ? RegisterFaceType.error
+                                : RegisterFaceType.warning,
+                          );
+                        },
+                      ),
+                      const Gap(8),
+                    ],
                   ),
-                  backgroundColor: primaryBase,
-                ),
+                );
+              } else {
+                return const Center(
+                  child: Text("Tidak dapat menginisialisasi kamera."),
+                );
+              }
+            } else if (snapshot.hasError) {
+              return Center(
+                child: Text('Error: ${snapshot.error}'),
+              );
+            } else {
+              return const Center(
+                child: CircularProgressIndicator(),
               );
             }
-          },
-          builder: (context, state) {
-            return FutureBuilder<void>(
-              future: _initializeControllerFuture,
-              builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (_cameraController != null &&
-                      _cameraController!.value.isInitialized) {
-                    return Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        children: [
-                          Center(child: _buildCircularCameraPreview()),
-                          const Gap(24),
-                          Text(
-                            'Ambil gambar wajah Anda!',
-                            style: headingThreeSemiBold.copyWith(
-                                color: neutralBase),
-                            textAlign: TextAlign.center,
-                          ),
-                          const Gap(8),
-                          Text(
-                            'Kami akan mengambil wajah Anda sekarang agar nanti bisa digunakan untuk masuk ke acara saat hadir!',
-                            style: paragraphOne.copyWith(color: neutral40),
-                            textAlign: TextAlign.center,
-                          ),
-                          const Spacer(),
-                          RegisterFaceAlert(
-                            text: 'Posisikan wajah Anda dengan benar',
-                            type: RegisterFaceType.warning,
-                          ),
-                          const Gap(8),
-                        ],
-                      ),
-                    );
-                  } else {
-                    return const Center(
-                      child: Text("Tidak dapat menginisialisasi kamera."),
-                    );
-                  }
-                } else if (snapshot.hasError) {
-                  return Center(
-                    child: Text('Error: ${snapshot.error}'),
-                  );
-                } else {
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                }
-              },
-            );
           },
         ),
         bottomNavigationBar: BottomAppBar(
@@ -294,6 +320,7 @@ class _VerifyFacePageState extends State<VerifyFacePage> {
   @override
   void dispose() {
     _cameraController?.dispose();
+    _verifyFaceBloc.close();
     super.dispose();
   }
 }

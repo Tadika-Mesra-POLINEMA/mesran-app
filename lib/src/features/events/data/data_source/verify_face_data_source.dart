@@ -9,19 +9,17 @@ class VerifyFaceDataSource {
 
   VerifyFaceDataSource(this._dioClient);
 
-  Future<Either<Null, BaseResponse<VerifyFaceResponse>>> verifyFace(
-      String path) async {
+  Future<Either<Null, VerifyFaceResponse>> verifyFace(String path) async {
     try {
       final formData = FormData.fromMap({
         'face': await MultipartFile.fromFile(path),
       });
 
       final response = await _dioClient.client
-          .post('/api/events/verify-face', data: formData);
+          .post('/api/users/face/predict', data: formData);
 
       if (response.statusCode == 200) {
-        return Right(
-            BaseResponse.fromJson(response.data, VerifyFaceResponse.fromJson));
+        return Right(VerifyFaceResponse.fromJson(response.data['data']));
       } else {
         return Left(null);
       }

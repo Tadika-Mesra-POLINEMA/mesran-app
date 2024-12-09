@@ -330,9 +330,6 @@ class _InputDressActivities extends StatelessWidget {
         final isThemeAndDressValid =
             state.isThemeValid && state.isDresscodeValid;
 
-        debugPrint('WIDGET ${state.theme}');
-        debugPrint('WIDGET ${state.dresscode}');
-
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [

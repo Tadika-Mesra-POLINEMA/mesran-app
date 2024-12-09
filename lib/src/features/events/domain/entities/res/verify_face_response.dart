@@ -1,30 +1,50 @@
 import 'package:mesran_app/src/shared/domain/entities/base_response.dart';
 
 class VerifyFaceResponse extends JsonParseable {
-  final bool isMatch;
-  final double confidence;
-  final String? user;
+  final String? userId;
+  final String? email;
+  final String? phone;
+  final String? role;
+  final String? firstName;
+  final String? lastName;
+  final String? username;
 
   VerifyFaceResponse({
-    required this.isMatch,
-    required this.confidence,
-    this.user, // Nullable
+    this.userId,
+    this.email,
+    this.phone,
+    this.role,
+    this.firstName,
+    this.lastName,
+    this.username,
   });
 
   factory VerifyFaceResponse.fromJson(Map<String, dynamic> json) {
     return VerifyFaceResponse(
-      isMatch: json['is_match'] as bool,
-      confidence: (json['confidence'] as num).toDouble(),
-      user: json['user'] as String?,
+      userId: json['id'] as String?,
+      email: json['email'] as String?,
+      phone: json['phone'] as String?,
+      role: json['role'] as String?,
+      firstName: json['profile']?['firstname'] as String?,
+      lastName: json['profile']?['lastname'] as String?,
+      username: json['profile']?['username'] as String?,
     );
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      'is_match': isMatch,
-      'confidence': confidence,
-      'user': user,
+      'user': {
+        'id': userId,
+        'email': email,
+        'phone': phone,
+        'role': role,
+        'profile': {
+          'username': username,
+          'firstname': firstName,
+          'lastname': lastName,
+        },
+      },
     };
   }
 }

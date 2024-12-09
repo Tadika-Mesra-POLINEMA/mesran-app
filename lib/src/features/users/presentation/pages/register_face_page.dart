@@ -268,7 +268,9 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Button(
-              onPressed: () => _captureImage(context),
+              onPressed: () {
+                _captureImage(context);
+              },
               type: ButtonType.primary,
               child: Text(
                 'Ambil',

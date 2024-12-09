@@ -1,16 +1,19 @@
 import 'package:equatable/equatable.dart';
+import 'package:mesran_app/src/features/events/domain/entities/res/verify_face_response.dart';
 
 class VerifyFaceState extends Equatable {
   final String path;
   final bool hasError;
   final bool isLoading;
   final String? errorMessage;
+  final VerifyFaceResponse? response;
 
   const VerifyFaceState({
     this.path = '',
     this.hasError = false,
     this.isLoading = false,
     this.errorMessage,
+    this.response,
   });
 
   @override
@@ -36,7 +39,15 @@ class VerifyFaceState extends Equatable {
   }
 }
 
-class VerifyFaceSuccess extends VerifyFaceState {}
+class VerifyFaceSuccess extends VerifyFaceState {
+  final VerifyFaceResponse response;
+
+  const VerifyFaceSuccess({required this.response})
+      : super(hasError: false, isLoading: false, response: response);
+
+  @override
+  List<Object?> get props => [response];
+}
 
 class VerifyFaceFailure extends VerifyFaceState {
   const VerifyFaceFailure({required String errorMessage})

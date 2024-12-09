@@ -18,7 +18,7 @@ class HeroSection extends StatelessWidget {
         strokeWidth: 1,
         dashPattern: const [12, 12],
         child: SizedBox(
-          width: MediaQuery.of(context).size.width * 0.9,
+          width: MediaQuery.of(context).size.width,
           child: Padding(
             padding: const EdgeInsets.all(12),
             child: Column(

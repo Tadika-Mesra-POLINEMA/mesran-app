@@ -8,8 +8,7 @@ class VerifyFaceUseCase {
 
   VerifyFaceUseCase(this._verifyFaceRepositoryImpl);
 
-  Future<Either<bool, BaseResponse<VerifyFaceResponse>>> call(
-      String path) async {
+  Future<Either<bool, VerifyFaceResponse>> call(String path) async {
     final response = await _verifyFaceRepositoryImpl.verifyFace(path);
 
     return response.fold(

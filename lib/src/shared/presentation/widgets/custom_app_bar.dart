@@ -134,15 +134,18 @@ class PopupItem extends PopupMenuItem<String> {
     required this.label,
   }) : super(
           padding: const EdgeInsets.all(2),
-          child: Row(
-            children: [
-              icon,
-              Gap(2),
-              Text(
-                label,
-                style: titleOneMedium.copyWith(color: neutralBase),
-              ),
-            ],
+          child: GestureDetector(
+            onTap: onPressed,
+            child: Row(
+              children: [
+                icon,
+                Gap(2),
+                Text(
+                  label,
+                  style: titleOneMedium.copyWith(color: neutralBase),
+                ),
+              ],
+            ),
           ),
         );
 }

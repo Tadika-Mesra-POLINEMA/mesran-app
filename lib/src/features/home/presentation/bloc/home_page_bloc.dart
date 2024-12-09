@@ -14,7 +14,6 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
       HomePageEventLoad event, Emitter<HomePageState> emit) async {
     emit(HomePageLoading());
 
-    // Load data from repository
     try {
       final result = await getHomeEventsUseCase.call();
       result.fold((failure) => emit(HomePageLoaded([])),

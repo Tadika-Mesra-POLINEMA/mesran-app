@@ -1,8 +1,8 @@
-import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mesran_app/src/config/styles/icons/custom.dart';
 import 'package:mesran_app/src/config/styles/texts/medium.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
@@ -55,30 +55,33 @@ class _HomePageContentState extends State<HomePageContent> {
                       style: headingThreeMedium.copyWith(color: neutralBase),
                     ),
                     const Gap(12),
-                    ListView.builder(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      itemCount: min(state.items.length, 3),
-                      itemBuilder: (context, index) {
-                        final EventHome event = state.items[index];
+                    SizedBox(
+                      height: 160,
+                      child: Skeletonizer(
+                        enabled: state.isLoading,
+                        child: PageView.builder(
+                          itemCount: state.items.length,
+                          controller: PageController(viewportFraction: 1.012),
+                          itemBuilder: (context, index) {
+                            final EventHome event = state.items[index];
 
-                        return Column(
-                          children: [
-                            InvitationCardHome(
-                              content: InvitationContentHome(
-                                onTap: () {
-                                  context.push('/account/invitation',
-                                      extra: {'event_id': state.items[index]});
-                                },
-                                name: event.name,
-                                date: event.date,
-                                desc: event.description,
+                            return Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: InvitationCardHome(
+                                content: InvitationContentHome(
+                                  onTap: () {
+                                    context.push('/events/${event.id}');
+                                  },
+                                  name: event.name,
+                                  date: event.date,
+                                  desc: event.description,
+                                ),
                               ),
-                            ),
-                            Gap(8)
-                          ],
-                        );
-                      },
+                            );
+                          },
+                        ),
+                      ),
                     ),
                     const Gap(16),
                     const Center(child: HeroSection()),

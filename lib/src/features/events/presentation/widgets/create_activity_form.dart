@@ -22,6 +22,16 @@ class CreateActivityForm extends StatefulWidget {
 
 class CreateActivityFormState extends State<CreateActivityForm> {
   @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      if (mounted) {
+        context.read<CreateEventActivityBloc>().add((LoadActivities()));
+      }
+    });
+  }
+
+  @override
   void dispose() {
     super.dispose();
   }

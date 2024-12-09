@@ -75,3 +75,20 @@ const Icon horror = Icon(
 const Icon anime = Icon(
   assetName: 'assets/icons/anime.svg',
 );
+
+// Social Media
+const Icon facebook = Icon(
+  assetName: 'assets/icons/facebook.svg',
+);
+const Icon instagram = Icon(
+  assetName: 'assets/icons/instagram.svg',
+);
+const Icon tiktok = Icon(
+  assetName: 'assets/icons/tiktok.svg',
+);
+const Icon twitter = Icon(
+  assetName: 'assets/icons/twitter.svg',
+);
+const Icon whatsapp = Icon(
+  assetName: 'assets/icons/whatsapp.svg',
+);

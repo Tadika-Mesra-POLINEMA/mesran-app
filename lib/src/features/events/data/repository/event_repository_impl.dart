@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:mesran_app/src/features/events/data/data_source/event_data_source.dart';
+import 'package:mesran_app/src/features/events/domain/entities/event.dart';
 import 'package:mesran_app/src/features/events/domain/entities/req/create_event_request.dart';
 import 'package:mesran_app/src/features/events/domain/entities/res/created_event_response.dart';
 import 'package:mesran_app/src/features/events/domain/failures/create_event_failure.dart';
@@ -22,6 +23,20 @@ class EventRepositoryImpl extends AbstractEventRepository {
       );
     } catch (error) {
       return Left(CreateEventFailure('Unknown error'));
+    }
+  }
+
+  @override
+  Future<Either<Null, Event>> getEvent(String eventId) async {
+    try {
+      final response = await _eventDataSource.getEvent(eventId);
+
+      return response.fold(
+        (error) => Left(null),
+        (event) => Right(event),
+      );
+    } catch (error) {
+      return Left(null);
     }
   }
 }

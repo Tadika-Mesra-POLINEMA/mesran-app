@@ -282,7 +282,8 @@ class DetailUndanganPage extends StatelessWidget {
                           onPressed: () {},
                           style: buttonSecondaryBase,
                           child: Text('Lihat Semua',
-                              style: titleOneSemiBold.copyWith(color: neutralBase)),
+                              style: titleOneSemiBold.copyWith(
+                                  color: neutralBase)),
                         )
                       ],
                     ),
