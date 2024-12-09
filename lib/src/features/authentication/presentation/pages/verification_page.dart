@@ -89,10 +89,18 @@ class _VerificationPageState extends State<VerificationPage> {
         body: BlocListener<OtpVerificationBloc, OtpVerificationState>(
           listener: (context, state) {
             if (state is OtpSuccess) {
-              context.go('/verify/success');
+              context.read<OtpVerificationBloc>().add(VerifyFace());
             } else if (state is OtpFailure) {
               // TODO: Handling failure otp verification
               print(state.message);
+            }
+
+            if (state is VerifyFaceSuccess) {
+              context.go('/verify/success');
+            }
+
+            if (state is VerifyFaceFailure) {
+              context.go('/register/faces/verify');
             }
 
             if (state is ResendOtpRequested) {

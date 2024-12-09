@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:math';
 import 'dart:async';
 
@@ -118,26 +119,12 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
 
     return BlocConsumer<RegisterFaceBloc, RegisterFaceState>(
       listener: (context, state) {
+        print(state.capturedCount);
         if (state is RegisterFaceSuccess) {
           context.go('/register/success');
         }
-
-        if (state.hasError) {
-          print(
-              "RegisterFaceFailure listener triggered with message: ${state.errorMessage!}");
-          showModalBottomSheet(
-            context: context,
-            isDismissible: true,
-            enableDrag: true,
-            builder: (BuildContext context) {
-              return ErrorBottomSheet(message: state.errorMessage!);
-            },
-          );
-        }
       },
       builder: (context, state) {
-        print('Loading pada widget ${state.isLoading}');
-
         return Stack(
           alignment: Alignment.center,
           children: [
@@ -146,7 +133,7 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
               height: circleSize,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: state.isLoading
+                color: state is RegisterFaceLoading
                     ? Colors.black.withOpacity(0.5)
                     : Colors.transparent,
               ),
@@ -174,9 +161,11 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
                 inactiveColor: neutral20,
               ),
             ),
-            if (state.isLoading)
+            if (state is RegisterFaceLoading)
               Center(
-                child: CircularProgressIndicator(),
+                child: CircularProgressIndicator(
+                  color: primaryBase,
+                ),
               ),
           ],
         );
@@ -193,9 +182,14 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
             .lockCaptureOrientation(DeviceOrientation.portraitUp);
         final XFile image = await _cameraController!.takePicture();
 
-        // ignore: use_build_context_synchronously
-        registerFaceBloc.add(CaptureFace(image.path));
-
+        // Cek apakah file gambar valid
+        final imageFile = File(image.path);
+        if (await imageFile.exists() && await imageFile.length() > 0) {
+          // Jika file valid, lanjutkan dengan trigger event
+          registerFaceBloc.add(CaptureFace(image.path));
+        } else {
+          print("Invalid image file: ${image.path}");
+        }
         setState(() {});
       } catch (e) {
         // ignore: avoid_print
@@ -233,14 +227,31 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
                       ),
                       Gap(8),
                       Text(
-                        'Kami akan mengambil wajah Anda sekarang agar nanti bisa digunakan untuk masuk ke acara saat hadir!',
+                        'Kami akan mengambil wajah Anda selama 5 kali,',
+                        style: paragraphOne.copyWith(color: neutral40),
+                        textAlign: TextAlign.center,
+                      ),
+                      Text(
+                        'Harap posisikan wajah Anda dengan benar menyesuaikan lingkaran yang ada di layar ponsel Anda',
                         style: paragraphOne.copyWith(color: neutral40),
                         textAlign: TextAlign.center,
                       ),
                       Spacer(),
-                      RegisterFaceAlert(
-                        text: 'Posisikan wajah Anda dengan benar',
-                        type: RegisterFaceType.warning,
+                      BlocBuilder<RegisterFaceBloc, RegisterFaceState>(
+                        builder: (context, state) {
+                          return RegisterFaceAlert(
+                            text: state is RegisterFaceFailure
+                                ? state.message
+                                : state is RegisterFaceLoading
+                                    ? 'Tunggu wajah Anda sedang kami proses'
+                                    : 'Posisikan wajah Anda dengan benar',
+                            type: state is RegisterFaceFailure
+                                ? RegisterFaceType.error
+                                : state is RegisterFaceLoading
+                                    ? RegisterFaceType.loading
+                                    : RegisterFaceType.warning,
+                          );
+                        },
                       ),
                       Gap(8)
                     ],
@@ -267,16 +278,19 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
           color: white,
           child: Padding(
             padding: const EdgeInsets.all(16),
-            child: Button(
-              onPressed: () {
-                _captureImage(context);
-              },
-              type: ButtonType.primary,
-              child: Text(
-                'Ambil',
-                style: titleOneMedium.copyWith(color: white),
-              ),
-            ),
+            child: BlocBuilder<RegisterFaceBloc, RegisterFaceState>(
+                builder: (context, state) {
+              return Button(
+                onPressed: () {
+                  _captureImage(context);
+                },
+                type: ButtonType.primary,
+                child: Text(
+                  'Ambil',
+                  style: titleOneMedium.copyWith(color: white),
+                ),
+              );
+            }),
           ),
         ),
       ),

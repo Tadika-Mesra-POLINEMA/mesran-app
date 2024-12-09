@@ -71,7 +71,7 @@ class _EventDetailContentState extends State<_EventDetailContent> {
         if (state.isSuccess) {
           final event = state.event;
           print('event id ${event!.id}');
-          final isEventStarted = event!.start.isBefore(DateTime.now());
+          final isEventStarted = event.start.isBefore(DateTime.now());
 
           return Scaffold(
             appBar: CustomAppBar(

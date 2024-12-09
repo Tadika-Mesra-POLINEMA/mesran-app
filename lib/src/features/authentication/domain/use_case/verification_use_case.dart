@@ -57,4 +57,8 @@ class VerificationUseCase {
       return Left(Right(null));
     }
   }
+
+  Future<bool> validateFace() async {
+    return await _verificationRepositoryImpl.validateRegisteredFace();
+  }
 }

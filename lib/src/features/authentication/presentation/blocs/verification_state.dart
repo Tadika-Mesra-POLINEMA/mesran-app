@@ -23,3 +23,15 @@ class OtpFailure extends OtpVerificationState {
   @override
   List<Object?> get props => [message];
 }
+
+class VerifyFaceSuccess extends OtpVerificationState {}
+
+class VerifyFaceFailure extends OtpVerificationState {
+  final AuthStatusType status;
+  final String message;
+
+  const VerifyFaceFailure(this.status, {required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

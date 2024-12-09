@@ -29,4 +29,20 @@ class VerificationDataSource {
       return Left(AuthFailure(AuthStatusType.fail, message: error.toString()));
     }
   }
+
+  Future<bool> validate() async {
+    final res = await _dioClient.get('api/users/me');
+
+    if (res.statusCode == 200) {
+      final data = res.data['data']["is_face_registered"] as bool;
+
+      if (!data) {
+        return false;
+      } else {
+        return true;
+      }
+    } else {
+      return false;
+    }
+  }
 }

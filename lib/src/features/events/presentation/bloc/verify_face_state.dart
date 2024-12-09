@@ -40,6 +40,7 @@ class VerifyFaceState extends Equatable {
 }
 
 class VerifyFaceSuccess extends VerifyFaceState {
+  @override
   final VerifyFaceResponse response;
 
   const VerifyFaceSuccess({required this.response})

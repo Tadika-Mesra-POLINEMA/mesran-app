@@ -23,6 +23,7 @@ class RegisterFaceAlert extends StatelessWidget {
         child: Text(
           text,
           style: titleOneMedium.copyWith(color: neutralBase),
+          textAlign: TextAlign.center,
         ),
       ),
     );
@@ -32,6 +33,8 @@ class RegisterFaceAlert extends StatelessWidget {
     switch (type) {
       case RegisterFaceType.success:
         return success10;
+      case RegisterFaceType.loading:
+        return neutral10;
       case RegisterFaceType.error:
         return error10;
       case RegisterFaceType.warning:
@@ -43,6 +46,8 @@ class RegisterFaceAlert extends StatelessWidget {
     switch (type) {
       case RegisterFaceType.success:
         return success30;
+      case RegisterFaceType.loading:
+        return neutral30;
       case RegisterFaceType.error:
         return error30;
       case RegisterFaceType.warning:
@@ -53,6 +58,7 @@ class RegisterFaceAlert extends StatelessWidget {
 
 enum RegisterFaceType {
   success,
+  loading,
   error,
   warning,
 }

@@ -29,4 +29,9 @@ class VerificationRepositoryImpl extends AbstractVerificationRepository {
       return Left(AuthFailure(AuthStatusType.fail, message: error.toString()));
     }
   }
+
+  @override
+  Future<bool> validateRegisteredFace() async {
+    return await _verificationDataSource.validate();
+  }
 }

@@ -29,10 +29,8 @@ class _AuthEmailFormState extends State<AuthEmailForm> {
     return BlocConsumer<AuthBloc, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
-          // TODO: Implement routing to home page
           context.go('/verify');
         } else if (state is AuthFailure) {
-          // TODO: Implement error handling
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message),
@@ -63,6 +61,7 @@ class _AuthEmailFormState extends State<AuthEmailForm> {
                 children: [
                   Button(
                       onPressed: () {
+                        print('test click login');
                         context.read<AuthBloc>().add(
                               LoginEvent(AuthRequest(
                                   email: emailController.text,

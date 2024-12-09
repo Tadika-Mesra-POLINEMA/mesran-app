@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mesran_app/src/config/injector.dart';
 import 'package:mesran_app/src/config/styles/icons/custom.dart';
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
@@ -225,10 +227,25 @@ class AccountProfilePage extends StatelessWidget {
                                       style: titleOneSemiBold.copyWith(
                                           color: neutralBase)),
                                 )),
-                                SizedBox(width: 10), // Spasi antar tombol
+                                SizedBox(width: 10),
                                 Expanded(
                                     child: Button(
-                                  onPressed: () => context.replace('/login'),
+                                  onPressed: () async {
+                                    final secureStorage =
+                                        getIt<FlutterSecureStorage>();
+
+                                    // Delete all secure storage entries
+                                    await secureStorage.deleteAll();
+
+                                    // Verify deletion
+                                    final allValues =
+                                        await secureStorage.readAll();
+                                    print(
+                                        'Secure storage after deletion: $allValues');
+
+                                    // Navigate to login page
+                                    context.replace('/login');
+                                  },
                                   child: Text('Iya',
                                       style: titleOneSemiBold.copyWith(
                                           color: white)),

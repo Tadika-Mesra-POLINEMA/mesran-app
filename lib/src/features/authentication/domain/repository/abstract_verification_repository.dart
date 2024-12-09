@@ -7,4 +7,5 @@ import 'package:mesran_app/src/shared/domain/entities/base_response.dart';
 abstract class AbstractVerificationRepository {
   Future<Either<AuthFailure, BaseResponse<VerificationResponse>>> verify(
       VerificationRequest request);
+  Future<bool> validateRegisteredFace();
 }

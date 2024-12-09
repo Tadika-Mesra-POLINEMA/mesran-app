@@ -7,8 +7,10 @@ import 'package:mesran_app/src/features/authentication/presentation/blocs/auth_s
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final AuthUseCase authUseCase;
 
-  AuthBloc(this.authUseCase, FlutterSecureStorage flutterSecureStorage)
-      : super(AuthInitial()) {
+  AuthBloc(
+    this.authUseCase,
+    FlutterSecureStorage flutterSecureStorage,
+  ) : super(AuthInitial()) {
     on<LoginEvent>(_onLoginButtonPressed);
   }
 

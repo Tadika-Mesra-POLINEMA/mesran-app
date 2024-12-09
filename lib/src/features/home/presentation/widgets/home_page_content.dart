@@ -55,34 +55,35 @@ class _HomePageContentState extends State<HomePageContent> {
                       style: headingThreeMedium.copyWith(color: neutralBase),
                     ),
                     const Gap(12),
-                    SizedBox(
-                      height: 160,
-                      child: Skeletonizer(
-                        enabled: state.isLoading,
-                        child: PageView.builder(
-                          itemCount: state.items.length,
-                          controller: PageController(viewportFraction: 1.012),
-                          itemBuilder: (context, index) {
-                            final EventHome event = state.items[index];
+                    if (state.items.length > 0)
+                      SizedBox(
+                        height: 160,
+                        child: Skeletonizer(
+                          enabled: state.isLoading,
+                          child: PageView.builder(
+                            itemCount: state.items.length,
+                            controller: PageController(viewportFraction: 1.012),
+                            itemBuilder: (context, index) {
+                              final EventHome event = state.items[index];
 
-                            return Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 8.0),
-                              child: InvitationCardHome(
-                                content: InvitationContentHome(
-                                  onTap: () {
-                                    context.push('/events/${event.id}');
-                                  },
-                                  name: event.name,
-                                  date: event.date,
-                                  desc: event.description,
+                              return Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 8.0),
+                                child: InvitationCardHome(
+                                  content: InvitationContentHome(
+                                    onTap: () {
+                                      context.push('/events/${event.id}');
+                                    },
+                                    name: event.name,
+                                    date: event.date,
+                                    desc: event.description,
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         ),
                       ),
-                    ),
                     const Gap(16),
                     const Center(child: HeroSection()),
                   ],

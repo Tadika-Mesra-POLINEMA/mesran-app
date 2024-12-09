@@ -4,13 +4,16 @@ import 'package:mesran_app/src/core/api/ml_client.dart';
 import 'package:mesran_app/src/features/users/domain/usecases/register_face_use_case.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_face_event.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_face_state.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterFaceBloc extends Bloc<RegisterFaceEvent, RegisterFaceState> {
   final ML _mlClient;
   final RegisterFaceUseCase _registerFaceUseCase;
+  final SharedPreferences prefs;
 
-  RegisterFaceBloc(this._mlClient, this._registerFaceUseCase)
-      : super(RegisterFaceState()) {
+  RegisterFaceBloc(this._mlClient, this._registerFaceUseCase, this.prefs)
+      : super(RegisterFaceState(paths: const [])) {
+    prefs.remove('facePaths');
     on<CaptureFace>(_onCaptureFace);
   }
 
@@ -18,8 +21,7 @@ class RegisterFaceBloc extends Bloc<RegisterFaceEvent, RegisterFaceState> {
     CaptureFace event,
     Emitter<RegisterFaceState> emit,
   ) async {
-    emit(state.copyWith(isLoading: true));
-
+    emit(RegisterFaceLoading());
     final path = event.path;
 
     try {
@@ -31,44 +33,45 @@ class RegisterFaceBloc extends Bloc<RegisterFaceEvent, RegisterFaceState> {
       );
 
       if (response.statusCode == 200) {
-        final paths = [...state.paths, path];
+        final prefs = await SharedPreferences.getInstance();
+        List<String> savedPaths = prefs.getStringList('facePaths') ?? [];
 
-        if (paths.length == 5) {
+        if (savedPaths.length < 5) {
+          savedPaths.add(path);
+          await prefs.setStringList('facePaths', savedPaths);
+        }
+
+        if (savedPaths.length == 5) {
+          emit(CaptureFaceComplete(savedPaths.length));
+
           try {
-            _registerFaceUseCase.call(paths);
+            await _registerFaceUseCase.call(savedPaths);
+
+            await prefs.remove('facePaths');
 
             emit(RegisterFaceSuccess());
           } catch (error) {
-            emit(state.copyWith(
-              hasError: true,
-              isLoading: false,
-              errorMessage: 'Failed to capture face: $error',
-            ));
+            emit(RegisterFaceFailure(message: 'Gagal mendaftarkan wajah Anda'));
           }
-
           return;
         }
 
         emit(state.copyWith(
-          paths: paths,
-          capturedCount: paths.length,
+          paths: savedPaths,
+          capturedCount: savedPaths.length,
           hasError: false,
-          isLoading: false,
           errorMessage: null,
         ));
+        return;
       } else {
-        emit(state.copyWith(
-          hasError: true,
-          isLoading: false,
-          errorMessage: 'Server responded with status: ${response.statusCode}',
-        ));
+        emit(RegisterFaceFailure(
+            message:
+                'Gagal mengambil wajah, coba sesuaikan wajah Anda pada tempat yang telah disediakan'));
       }
     } catch (error) {
-      emit(state.copyWith(
-        hasError: true,
-        isLoading: false,
-        errorMessage: 'Failed to capture face: $error',
-      ));
+      emit(RegisterFaceFailure(
+          message:
+              'Gagal mengambil wajah, sesuaikan wajah Anda pada tempat yang disediakan'));
     }
   }
 }

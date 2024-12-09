@@ -32,34 +32,41 @@ class _AuthPageState extends State<AuthPage> {
     return Scaffold(
       appBar: CustomAppBar(),
       backgroundColor: white,
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Gap(32),
-            Text(
-              'Daftarkan akun Anda!',
-              style: headingTwoSemiBold.copyWith(color: neutralBase),
+      body: SingleChildScrollView(
+        child: IntrinsicHeight(
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Gap(32),
+                Text(
+                  'Daftarkan akun Anda!',
+                  style: headingTwoSemiBold.copyWith(color: neutralBase),
+                ),
+                const Gap(8),
+                Text(
+                  'Isi informasi yang diperlukan, dan Anda akan siap untuk memulai dalam hitungan menit!',
+                  style: titleTwo.copyWith(color: neutral40),
+                ),
+                const Gap(32),
+                AuthTypeSection(
+                  type: currentType,
+                  toggleChangeLoginType: _setAuthType,
+                ),
+                const Gap(32),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height - 330,
+                  child: BlocProvider(
+                    create: (_) => getIt<AuthBloc>(),
+                    child: currentType == AuthType.email
+                        ? const AuthEmailForm()
+                        : const AuthPhoneForm(),
+                  ),
+                ),
+              ],
             ),
-            const Gap(8),
-            Text(
-              'Isi informasi yang diperlukan, dan Anda akan siap untuk memulai dalam hitungan menit!',
-              style: titleTwo.copyWith(color: neutral40),
-            ),
-            const Gap(32),
-            AuthTypeSection(
-              type: currentType,
-              toggleChangeLoginType: _setAuthType,
-            ),
-            const Gap(32),
-            BlocProvider(
-              create: (_) => getIt<AuthBloc>(),
-              child: currentType == AuthType.email
-                  ? const AuthEmailForm()
-                  : const AuthPhoneForm(),
-            ),
-          ],
+          ),
         ),
       ),
     );

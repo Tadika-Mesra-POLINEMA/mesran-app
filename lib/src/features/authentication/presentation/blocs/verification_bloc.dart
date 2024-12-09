@@ -14,6 +14,7 @@ class OtpVerificationBloc
     on<OtpChanged>(_onOtpChanged);
     on<ResendOtpRequested>(_onResendOtpRequested);
     on<OtpSubmitted>(_onOtpSubmitted);
+    on<VerifyFace>(_onVerifyFace);
   }
 
   void _onOtpChanged(OtpChanged event, Emitter<OtpVerificationState> emit) {
@@ -42,5 +43,17 @@ class OtpVerificationBloc
           emit(OtpFailure(AuthStatusType.fail, message: error.toString())),
       (_) => emit(OtpSuccess()),
     );
+  }
+
+  void _onVerifyFace(
+      VerifyFace event, Emitter<OtpVerificationState> emit) async {
+    final response = await verificationUseCase.validateFace();
+
+    if (response) {
+      emit(VerifyFaceSuccess());
+    } else {
+      emit(VerifyFaceFailure(AuthStatusType.fail,
+          message: 'Wajah belum terdaftar'));
+    }
   }
 }

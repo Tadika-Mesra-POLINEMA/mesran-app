@@ -27,3 +27,5 @@ class OtpSubmitted extends OtpVerificationEvent {
   @override
   List<Object?> get props => [otp];
 }
+
+class VerifyFace extends OtpVerificationEvent {}

@@ -31,12 +31,12 @@ class InputField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final effectiveController =
-        controller ?? TextEditingController(text: initialValue);
+    // final effectiveController =
+    //     controller ?? TextEditingController(text: initialValue);
 
     return TextField(
       onChanged: onChanged,
-      controller: effectiveController,
+      controller: controller,
       keyboardType: keyboardType ?? TextInputType.text,
       maxLines: maxLines ?? 1,
       decoration: decoration ??

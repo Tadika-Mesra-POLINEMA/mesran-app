@@ -55,13 +55,13 @@ Future<void> setupInjection() async {
   getIt.registerLazySingleton(() => AuthDataSource(getIt<DioClient>()));
   getIt.registerLazySingleton(() => AuthRepositoryImpl(getIt<AuthDataSource>()));
   getIt.registerLazySingleton(() =>AuthUseCase(getIt<AuthRepositoryImpl>(), getIt<FlutterSecureStorage>()));
-  getIt.registerLazySingleton(() => AuthBloc(getIt<AuthUseCase>(), getIt<FlutterSecureStorage>()));
+  getIt.registerFactory(() => AuthBloc(getIt<AuthUseCase>(), getIt<FlutterSecureStorage>()));
 
   // Authentication Verifications
   getIt.registerLazySingleton(() => VerificationDataSource(getIt<DioClient>()));
   getIt.registerLazySingleton(() => VerificationRepositoryImpl(getIt<VerificationDataSource>()));
   getIt.registerLazySingleton(() => VerificationUseCase(getIt<VerificationRepositoryImpl>(), getIt<FlutterSecureStorage>()));
-  getIt.registerLazySingleton(() => OtpVerificationBloc(getIt<VerificationUseCase>()));
+  getIt.registerFactory(() => OtpVerificationBloc(getIt<VerificationUseCase>()));
 
   /******************************************************************/
   /*****************************  USERS *****************************/
@@ -71,11 +71,11 @@ Future<void> setupInjection() async {
 
   //==> User Registration <==//
   getIt.registerLazySingleton(() => RegisterUseCase(getIt<UserRepositoryImpl>(), getIt<FlutterSecureStorage>()));
-  getIt.registerLazySingleton(() => RegisterBloc(getIt<RegisterUseCase>(), getIt<AuthUseCase>(), getIt<SharedPreferences>()));
+  getIt.registerFactory(() => RegisterBloc(getIt<RegisterUseCase>(), getIt<AuthUseCase>(), getIt<SharedPreferences>()));
 
   //==> Register Face <==//
   getIt.registerLazySingleton(() => RegisterFaceUseCase(getIt<UserRepositoryImpl>()));
-  getIt.registerLazySingleton(() => RegisterFaceBloc(getIt<ML>(), getIt<RegisterFaceUseCase>()));
+  getIt.registerFactory(() => RegisterFaceBloc(getIt<ML>(), getIt<RegisterFaceUseCase>(), getIt<SharedPreferences>()));
 
   /*******************************************************************/
   /*****************************  EVENTS *****************************/

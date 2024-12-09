@@ -32,7 +32,7 @@ class CircularProgressPainter extends CustomPainter {
       paint.color = i < capturedCount ? activeColor : inactiveColor;
 
       final double startAngle = (segmentAngle * i) - pi / 2;
-      final double sweepAngle = segmentAngle - 0.05;
+      final double sweepAngle = segmentAngle - 0.08;
       canvas.drawArc(
         Rect.fromCircle(center: center, radius: radius),
         startAngle,

@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:mesran_app/src/core/api/dio_client.dart';
 import 'package:mesran_app/src/features/events/domain/entities/res/verify_face_response.dart';
-import 'package:mesran_app/src/shared/domain/entities/base_response.dart';
 
 class VerifyFaceDataSource {
   final DioClient _dioClient;
