@@ -28,6 +28,10 @@ import 'package:mesran_app/src/features/home/data/data_source/home_data_source.d
 import 'package:mesran_app/src/features/home/data/repository/home_repository_impl.dart';
 import 'package:mesran_app/src/features/home/domain/use_case/get_home_events_use_case.dart';
 import 'package:mesran_app/src/features/home/presentation/bloc/home_page_bloc.dart';
+import 'package:mesran_app/src/features/profiles/data/data_source/profile_data_source.dart';
+import 'package:mesran_app/src/features/profiles/data/repository/profile_repository_impl.dart';
+import 'package:mesran_app/src/features/profiles/domain/use_case/get_profile_use_case.dart';
+import 'package:mesran_app/src/features/profiles/presentation/bloc/profile_bloc.dart';
 import 'package:mesran_app/src/features/users/data/data_source/user_data_source.dart';
 import 'package:mesran_app/src/features/users/data/repository/user_repository_impl.dart';
 import 'package:mesran_app/src/features/users/domain/usecases/register_face_use_case.dart';
@@ -108,4 +112,12 @@ Future<void> setupInjection() async {
   getIt.registerLazySingleton(() => HomeRepositoryImpl(getIt<HomeDataSource>()));
   getIt.registerLazySingleton(() => GetHomeEventsUseCase(getIt<HomeRepositoryImpl>()));
   getIt.registerLazySingleton(() => HomePageBloc(getIt<GetHomeEventsUseCase>()));
+
+  /*****************************************************************/
+  /***************************** PROFILE ***************************/
+  /*****************************************************************/
+  getIt.registerLazySingleton(()=> ProfileDataSource(getIt<DioClient>()));
+  getIt.registerLazySingleton(()=> ProfileRepositoryImpl(getIt<ProfileDataSource>()));
+  getIt.registerLazySingleton(()=> GetProfileUseCase(getIt<ProfileRepositoryImpl>()));
+  getIt.registerFactory(()=> ProfileBloc(getIt<GetProfileUseCase>()));
 }

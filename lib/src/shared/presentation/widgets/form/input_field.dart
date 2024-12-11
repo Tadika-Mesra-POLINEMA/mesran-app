@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mesran_app/src/config/styles/icons/template.dart' as ic;
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/error.dart';
@@ -15,6 +16,7 @@ class InputField extends StatelessWidget {
   final bool? isError;
   final String? initialValue;
   final int? maxLines;
+  final List<TextInputFormatter>? formatInput;
 
   const InputField({
     super.key,
@@ -27,6 +29,7 @@ class InputField extends StatelessWidget {
     this.isError = false,
     this.initialValue,
     this.maxLines,
+    this.formatInput,
   });
 
   @override
@@ -39,6 +42,7 @@ class InputField extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType ?? TextInputType.text,
       maxLines: maxLines ?? 1,
+      inputFormatters: formatInput ?? [],
       decoration: decoration ??
           InputDecoration(
             prefixIcon: prefixIcon?.copyWith(color: neutralBase),

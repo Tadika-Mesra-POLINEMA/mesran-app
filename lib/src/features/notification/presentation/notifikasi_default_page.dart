@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mesran_app/components/undo_button.dart';
+import 'package:mesran_app/src/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:mesran_app/utils/themes.dart';
 
 class NotifikasiDefaultPage extends StatelessWidget {
@@ -11,23 +12,8 @@ class NotifikasiDefaultPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: white,
-      appBar: AppBar(
-        backgroundColor: white,
-        title: Padding(
-          padding: EdgeInsets.all(0),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              UndoButton(
-                onPressed: () => context.pop(),
-              ),
-              Text(
-                'Notifikasi',
-                style: headingTwoSemiBold.copyWith(color: neutralBase),
-              ),
-            ],
-          ),
-        ),
+      appBar: CustomAppBar(
+        leadingText: 'Notifikasi',
       ),
       body: Center(
         child: Padding(
