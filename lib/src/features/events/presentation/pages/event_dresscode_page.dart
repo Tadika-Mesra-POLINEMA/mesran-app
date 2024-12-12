@@ -36,11 +36,10 @@ class _EventDresscodePageState extends State<EventDresscodePage> {
     Dress(label: 'Anime', icon: anime),
   ];
 
-  String handleDresscodeSave(BuildContext context) {
+  void handleDresscodeSave(BuildContext context) {
     context
         .read<EventDresscodeBloc>()
         .add(ChangeDresscode(dresscode: _items[_selectedIndex].label));
-    return _items[_selectedIndex].label;
   }
 
   bool _getSelectedDresscode(int index, String dresscode) {
@@ -50,13 +49,18 @@ class _EventDresscodePageState extends State<EventDresscodePage> {
   @override
   Widget build(BuildContext context) {
     return BlocProvider<EventDresscodeBloc>.value(
-      value: getIt<EventDresscodeBloc>(),
+      value: getIt<EventDresscodeBloc>()..add(LoadEventDresscode()),
       child: Scaffold(
         appBar: CustomAppBar(
+          onBack: () {
+            context.go('/events/create');
+          },
           leadingText: 'Pakaian dan Tema',
         ),
-        body: BlocConsumer<EventDresscodeBloc, EventDresscodeState>(
-          listener: (context, state) {},
+        body: BlocBuilder<EventDresscodeBloc, EventDresscodeState>(
+          buildWhen: (previous, current) =>
+              previous.dresscode != current.dresscode &&
+              previous.theme != current.theme,
           builder: (context, state) {
             return Container(
               color: Colors.white,
@@ -119,10 +123,7 @@ class _EventDresscodePageState extends State<EventDresscodePage> {
                   Gap(16),
                   Button(
                       onPressed: () {
-                        context.pop({
-                          'dresscode': state.dresscode,
-                          'theme': state.theme,
-                        });
+                        context.go('/events/create');
                       },
                       type: ButtonType.primary,
                       child: Text(

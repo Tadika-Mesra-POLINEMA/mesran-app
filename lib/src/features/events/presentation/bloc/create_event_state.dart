@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:mesran_app/src/shared/presentation/widgets/form/custom_time_range_picker_input.dart';
 
 class CreateEventState extends Equatable {
   final String name;
@@ -9,6 +10,9 @@ class CreateEventState extends Equatable {
   final String theme;
   final String dresscode;
   final String location;
+  final List<String>? savedNames;
+  final List<String>? savedDescriptions;
+  final List<TimeRange>? savedTimeRanges;
   final String errorMessage;
 
   final bool isNameValid;
@@ -36,6 +40,9 @@ class CreateEventState extends Equatable {
     this.location = '',
     this.theme = '',
     this.dresscode = '',
+    this.savedNames,
+    this.savedDescriptions,
+    this.savedTimeRanges,
     this.errorMessage = '',
     this.isNameValid = false,
     this.isDescriptionValid = false,
@@ -56,6 +63,9 @@ class CreateEventState extends Equatable {
     String? location,
     String? theme,
     String? dresscode,
+    List<String>? savedNames,
+    List<String>? savedDescriptions,
+    List<TimeRange>? savedTimeRanges,
     String? errorMessage,
     bool? isNameValid,
     bool? isDescriptionValid,
@@ -73,6 +83,9 @@ class CreateEventState extends Equatable {
       location: location ?? this.location,
       theme: theme ?? this.theme,
       dresscode: dresscode ?? this.dresscode,
+      savedNames: savedNames ?? this.savedNames,
+      savedDescriptions: savedDescriptions ?? this.savedDescriptions,
+      savedTimeRanges: savedTimeRanges ?? this.savedTimeRanges,
       errorMessage: errorMessage ?? this.errorMessage,
       isNameValid: isNameValid ?? this.isNameValid,
       isDescriptionValid: isDescriptionValid ?? this.isDescriptionValid,
@@ -93,6 +106,9 @@ class CreateEventState extends Equatable {
         location,
         theme,
         dresscode,
+        savedNames,
+        savedDescriptions,
+        savedTimeRanges,
         isNameValid,
         isDescriptionValid,
         isDateValid,
@@ -115,6 +131,9 @@ class CreateEventSuccess extends CreateEventState {
           location: '',
           theme: '',
           dresscode: '',
+          savedNames: [],
+          savedDescriptions: [],
+          savedTimeRanges: [],
           errorMessage: '',
           isNameValid: false,
           isDescriptionValid: false,
@@ -146,6 +165,30 @@ class CreateEventFormNotValid extends CreateEventState {
           theme: state.theme,
           dresscode: state.dresscode,
           errorMessage: 'Please fill all required fields correctly',
+          isNameValid: state.isNameValid,
+          isDescriptionValid: state.isDescriptionValid,
+          isDateValid: state.isDateValid,
+          isStartValid: state.isStartValid,
+          isLocationValid: state.isLocationValid,
+          isThemeValid: state.isThemeValid,
+          isDresscodeValid: state.isDresscodeValid,
+        );
+}
+
+class CreateEventLoading extends CreateEventState {
+  CreateEventLoading(CreateEventState state)
+      : super(
+          name: state.name,
+          description: state.description,
+          date: state.date,
+          start: state.start,
+          location: state.location,
+          theme: state.theme,
+          dresscode: state.dresscode,
+          savedNames: state.savedNames,
+          savedDescriptions: state.savedDescriptions,
+          savedTimeRanges: state.savedTimeRanges,
+          errorMessage: state.errorMessage,
           isNameValid: state.isNameValid,
           isDescriptionValid: state.isDescriptionValid,
           isDateValid: state.isDateValid,

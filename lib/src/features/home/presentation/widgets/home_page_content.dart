@@ -55,37 +55,61 @@ class _HomePageContentState extends State<HomePageContent> {
                       style: headingThreeMedium.copyWith(color: neutralBase),
                     ),
                     const Gap(12),
-                    if (state.items.length > 0)
-                      SizedBox(
-                        height: 160,
-                        child: Skeletonizer(
-                          enabled: state.isLoading,
-                          child: PageView.builder(
-                            itemCount: state.items.length,
-                            controller: PageController(viewportFraction: 1.012),
-                            itemBuilder: (context, index) {
-                              final EventHome event = state.items[index];
+                    Column(
+                      children: [
+                        if (state.items.isNotEmpty)
+                          SizedBox(
+                            height: 160,
+                            child: Skeletonizer(
+                              enabled: state.isLoading,
+                              child: PageView.builder(
+                                itemCount: state.items.length,
+                                controller:
+                                    PageController(viewportFraction: 1.012),
+                                itemBuilder: (context, index) {
+                                  final EventHome event = state.items[index];
 
-                              return Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 8.0),
-                                child: InvitationCardHome(
-                                  content: InvitationContentHome(
-                                    onTap: () {
-                                      context.push('/events/${event.id}');
-                                    },
-                                    name: event.name,
-                                    date: event.date,
-                                    desc: event.description,
-                                  ),
-                                ),
-                              );
-                            },
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 8.0),
+                                    child: InvitationCardHome(
+                                      content: InvitationContentHome(
+                                        onTap: () {
+                                          context.push('/events/${event.id}');
+                                        },
+                                        name: event.name,
+                                        date: event.date,
+                                        desc: event.description,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
+                        if (state.items.isEmpty)
+                          Skeletonizer(
+                            enabled: state.isLoading,
+                            child: Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8),
+                                color: neutral10,
+                              ),
+                              height: 160,
+                              child: Center(
+                                child: Text(
+                                  'Tidak ada acara yang akan datang',
+                                  style:
+                                      titleOneMedium.copyWith(color: neutral40),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
                     const Gap(16),
                     const Center(child: HeroSection()),
+                    Gap(12),
                   ],
                 ),
               ),

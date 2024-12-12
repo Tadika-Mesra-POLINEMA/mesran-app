@@ -6,7 +6,7 @@ class EventDresscodeState extends Equatable {
 
   const EventDresscodeState({
     this.theme = '',
-    this.dresscode = 'Formal',
+    this.dresscode = '',
   });
 
   @override

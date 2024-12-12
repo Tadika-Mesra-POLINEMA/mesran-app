@@ -28,3 +28,9 @@ class HomePageLoaded extends HomePageState {
 
   HomePageLoaded(this.events) : super(isLoading: false, items: events);
 }
+
+class HomePageError extends HomePageState {
+  final String message;
+
+  HomePageError(this.message) : super(isLoading: false, items: []);
+}

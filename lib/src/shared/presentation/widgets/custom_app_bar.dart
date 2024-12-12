@@ -7,6 +7,7 @@ import 'package:mesran_app/src/config/styles/texts/semibold.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
+  final Function? onBack;
   final String? leadingText;
   final String? middleText;
   final List<PopupItem>? dropdownItems;
@@ -14,6 +15,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   const CustomAppBar({
     super.key,
+    this.onBack,
     this.leadingText,
     this.middleText,
     this.dropdownItems,
@@ -38,7 +40,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 GestureDetector(
-                  onTap: () => context.pop(),
+                  onTap: () => onBack != null ? onBack!() : context.pop(),
                   child: Icon(
                     Icons.arrow_back_ios,
                     color: neutralBase,

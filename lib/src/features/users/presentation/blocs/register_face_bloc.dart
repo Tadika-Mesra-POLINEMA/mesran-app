@@ -1,27 +1,33 @@
 import 'package:bloc/bloc.dart';
 import 'package:dio/dio.dart';
 import 'package:mesran_app/src/core/api/ml_client.dart';
+import 'package:mesran_app/src/features/users/domain/usecases/get_user_use_case.dart';
 import 'package:mesran_app/src/features/users/domain/usecases/register_face_use_case.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_face_event.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_face_state.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterFaceBloc extends Bloc<RegisterFaceEvent, RegisterFaceState> {
   final ML _mlClient;
   final RegisterFaceUseCase _registerFaceUseCase;
-  final SharedPreferences prefs;
+  final GetUserUseCase _getUserUseCase;
 
-  RegisterFaceBloc(this._mlClient, this._registerFaceUseCase, this.prefs)
-      : super(RegisterFaceState(paths: const [])) {
-    prefs.remove('facePaths');
+  RegisterFaceBloc(
+      this._mlClient, this._registerFaceUseCase, this._getUserUseCase)
+      : super(RegisterFaceState()) {
     on<CaptureFace>(_onCaptureFace);
+    on<LoadUser>(_onLoadUser);
   }
 
   void _onCaptureFace(
     CaptureFace event,
     Emitter<RegisterFaceState> emit,
   ) async {
-    emit(RegisterFaceLoading());
+    emit(RegisterFaceLoading(
+      capturedCount: state.capturedCount,
+      paths: state.paths,
+      user: state.user,
+    ));
+
     final path = event.path;
 
     try {
@@ -33,45 +39,73 @@ class RegisterFaceBloc extends Bloc<RegisterFaceEvent, RegisterFaceState> {
       );
 
       if (response.statusCode == 200) {
-        final prefs = await SharedPreferences.getInstance();
-        List<String> savedPaths = prefs.getStringList('facePaths') ?? [];
+        final paths = [...state.paths, path];
 
-        if (savedPaths.length < 5) {
-          savedPaths.add(path);
-          await prefs.setStringList('facePaths', savedPaths);
-        }
-
-        if (savedPaths.length == 5) {
-          emit(CaptureFaceComplete(savedPaths.length));
-
+        if (paths.length == 5) {
           try {
-            await _registerFaceUseCase.call(savedPaths);
+            emit(VerifyingFace(
+              capturedCount: paths.length,
+              paths: paths,
+              user: state.user,
+            ));
 
-            await prefs.remove('facePaths');
+            final registerFaceResponse = await _registerFaceUseCase.call(paths);
 
-            emit(RegisterFaceSuccess());
+            registerFaceResponse.fold((_) {
+              emit(RegisterFaceFailure(
+                  'Gagal mendaftarkan wajah Anda, silakan coba lagi'));
+            }, (_) {
+              emit(RegisterFaceSuccess());
+            });
           } catch (error) {
-            emit(RegisterFaceFailure(message: 'Gagal mendaftarkan wajah Anda'));
+            emit(RegisterFaceFailure(
+                'Gagal mendaftarkan wajah Anda, silakan coba lagi'));
           }
+
           return;
         }
 
         emit(state.copyWith(
-          paths: savedPaths,
-          capturedCount: savedPaths.length,
-          hasError: false,
-          errorMessage: null,
+          paths: paths,
+          capturedCount: paths.length,
         ));
-        return;
       } else {
-        emit(RegisterFaceFailure(
-            message:
-                'Gagal mengambil wajah, coba sesuaikan wajah Anda pada tempat yang telah disediakan'));
+        emit(VerifyFaceFailed(
+          capturedCount: state.capturedCount,
+          paths: state.paths,
+          user: state.user,
+          message: 'Wajah Anda tidak terdeteksi, silakan coba lagi',
+        ));
       }
     } catch (error) {
-      emit(RegisterFaceFailure(
-          message:
-              'Gagal mengambil wajah, sesuaikan wajah Anda pada tempat yang disediakan'));
+      emit(VerifyFaceFailed(
+        capturedCount: state.capturedCount,
+        paths: state.paths,
+        user: state.user,
+        message: 'Wajah Anda tidak terdeteksi, silakan coba lagi',
+      ));
+    }
+  }
+
+  void _onLoadUser(
+    LoadUser event,
+    Emitter<RegisterFaceState> emit,
+  ) async {
+    emit(RegisterFaceLoading(
+      capturedCount: state.capturedCount,
+      paths: state.paths,
+      user: state.user,
+    ));
+    try {
+      final response = await _getUserUseCase.call();
+
+      response.fold((_) {
+        emit(RegisterFaceFailure('Gagal memuat data, silahkan coba lagi'));
+      }, (user) {
+        emit(state.copyWith(user: user));
+      });
+    } catch (error) {
+      emit(RegisterFaceFailure('Gagal memuat data, silahkan coba lagi'));
     }
   }
 }

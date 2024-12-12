@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:mesran_app/src/features/events/domain/entities/pref/create_event_pref.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/event_dresscode_event.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/event_dresscode_state.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,27 +12,20 @@ class EventDresscodeBloc
       : super(const EventDresscodeState()) {
     on<ChangeTheme>(_onChangeTheme);
     on<ChangeDresscode>(_onChangeDresscode);
-
-    Future.microtask(() {
-      load();
-    });
+    on<LoadEventDresscode>(_onLoadEventDresscode);
   }
 
-  void load() {
-    final theme = _sharedPreferences.getString('create_event_theme') ?? '';
-    final dresscode =
-        _sharedPreferences.getString('create_event_dresscode') ?? 'Formal';
+  void _onLoadEventDresscode(
+      LoadEventDresscode event, Emitter<EventDresscodeState> emit) {
+    final theme = _sharedPreferences.getString(CreateEventPref.theme) ?? '';
+    final dresscode = _sharedPreferences.getString(CreateEventPref.dresscode) ?? 'Formal';
 
-    debugPrint('SHARED PREF $theme');
-    debugPrint('SHARED PREF $dresscode');
-
-    add(ChangeTheme(theme: theme));
-    add(ChangeDresscode(dresscode: dresscode));
+    emit(state.copyWith(theme: theme, dresscode: dresscode));
   }
 
   void _onChangeTheme(ChangeTheme event, Emitter<EventDresscodeState> emit) {
     if (_validateTheme(event.theme)) {
-      _sharedPreferences.setString('create_event_theme', event.theme);
+      _sharedPreferences.setString(CreateEventPref.theme, event.theme);
 
       emit(state.copyWith(theme: event.theme));
     }
@@ -41,7 +34,7 @@ class EventDresscodeBloc
   void _onChangeDresscode(
       ChangeDresscode event, Emitter<EventDresscodeState> emit) {
     if (_validateDresscode(event.dresscode)) {
-      _sharedPreferences.setString('create_event_dresscode', event.dresscode);
+      _sharedPreferences.setString(CreateEventPref.dresscode, event.dresscode);
 
       emit(state.copyWith(dresscode: event.dresscode));
     }

@@ -19,18 +19,18 @@ class AuthDataSource {
         'password': request.password,
       });
 
-      print(response.data['data']);
-
       if (response.statusCode == 200) {
         return Right(
             BaseResponse.fromJson(response.data, AuthResponse.fromJson));
       } else {
         return Left(AuthFailure.fromJson(response.data));
       }
-    } on DioException catch (error) {
-      return Left(AuthFailure(AuthStatusType.fail, message: error.toString()));
+    } on DioException {
+      return Left(AuthFailure(AuthStatusType.fail,
+          message: 'Gagal login, silahkan coba lagi'));
     } catch (error) {
-      return Left(AuthFailure(AuthStatusType.fail, message: error.toString()));
+      return Left(AuthFailure(AuthStatusType.fail,
+          message: 'Gagal login, silahkan coba lagi'));
     }
   }
 }

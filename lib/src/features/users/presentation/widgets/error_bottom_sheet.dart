@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mesran_app/src/config/styles/texts/semibold.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
+import 'package:mesran_app/src/shared/presentation/widgets/form/button.dart';
 
 class ErrorBottomSheet extends StatelessWidget {
   final String message;
@@ -19,15 +24,13 @@ class ErrorBottomSheet extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
+          Image.asset('assets/images/finding.png'),
+          Gap(16),
           Text(
-            "Error",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              color: Colors.red,
-            ),
+            "Oops!, Terjadi Kesalahan",
+            style: headingOneSemiBold.copyWith(color: primaryBase),
           ),
-          Gap(8),
+          Gap(16),
           Text(
             message,
             textAlign: TextAlign.center,
@@ -36,11 +39,16 @@ class ErrorBottomSheet extends StatelessWidget {
               color: Colors.black,
             ),
           ),
-          Gap(8),
-          ElevatedButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text('Tutup'),
-          ),
+          Gap(16),
+          Button(
+              onPressed: () {
+                context.pop();
+              },
+              type: ButtonType.primary,
+              child: Text(
+                'Tutup',
+                style: titleOneSemiBold.copyWith(color: white),
+              )),
         ],
       ),
     );

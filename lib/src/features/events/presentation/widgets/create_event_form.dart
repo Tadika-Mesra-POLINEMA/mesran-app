@@ -25,12 +25,21 @@ class CreateEventForm extends StatefulWidget {
 
 class _CreateEventFormState extends State<CreateEventForm> {
   @override
+  void initState() {
+    super.initState();
+    if (mounted) {
+      context.read<CreateEventBloc>().add(LoadEvent());
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<CreateEventBloc, CreateEventState>(
         listener: (context, state) {
       if (state is CreateEventSuccess) {
         context.go('/home');
       }
+
       if (state is CreateEventFailed || state is CreateEventFormNotValid) {
         ScaffoldMessenger.of(context)
           ..hideCurrentSnackBar()
@@ -189,6 +198,7 @@ class _InputEventLocation extends StatelessWidget {
               },
               isError: isLocationError,
               hintText: 'Tulis alamat',
+              initialValue: state.location,
             ),
             if (isLocationError)
               Column(
@@ -322,6 +332,9 @@ class _InputDressActivities extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<CreateEventBloc, CreateEventState>(
       buildWhen: (previous, current) =>
+          previous.savedNames != current.savedNames ||
+          previous.savedDescriptions != current.savedDescriptions ||
+          previous.savedTimeRanges != current.savedTimeRanges ||
           previous.theme != current.theme ||
           previous.dresscode != current.dresscode ||
           previous.isThemeValid != current.isThemeValid ||
@@ -336,21 +349,59 @@ class _InputDressActivities extends StatelessWidget {
             InputLabel(label: 'Tambahan'),
             Gap(8),
             GestureDetector(
-              onTap: () => context.push('/events/activities'),
+              onTap: () {
+                context.push('/events/activities');
+              },
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: neutral20),
                 ),
-                padding: const EdgeInsets.fromLTRB(16, 2, 4, 2),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                child: Column(
                   children: [
-                    Text(
-                      'Aktivitas',
-                      style: titleOne.copyWith(color: neutral40),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(16, 2, 4, 0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'Aktivitas',
+                            style: titleOne.copyWith(color: neutral40),
+                          ),
+                          angleRight.copyWith(color: neutralBase),
+                        ],
+                      ),
                     ),
-                    angleRight.copyWith(color: neutralBase),
+                    if (state.savedNames != null &&
+                        state.savedNames!.isNotEmpty)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.symmetric(vertical: 10),
+                            height: 1,
+                            color: neutral20,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 2, 4, 12),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(state.savedNames![0],
+                                    style: titleOneMedium.copyWith(
+                                        color: neutralBase)),
+                                Gap(4),
+                                Text(
+                                    '${state.savedTimeRanges![0].startTime.hour.toString().padLeft(2, '0')}:${state.savedTimeRanges![0].startTime.minute.toString().padLeft(2, '0')} - ${state.savedTimeRanges![0].endTime.hour.toString().padLeft(2, '0')}:${state.savedTimeRanges![0].endTime.minute.toString().padLeft(2, '0')}',
+                                    style: titleTwo.copyWith(color: neutral40)),
+                                Gap(4),
+                                Text(state.savedDescriptions![0],
+                                    style: titleTwo.copyWith(color: neutral40)),
+                              ],
+                            ),
+                          )
+                        ],
+                      )
                   ],
                 ),
               ),
@@ -358,18 +409,7 @@ class _InputDressActivities extends StatelessWidget {
             Gap(8),
             GestureDetector(
               onTap: () async {
-                final result = await context.push('/events/dresscode/create');
-
-                if (result != null) {
-                  final mapResult = result as Map<String, dynamic>;
-                  final dresscode = mapResult['dresscode'];
-                  final theme = mapResult['theme'];
-
-                  context
-                      .read<CreateEventBloc>()
-                      .add(DressCodeChanged(dresscode));
-                  context.read<CreateEventBloc>().add(ThemeChanged(theme));
-                }
+                context.go('/events/dresscode/create');
               },
               child: Container(
                 decoration: BoxDecoration(

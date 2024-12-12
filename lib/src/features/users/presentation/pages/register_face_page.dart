@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'dart:math';
 import 'dart:async';
 
@@ -16,7 +15,7 @@ import 'package:mesran_app/src/features/users/presentation/blocs/register_face_b
 import 'package:mesran_app/src/features/users/presentation/blocs/register_face_event.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_face_state.dart';
 import 'package:mesran_app/src/features/users/presentation/widgets/circular_progress_painter.dart';
-import 'package:mesran_app/src/features/users/presentation/widgets/error_bottom_sheet.dart';
+import 'package:mesran_app/src/shared/presentation/widgets/loader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/config/styles/texts/medium.dart';
@@ -24,15 +23,26 @@ import 'package:mesran_app/src/features/users/presentation/widgets/register_face
 import 'package:mesran_app/src/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/form/button.dart';
 
-class RegisterFacePage extends StatefulWidget {
+class RegisterFacePage extends StatelessWidget {
   const RegisterFacePage({super.key});
 
   @override
-  State<RegisterFacePage> createState() => _RegisterFacePageState();
+  Widget build(BuildContext context) {
+    return BlocProvider(
+      create: (_) => getIt<RegisterFaceBloc>(),
+      child: const RegisterFaceContent(),
+    );
+  }
 }
 
-class _RegisterFacePageState extends State<RegisterFacePage> {
-  // Controller for the camera, used to display the camera preview and capture images
+class RegisterFaceContent extends StatefulWidget {
+  const RegisterFaceContent({super.key});
+
+  @override
+  State<RegisterFaceContent> createState() => _RegisterFaceContentState();
+}
+
+class _RegisterFaceContentState extends State<RegisterFaceContent> {
   CameraController? _cameraController;
   Future<void>? _initializeControllerFuture;
 
@@ -40,14 +50,16 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
   void initState() {
     super.initState();
     _initializeCamera();
+
+    if (mounted) {
+      context.read<RegisterFaceBloc>().add(LoadUser());
+    }
   }
 
   Future<void> _initializeCamera() async {
     _initializeControllerFuture = Future(() async {
-      // Cek permission dulu sebelum request
       var status = await Permission.camera.status;
 
-      // Jika belum granted, baru request
       if (!status.isGranted) {
         status = await Permission.camera.request();
       }
@@ -56,13 +68,9 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
         try {
           final cameras = await availableCameras();
 
-          // Tambahkan log untuk debug
-          print('Available cameras: ${cameras.length}');
-
           final frontCamera = cameras.firstWhere(
             (camera) => camera.lensDirection == CameraLensDirection.front,
             orElse: () {
-              print('Front camera not found, using first available camera');
               return cameras.first;
             },
           );
@@ -74,14 +82,6 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
             imageFormatGroup: ImageFormatGroup.jpeg,
           );
 
-          // Tambahkan listener untuk error
-          _cameraController!.addListener(() {
-            if (_cameraController!.value.hasError) {
-              print(
-                  'Camera error ${_cameraController!.value.errorDescription}');
-            }
-          });
-
           await _cameraController!.initialize();
           await _cameraController!
               .lockCaptureOrientation(DeviceOrientation.portraitUp);
@@ -90,16 +90,11 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
             setState(() {});
           }
         } catch (e) {
-          print('Camera initialization error: $e'); // Tambahkan log error
           throw Exception('Failed to initialize camera: $e');
         }
       } else if (status.isDenied) {
-        print('Camera permission is denied');
-        // Tambahkan handling untuk ketika user menolak permission
         throw Exception('Camera permission denied by user');
       } else if (status.isPermanentlyDenied) {
-        print('Camera permission is permanently denied');
-        // Buka settings aplikasi
         await openAppSettings();
         throw Exception(
             'Camera permission permanently denied, please enable from settings');
@@ -119,7 +114,6 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
 
     return BlocConsumer<RegisterFaceBloc, RegisterFaceState>(
       listener: (context, state) {
-        print(state.capturedCount);
         if (state is RegisterFaceSuccess) {
           context.go('/register/success');
         }
@@ -133,9 +127,7 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
               height: circleSize,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: state is RegisterFaceLoading
-                    ? Colors.black.withOpacity(0.5)
-                    : Colors.transparent,
+                color: Colors.black,
               ),
               child: ClipOval(
                 child: Transform.scale(
@@ -161,10 +153,19 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
                 inactiveColor: neutral20,
               ),
             ),
-            if (state is RegisterFaceLoading)
-              Center(
-                child: CircularProgressIndicator(
-                  color: primaryBase,
+            if (state is RegisterFaceLoading || state is VerifyingFace)
+              Positioned.fill(
+                child: Center(
+                  child: Container(
+                    width: 120,
+                    height: 120,
+                    decoration: BoxDecoration(
+                      color: white,
+                      borderRadius: BorderRadius.circular(
+                          12), // Optional: untuk rounded corners
+                    ),
+                    child: Center(child: Loader()),
+                  ),
                 ),
               ),
           ],
@@ -182,14 +183,9 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
             .lockCaptureOrientation(DeviceOrientation.portraitUp);
         final XFile image = await _cameraController!.takePicture();
 
-        // Cek apakah file gambar valid
-        final imageFile = File(image.path);
-        if (await imageFile.exists() && await imageFile.length() > 0) {
-          // Jika file valid, lanjutkan dengan trigger event
-          registerFaceBloc.add(CaptureFace(image.path));
-        } else {
-          print("Invalid image file: ${image.path}");
-        }
+        // ignore: use_build_context_synchronously
+        registerFaceBloc.add(CaptureFace(image.path, 1));
+
         setState(() {});
       } catch (e) {
         // ignore: avoid_print
@@ -219,41 +215,58 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
                     children: [
                       Center(child: _buildCircularCameraPreview()),
                       Gap(24),
-                      Text(
-                        'Ambil gambar wajah Anda!',
-                        style:
-                            headingThreeSemiBold.copyWith(color: neutralBase),
-                        textAlign: TextAlign.center,
-                      ),
+                      BlocBuilder<RegisterFaceBloc, RegisterFaceState>(
+                          builder: (context, state) {
+                        return Text(
+                          'Hai ${state.user?.firstname}, Kami akan ambil gambar wajah Anda!',
+                          style:
+                              headingThreeSemiBold.copyWith(color: neutralBase),
+                          textAlign: TextAlign.center,
+                        );
+                      }),
                       Gap(8),
                       Text(
-                        'Kami akan mengambil wajah Anda selama 5 kali,',
-                        style: paragraphOne.copyWith(color: neutral40),
-                        textAlign: TextAlign.center,
-                      ),
-                      Text(
-                        'Harap posisikan wajah Anda dengan benar menyesuaikan lingkaran yang ada di layar ponsel Anda',
+                        'Kami akan mengambil wajah Anda sekarang agar nanti bisa digunakan untuk masuk ke acara saat hadir!',
                         style: paragraphOne.copyWith(color: neutral40),
                         textAlign: TextAlign.center,
                       ),
                       Spacer(),
                       BlocBuilder<RegisterFaceBloc, RegisterFaceState>(
-                        builder: (context, state) {
-                          return RegisterFaceAlert(
-                            text: state is RegisterFaceFailure
-                                ? state.message
-                                : state is RegisterFaceLoading
-                                    ? 'Tunggu wajah Anda sedang kami proses'
-                                    : 'Posisikan wajah Anda dengan benar',
-                            type: state is RegisterFaceFailure
-                                ? RegisterFaceType.error
-                                : state is RegisterFaceLoading
-                                    ? RegisterFaceType.loading
-                                    : RegisterFaceType.warning,
-                          );
-                        },
-                      ),
-                      Gap(8)
+                          builder: (context, state) {
+                        return Column(
+                          children: [
+                            RegisterFaceAlert(
+                              text: state is RegisterFaceLoading
+                                  ? 'Tunggu kami sedang memproses wajah Anda'
+                                  : state is RegisterFaceFailure
+                                      ? 'Gagal mengambil wajah Anda'
+                                      : 'Posisikan wajah Anda tepat di dalam lingkaran',
+                              type: state is RegisterFaceLoading
+                                  ? RegisterFaceType.loading
+                                  : state is RegisterFaceFailure
+                                      ? RegisterFaceType.error
+                                      : RegisterFaceType.warning,
+                            ),
+                            Gap(16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Wajah yang sudah diambil',
+                                  style: titleOne.copyWith(color: neutralBase),
+                                ),
+                                Gap(4),
+                                Text(
+                                  '${state.capturedCount} dari 5',
+                                  style: titleOneSemiBold.copyWith(
+                                      color: neutralBase),
+                                )
+                              ],
+                            )
+                          ],
+                        );
+                      }),
+                      Gap(8),
                     ],
                   ),
                 );
@@ -267,8 +280,8 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
                 child: Text('Error: ${snapshot.error}'),
               );
             } else {
-              return const Center(
-                child: CircularProgressIndicator(),
+              return Center(
+                child: Loader(),
               );
             }
           },
@@ -281,13 +294,23 @@ class _RegisterFacePageState extends State<RegisterFacePage> {
             child: BlocBuilder<RegisterFaceBloc, RegisterFaceState>(
                 builder: (context, state) {
               return Button(
-                onPressed: () {
-                  _captureImage(context);
-                },
-                type: ButtonType.primary,
+                onPressed: () => _captureImage(context),
+                type: state is RegisterFaceLoading || state is VerifyingFace
+                    ? ButtonType.secondaryFill
+                    : ButtonType.primary,
                 child: Text(
-                  'Ambil',
-                  style: titleOneMedium.copyWith(color: white),
+                  state is RegisterFaceLoading
+                      ? 'Tunggu'
+                      : state is RegisterFaceFailure
+                          ? 'Coba lagi'
+                          : state is VerifyingFace
+                              ? 'Verifikasi'
+                              : 'Ambil Foto',
+                  style: titleOneMedium.copyWith(
+                      color:
+                          state is RegisterFaceLoading || state is VerifyingFace
+                              ? neutral40
+                              : white),
                 ),
               );
             }),

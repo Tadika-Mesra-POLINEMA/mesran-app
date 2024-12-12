@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
+import 'package:isar/isar.dart';
 import 'package:mesran_app/src/config/routes/routes.dart';
 import 'package:mesran_app/src/core/api/dio_client.dart';
 import 'package:mesran_app/src/core/api/ml_client.dart';
@@ -20,6 +21,7 @@ import 'package:mesran_app/src/features/events/data/repository/verify_face_repos
 import 'package:mesran_app/src/features/events/domain/use_case/create_event_use_case.dart';
 import 'package:mesran_app/src/features/events/domain/use_case/get_event_by_id_use_case.dart';
 import 'package:mesran_app/src/features/events/domain/use_case/verify_face_use_case.dart';
+import 'package:mesran_app/src/features/events/presentation/bloc/create_event_activity_bloc.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/create_event_bloc.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/event_detail_bloc.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/event_dresscode_bloc.dart';
@@ -34,6 +36,7 @@ import 'package:mesran_app/src/features/profiles/domain/use_case/get_profile_use
 import 'package:mesran_app/src/features/profiles/presentation/bloc/profile_bloc.dart';
 import 'package:mesran_app/src/features/users/data/data_source/user_data_source.dart';
 import 'package:mesran_app/src/features/users/data/repository/user_repository_impl.dart';
+import 'package:mesran_app/src/features/users/domain/usecases/get_user_use_case.dart';
 import 'package:mesran_app/src/features/users/domain/usecases/register_face_use_case.dart';
 import 'package:mesran_app/src/features/users/domain/usecases/register_use_case.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_bloc.dart';
@@ -58,7 +61,7 @@ Future<void> setupInjection() async {
   /****************************************************************************/
   getIt.registerLazySingleton(() => AuthDataSource(getIt<DioClient>()));
   getIt.registerLazySingleton(() => AuthRepositoryImpl(getIt<AuthDataSource>()));
-  getIt.registerLazySingleton(() =>AuthUseCase(getIt<AuthRepositoryImpl>(), getIt<FlutterSecureStorage>()));
+  getIt.registerLazySingleton(() => AuthUseCase(getIt<AuthRepositoryImpl>(), getIt<FlutterSecureStorage>()));
   getIt.registerFactory(() => AuthBloc(getIt<AuthUseCase>(), getIt<FlutterSecureStorage>()));
 
   // Authentication Verifications
@@ -75,11 +78,12 @@ Future<void> setupInjection() async {
 
   //==> User Registration <==//
   getIt.registerLazySingleton(() => RegisterUseCase(getIt<UserRepositoryImpl>(), getIt<FlutterSecureStorage>()));
-  getIt.registerFactory(() => RegisterBloc(getIt<RegisterUseCase>(), getIt<AuthUseCase>(), getIt<SharedPreferences>()));
+  getIt.registerFactory(() => RegisterBloc(getIt<RegisterUseCase>(),getIt<AuthUseCase>(), getIt<SharedPreferences>()));
 
   //==> Register Face <==//
   getIt.registerLazySingleton(() => RegisterFaceUseCase(getIt<UserRepositoryImpl>()));
-  getIt.registerFactory(() => RegisterFaceBloc(getIt<ML>(), getIt<RegisterFaceUseCase>(), getIt<SharedPreferences>()));
+  getIt.registerFactory(() => GetUserUseCase(getIt<UserRepositoryImpl>()));
+  getIt.registerLazySingleton(() => RegisterFaceBloc(getIt<ML>(), getIt<RegisterFaceUseCase>(), getIt<GetUserUseCase>()));
 
   /*******************************************************************/
   /*****************************  EVENTS *****************************/
@@ -87,13 +91,15 @@ Future<void> setupInjection() async {
   getIt.registerLazySingleton(() => EventDataSource(getIt<DioClient>()));
   getIt.registerLazySingleton(() => EventRepositoryImpl(getIt<EventDataSource>()));
   getIt.registerLazySingleton(() => CreateEventUseCase(getIt<EventRepositoryImpl>(), getIt<SharedPreferences>()));
-  
 
   //==> Create Event <==//
-  getIt.registerLazySingleton(() => CreateEventBloc(getIt<SharedPreferences>(), getIt<CreateEventUseCase>()));
+  getIt.registerFactory(() =>CreateEventBloc(getIt<SharedPreferences>(), getIt<CreateEventUseCase>()));
+
+  //==> Create Event Activity <==//
+  getIt.registerFactory(() => CreateEventActivityBloc(getIt<SharedPreferences>()));
 
   //==> Create Dresscode <==//
-  getIt.registerLazySingleton(() => EventDresscodeBloc(getIt<SharedPreferences>()));
+  getIt.registerFactory(() => EventDresscodeBloc(getIt<SharedPreferences>()));
 
   //==> Event Detail <==//
   getIt.registerLazySingleton(() => GetEventByIdUseCase(getIt<EventRepositoryImpl>()));
@@ -116,8 +122,8 @@ Future<void> setupInjection() async {
   /*****************************************************************/
   /***************************** PROFILE ***************************/
   /*****************************************************************/
-  getIt.registerLazySingleton(()=> ProfileDataSource(getIt<DioClient>()));
-  getIt.registerLazySingleton(()=> ProfileRepositoryImpl(getIt<ProfileDataSource>()));
-  getIt.registerLazySingleton(()=> GetProfileUseCase(getIt<ProfileRepositoryImpl>()));
-  getIt.registerFactory(()=> ProfileBloc(getIt<GetProfileUseCase>()));
+  getIt.registerLazySingleton(() => ProfileDataSource(getIt<DioClient>()));
+  getIt.registerLazySingleton(() => ProfileRepositoryImpl(getIt<ProfileDataSource>()));
+  getIt.registerLazySingleton(() => GetProfileUseCase(getIt<ProfileRepositoryImpl>()));
+  getIt.registerFactory(() => ProfileBloc(getIt<GetProfileUseCase>()));
 }

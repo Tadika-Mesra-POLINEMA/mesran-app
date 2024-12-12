@@ -18,22 +18,16 @@ class RegisterUseCase {
     return response.fold(
       (error) => Left(null),
       (successResponse) async {
+        _secureStorage.deleteAll();
+
         final accessToken = successResponse.data?.accessToken;
         if (accessToken != null && accessToken.isNotEmpty) {
           await _secureStorage.write(key: 'accessToken', value: accessToken);
-          final savedToken = await _secureStorage.read(key: 'accessToken');
-          debugPrint('AccessToken dari secure storage: $savedToken');
-          debugPrint('AccessToken berhasil disimpan: $accessToken');
-        } else {
-          debugPrint('AccessToken tidak valid: $accessToken');
         }
 
         final refreshToken = successResponse.data?.refreshToken;
         if (refreshToken != null && refreshToken.isNotEmpty) {
           await _secureStorage.write(key: 'refreshToken', value: refreshToken);
-          debugPrint('RefreshToken berhasil disimpan: $refreshToken');
-        } else {
-          debugPrint('RefreshToken tidak valid: $refreshToken');
         }
 
         return Right(true);

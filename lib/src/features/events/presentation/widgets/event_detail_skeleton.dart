@@ -17,6 +17,7 @@ class EventDetailSkeleton extends StatelessWidget {
             color: Colors.grey[300],
           ),
         ),
+        backgroundColor: white,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:mesran_app/src/features/users/data/data_source/user_data_source.dart';
+import 'package:mesran_app/src/features/users/domain/entity/get_user_response.dart';
 import 'package:mesran_app/src/features/users/domain/entity/register_request.dart';
 import 'package:mesran_app/src/features/users/domain/entity/register_response.dart';
 import 'package:mesran_app/src/features/users/domain/repository/abstract_user_repository.dart';
@@ -45,5 +46,10 @@ class UserRepositoryImpl extends AbstractUserRepository {
     } catch (e) {
       return Left(null);
     }
+  }
+
+  @override
+  Future<Either<Null, GetUserResponse>> getUser() async {
+    return await _userDataSource.getUser();
   }
 }

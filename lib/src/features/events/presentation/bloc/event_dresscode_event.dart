@@ -10,13 +10,7 @@ class EventDresscodeEvent extends Equatable {
 
 /// Load event dresscode event
 class LoadEventDresscode extends EventDresscodeEvent {
-  final String theme;
-  final String dresscode;
-
-  const LoadEventDresscode({required this.theme, required this.dresscode});
-
-  @override
-  List<Object> get props => [theme, dresscode];
+  const LoadEventDresscode();
 }
 
 /// Change theme event

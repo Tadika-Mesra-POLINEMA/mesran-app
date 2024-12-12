@@ -72,3 +72,5 @@ class LocationChanged extends CreateEventEvent {
 }
 
 class SubmitEvent extends CreateEventEvent {}
+
+class LoadEvent extends CreateEventEvent {}

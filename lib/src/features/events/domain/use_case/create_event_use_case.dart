@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:mesran_app/src/features/events/data/repository/event_repository_impl.dart';
+import 'package:mesran_app/src/features/events/domain/entities/pref/create_activity_pref.dart';
 import 'package:mesran_app/src/features/events/domain/entities/pref/create_event_pref.dart';
 import 'package:mesran_app/src/features/events/domain/entities/req/create_event_request.dart';
 import 'package:mesran_app/src/features/events/domain/entities/res/created_event_response.dart';
@@ -36,5 +37,9 @@ class CreateEventUseCase {
     _sharedPreferences.remove(CreateEventPref.start);
     _sharedPreferences.remove(CreateEventPref.theme);
     _sharedPreferences.remove(CreateEventPref.dresscode);
+    _sharedPreferences.remove(CreateActivityPref.names);
+    _sharedPreferences.remove(CreateActivityPref.descriptions);
+    _sharedPreferences.remove(CreateActivityPref.starts);
+    _sharedPreferences.remove(CreateActivityPref.ends);
   }
 }

@@ -19,13 +19,6 @@ class OtpChanged extends OtpVerificationEvent {
 
 class ResendOtpRequested extends OtpVerificationEvent {}
 
-class OtpSubmitted extends OtpVerificationEvent {
-  final String otp;
-
-  const OtpSubmitted({required this.otp});
-
-  @override
-  List<Object?> get props => [otp];
-}
+class OtpSubmitted extends OtpVerificationEvent {}
 
 class VerifyFace extends OtpVerificationEvent {}

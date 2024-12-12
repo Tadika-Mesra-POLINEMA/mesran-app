@@ -38,6 +38,8 @@ class VerificationUseCase {
       response.fold(
         (error) => Left(Left(error)),
         (success) {
+          _secureStorage.deleteAll();
+
           final accessToken = success.data?.accessToken;
           final refreshToken = success.data?.refreshToken;
 

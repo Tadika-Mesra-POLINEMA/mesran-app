@@ -1,23 +1,15 @@
-import 'package:isar/isar.dart';
+import 'package:flutter/material.dart';
 
-part 'activity.g.dart';
-
-@Collection()
 class Activity {
-  Id id = Isar.autoIncrement;
+  final String name;
+  final String description;
+  final TimeOfDay start;
+  final TimeOfDay end;
 
-  late String name;
-  late String description;
-
-  @Name('activity_start')
-  late DateTime activityStart;
-
-  @Name('activity_end')
-  late DateTime activityEnd;
-
-  @Name('duration_seconds')
-  late int durationSeconds;
-
-  @ignore
-  Duration get duration => activityEnd.difference(activityStart);
+  Activity({
+    required this.name,
+    required this.description,
+    required this.start,
+    required this.end,
+  });
 }

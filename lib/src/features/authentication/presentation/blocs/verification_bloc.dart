@@ -6,7 +6,7 @@ import 'package:mesran_app/src/features/authentication/presentation/blocs/verifi
 
 class OtpVerificationBloc
     extends Bloc<OtpVerificationEvent, OtpVerificationState> {
-  List<String?> otp = List.filled(6, null);
+  late List<String?> otp;
 
   final VerificationUseCase verificationUseCase;
 
@@ -15,6 +15,8 @@ class OtpVerificationBloc
     on<ResendOtpRequested>(_onResendOtpRequested);
     on<OtpSubmitted>(_onOtpSubmitted);
     on<VerifyFace>(_onVerifyFace);
+
+    otp = List.filled(6, null);
   }
 
   void _onOtpChanged(OtpChanged event, Emitter<OtpVerificationState> emit) {
@@ -22,25 +24,26 @@ class OtpVerificationBloc
   }
 
   void _onResendOtpRequested(
-      ResendOtpRequested event, Emitter<OtpVerificationState> emit) {
-    // emit(OtpLoading());
-
-    // TODO: Resend OTP
-
-    // emit(OtpSuccess());
-  }
+      ResendOtpRequested event, Emitter<OtpVerificationState> emit) {}
 
   void _onOtpSubmitted(
       OtpSubmitted event, Emitter<OtpVerificationState> emit) async {
     emit(OtpLoading());
 
-    // TODO: Implement OTP verification
-    final response =
-        await verificationUseCase.verify(otp.map((code) => code ?? '').join());
+    final otpCode = otp.map((code) => code ?? '').join();
+
+    final isOtpValid = this.isOtpValid(otpCode);
+
+    if (!isOtpValid) {
+      emit(OtpFailure(AuthStatusType.fail, message: 'Kode OTP tidak valid'));
+      return;
+    }
+
+    final response = await verificationUseCase.verify(otpCode);
 
     response.fold(
       (error) =>
-          emit(OtpFailure(AuthStatusType.fail, message: error.toString())),
+          emit(OtpFailure(AuthStatusType.fail, message: 'Kode OTP salah')),
       (_) => emit(OtpSuccess()),
     );
   }
@@ -55,5 +58,9 @@ class OtpVerificationBloc
       emit(VerifyFaceFailure(AuthStatusType.fail,
           message: 'Wajah belum terdaftar'));
     }
+  }
+
+  bool isOtpValid(String otp) {
+    return otp.length == 6;
   }
 }

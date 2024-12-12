@@ -14,6 +14,10 @@ class TimeRange {
     required this.startTime,
     required this.endTime,
   });
+
+  get activityStart => null;
+
+  get activityEnd => null;
 }
 
 class CustomTimeRangePickerInput {

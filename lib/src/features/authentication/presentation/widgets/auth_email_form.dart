@@ -59,19 +59,35 @@ class _AuthEmailFormState extends State<AuthEmailForm> {
               Spacer(),
               Column(
                 children: [
-                  Button(
-                      onPressed: () {
-                        print('test click login');
-                        context.read<AuthBloc>().add(
-                              LoginEvent(AuthRequest(
-                                  email: emailController.text,
-                                  password: passwordController.text)),
+                  BlocBuilder<AuthBloc, AuthState>(builder: (context, state) {
+                    return Button(
+                        onPressed: () {
+                          if (emailController.text.isNotEmpty &&
+                              passwordController.text.isNotEmpty) {
+                            context.read<AuthBloc>().add(
+                                  LoginEvent(AuthRequest(
+                                      email: emailController.text,
+                                      password: passwordController.text)),
+                                );
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: const Text(
+                                    'Email dan kata sandi wajib diisi'),
+                                backgroundColor: errorBase,
+                              ),
                             );
-                      },
-                      child: Text(
-                        'Masuk',
-                        style: titleOneSemiBold.copyWith(color: white),
-                      )),
+                          }
+                        },
+                        type: state is AuthLoading
+                            ? ButtonType.secondaryFill
+                            : ButtonType.primary,
+                        child: Text(
+                          'Masuk',
+                          style: titleOneSemiBold.copyWith(
+                              color: state is AuthLoading ? neutral40 : white),
+                        ));
+                  }),
                   Gap(12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,

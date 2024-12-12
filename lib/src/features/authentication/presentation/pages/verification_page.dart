@@ -6,13 +6,14 @@ import 'package:mesran_app/src/config/injector.dart';
 import 'package:mesran_app/src/config/styles/texts/medium.dart';
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/error.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/features/authentication/presentation/blocs/verification_bloc.dart';
 import 'package:mesran_app/src/features/authentication/presentation/blocs/verification_event.dart';
 import 'package:mesran_app/src/features/authentication/presentation/blocs/verification_state.dart';
 import 'package:mesran_app/src/features/authentication/presentation/widgets/otp_input_section.dart';
-import 'package:mesran_app/src/shared/presentation/widgets/form/button.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import 'package:mesran_app/src/shared/presentation/widgets/form/button.dart';
 
 class VerificationPage extends StatefulWidget {
   const VerificationPage({super.key});
@@ -73,8 +74,7 @@ class _VerificationPageState extends State<VerificationPage> {
   }
 
   void _onOtpSubmitted(BuildContext context) {
-    final otp = otpControllers.map((controller) => controller.text).join();
-    context.read<OtpVerificationBloc>().add(OtpSubmitted(otp: otp));
+    context.read<OtpVerificationBloc>().add(OtpSubmitted());
   }
 
   @override
@@ -91,8 +91,12 @@ class _VerificationPageState extends State<VerificationPage> {
             if (state is OtpSuccess) {
               context.read<OtpVerificationBloc>().add(VerifyFace());
             } else if (state is OtpFailure) {
-              // TODO: Handling failure otp verification
-              print(state.message);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: errorBase,
+                ),
+              );
             }
 
             if (state is VerifyFaceSuccess) {
@@ -109,10 +113,6 @@ class _VerificationPageState extends State<VerificationPage> {
           },
           child: BlocBuilder<OtpVerificationBloc, OtpVerificationState>(
             builder: (context, state) {
-              if (state is OtpLoading) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
               return Padding(
                 padding: const EdgeInsets.fromLTRB(16, 16, 16, 32),
                 child: Column(
@@ -165,11 +165,19 @@ class _VerificationPageState extends State<VerificationPage> {
                       ),
                     ),
                     Spacer(),
-                    Button(
-                      onPressed: () => _onOtpSubmitted(context),
-                      child: Text('Kirim',
-                          style: titleOneSemiBold.copyWith(color: white)),
-                    ),
+                    BlocBuilder<OtpVerificationBloc, OtpVerificationState>(
+                        builder: (context, state) {
+                      return Button(
+                        onPressed: () => _onOtpSubmitted(context),
+                        type: state is OtpLoading
+                            ? ButtonType.secondaryFill
+                            : ButtonType.primary,
+                        child: Text(state is OtpLoading ? 'Mengirim' : 'Kirim',
+                            style: titleOneSemiBold.copyWith(
+                                color:
+                                    state is OtpLoading ? neutral40 : white)),
+                      );
+                    }),
                     Gap(8),
                     Button(
                         onPressed: () => _onOtpResend(context),

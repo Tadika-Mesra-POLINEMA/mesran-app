@@ -99,7 +99,7 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         final response = await registerUseCase.call(RegisterRequest(
           email: state.email,
           password: state.password,
-          username: state.username,
+          name: state.username,
           phone: state.phone,
         ));
 

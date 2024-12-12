@@ -70,7 +70,7 @@ const Icon traditional = Icon(
   assetName: 'assets/icons/traditional.svg',
 );
 const Icon horror = Icon(
-  assetName: 'assets/icons/horror.svg',
+  assetName: 'assets/icons/ghost.svg',
 );
 const Icon anime = Icon(
   assetName: 'assets/icons/anime.svg',

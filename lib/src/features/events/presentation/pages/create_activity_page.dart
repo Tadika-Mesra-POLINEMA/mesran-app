@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mesran_app/src/config/injector.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
@@ -37,18 +38,23 @@ class _CreateActivityPageState extends State<CreateActivityPage> {
           child: CreateActivityForm(),
         ),
         bottomNavigationBar:
-            BlocConsumer<CreateEventActivityBloc, CreateEventActivityState>(
-          listener: (context, state) {},
+            BlocBuilder<CreateEventActivityBloc, CreateEventActivityState>(
+          buildWhen: (previous, current) =>
+              previous.name != current.name ||
+              previous.description != current.description ||
+              previous.timeRange != current.timeRange,
           builder: (context, state) {
             return BottomAppBar(
               color: white,
               child: Button(
                 onPressed: () {
-                  context.read<CreateEventActivityBloc>().add(CreateActivity(
-                        name: state.name,
-                        description: state.description,
-                        timeRange: state.timeRange,
-                      ));
+                  final bloc = context.read<CreateEventActivityBloc>();
+                  bloc.add(CreateActivity(
+                    name: state.name,
+                    description: state.description,
+                    timeRange: state.timeRange,
+                  ));
+                  context.go('/events/activities');
                 },
                 child: Text(
                   'Simpan',

@@ -15,6 +15,7 @@ import 'package:mesran_app/src/features/profiles/presentation/bloc/profile_event
 import 'package:mesran_app/src/features/profiles/presentation/bloc/profile_state.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/bottom_navigation.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/form/button.dart';
+import 'package:mesran_app/src/shared/presentation/widgets/loader.dart';
 
 class AccountProfilePage extends StatelessWidget {
   const AccountProfilePage({super.key});
@@ -345,10 +346,7 @@ class _ProfileContentState extends State<ProfileContent> {
 
           return Scaffold(
             backgroundColor: white,
-            body: Center(
-                child: CircularProgressIndicator(
-              color: primaryBase,
-            )),
+            body: Center(child: Loader()),
           );
         });
   }

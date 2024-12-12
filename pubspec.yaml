@@ -94,6 +94,7 @@ dependencies:
   isar: ^3.1.0+1
   skeletonizer: ^1.4.2
   share_plus: ^10.1.2
+  timeline_tile: ^2.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

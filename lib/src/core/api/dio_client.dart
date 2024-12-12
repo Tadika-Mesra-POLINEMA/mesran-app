@@ -15,6 +15,7 @@ class DioClient {
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
+            'Cache-Control': 'no-cache',
           },
         )) {
     _dio.interceptors.add(InterceptorsWrapper(
@@ -23,9 +24,7 @@ class DioClient {
         handler.next(options);
       },
       onError: (DioException error, handler) async {
-        final response = error.response;
-
-        if (response != null && response.statusCode == 401) {
+        if (error.response?.statusCode == 401) {
           final isRefreshed = await _refreshToken();
           if (isRefreshed) {
             final newRequest = await _retryRequest(error.requestOptions);
@@ -38,16 +37,16 @@ class DioClient {
         handler.next(error);
       },
     ));
+
     _dio.interceptors.add(LogInterceptor(
       requestBody: true,
       responseBody: true,
-      requestHeader: true,
-      responseHeader: true,
       error: true,
     ));
   }
 
   Future<void> _addAuthorizationHeader(RequestOptions options) async {
+    if (options.path.contains('/login')) return;
     final token = await _secureStorage.read(key: 'accessToken');
     if (token != null) {
       options.headers['Authorization'] = 'Bearer $token';
@@ -57,48 +56,47 @@ class DioClient {
   Future<bool> _refreshToken() async {
     try {
       final refreshToken = await _secureStorage.read(key: 'refreshToken');
-
-      if (refreshToken == null) {
-        return false;
-      }
+      if (refreshToken == null) return false;
 
       final response = await _dio.put(
-        'api/authentications/refresh',
+        '/api/authentications/refresh',
         data: {'refreshToken': refreshToken},
+        options: Options(
+          headers: {'Content-Type': 'application/json'},
+        ),
       );
 
       if (response.statusCode == 200) {
         final newAccessToken = response.data['data']['accessToken'];
-
         await _secureStorage.write(key: 'accessToken', value: newAccessToken);
-
         return true;
-      } else {
-        return false;
       }
-    } on DioException {
-      return false;
+    } catch (e) {
+      print('Error refreshing token: $e');
     }
+    return false;
   }
 
   Future<Response<dynamic>> _retryRequest(RequestOptions requestOptions) async {
     final newToken = await _secureStorage.read(key: 'accessToken');
     final headers = Map<String, dynamic>.from(requestOptions.headers);
-
     if (newToken != null) {
       headers['Authorization'] = 'Bearer $newToken';
     }
-
-    final options = Options(
-      method: requestOptions.method,
-      headers: headers,
-    );
 
     return _dio.request(
       requestOptions.path,
       data: requestOptions.data,
       queryParameters: requestOptions.queryParameters,
-      options: options,
+      options: Options(
+        method: requestOptions.method,
+        headers: headers,
+        responseType: requestOptions.responseType,
+        contentType: requestOptions.contentType,
+        receiveDataWhenStatusError: requestOptions.receiveDataWhenStatusError,
+        followRedirects: requestOptions.followRedirects,
+        validateStatus: requestOptions.validateStatus,
+      ),
     );
   }
 
@@ -106,7 +104,10 @@ class DioClient {
 
   Future<Response> get(String endpoint,
       {Map<String, dynamic>? queryParams}) async {
-    return await _dio.get(endpoint, queryParameters: queryParams);
+    return await _dio.get(
+      endpoint,
+      queryParameters: queryParams,
+    );
   }
 
   Future<Response> post(String endpoint,

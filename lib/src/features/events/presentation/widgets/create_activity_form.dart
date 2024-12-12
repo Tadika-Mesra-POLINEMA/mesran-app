@@ -78,7 +78,7 @@ class _InputActivityName extends StatelessWidget {
               InputField(
                 onChanged: (name) {
                   context.read<CreateEventActivityBloc>().add(
-                        ActivityNameChanged(name: name),
+                        ActivityNameChanged(name),
                       );
                 },
                 hintText: 'Masukkan nama',
@@ -116,7 +116,7 @@ class _InputActivityDescription extends StatelessWidget {
             InputField(
               onChanged: (description) {
                 context.read<CreateEventActivityBloc>().add(
-                      ActivityDescriptionChanged(description: description),
+                      ActivityDescriptionChanged(description),
                     );
               },
               hintText: 'Tulis deskripsi',

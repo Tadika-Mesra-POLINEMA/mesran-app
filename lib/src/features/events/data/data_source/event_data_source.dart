@@ -14,6 +14,8 @@ class EventDataSource {
   Future<Either<CreateEventFailure, CreatedEventResponse>> createEvent(
       CreateEventRequest request) async {
     try {
+      print(request.toJson());
+
       final response = await _dioClient.post(
         '/api/events',
         data: request.toJson(),

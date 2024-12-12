@@ -1,13 +1,13 @@
 class RegisterRequest {
   final String email;
   final String phone;
-  final String username;
+  final String name;
   final String password;
 
   RegisterRequest({
     required this.email,
     required this.phone,
-    required this.username,
+    required this.name,
     required this.password,
   });
 
@@ -15,7 +15,7 @@ class RegisterRequest {
     return {
       'email': email,
       'phone': phone,
-      'username': username,
+      'name': name,
       'password': password,
     };
   }

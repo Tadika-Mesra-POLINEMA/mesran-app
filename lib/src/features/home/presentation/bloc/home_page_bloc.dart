@@ -18,6 +18,8 @@ class HomePageBloc extends Bloc<HomePageEvent, HomePageState> {
       final result = await getHomeEventsUseCase.call();
       result.fold((failure) => emit(HomePageLoaded([])),
           (events) => emit(HomePageLoaded(events)));
-    } catch (error) {}
+    } catch (error) {
+      emit(HomePageError('Gagal memuat data'));
+    }
   }
 }
