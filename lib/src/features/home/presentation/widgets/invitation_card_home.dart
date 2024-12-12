@@ -47,8 +47,13 @@ class InvitationContentHome extends StatelessWidget {
         Text(DateFormat.yMMMMd('id').format(date),
             style: titleTwo.copyWith(color: neutral40)),
         Gap(4),
-        Text(desc, style: titleTwo.copyWith(color: neutral40)),
-        Gap(16),
+        Text(
+          desc,
+          style: titleTwo.copyWith(color: neutral40),
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
+        ),
+        Spacer(),
         Button(
             onPressed: () => onTap(),
             type: ButtonType.secondary,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 import 'package:mesran_app/src/config/styles/icons/custom.dart';
 import 'package:mesran_app/src/config/styles/texts/medium.dart';
@@ -36,15 +37,22 @@ class _HomePageContentState extends State<HomePageContent> {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomePageBloc, HomePageState>(
-        listener: (_, state) {},
-        builder: (context, state) {
-          return Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              backgroundColor: white,
-              title: const AppBarHomePage(),
-            ),
-            body: SingleChildScrollView(
+      listener: (_, state) {},
+      builder: (context, state) {
+        return Scaffold(
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: white,
+            title: const AppBarHomePage(),
+          ),
+          body: RefreshIndicator(
+            onRefresh: () async {
+              context.read<HomePageBloc>().add(HomePageEventLoad());
+            },
+            color: primaryBase,
+            backgroundColor: white,
+            child: SingleChildScrollView(
+              physics: AlwaysScrollableScrollPhysics(),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Column(
@@ -59,7 +67,7 @@ class _HomePageContentState extends State<HomePageContent> {
                       children: [
                         if (state.items.isNotEmpty)
                           SizedBox(
-                            height: 160,
+                            height: 180,
                             child: Skeletonizer(
                               enabled: state.isLoading,
                               child: PageView.builder(
@@ -114,12 +122,14 @@ class _HomePageContentState extends State<HomePageContent> {
                 ),
               ),
             ),
-            backgroundColor: white,
-            bottomNavigationBar: const BottomNavigation(
-              path: BottomNavigationPath.home,
-            ),
-          );
-        });
+          ),
+          backgroundColor: white,
+          bottomNavigationBar: const BottomNavigation(
+            path: BottomNavigationPath.home,
+          ),
+        );
+      },
+    );
   }
 }
 
@@ -128,22 +138,26 @@ class AppBarHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(
-            'Halo, Selamat Datang!',
-            style: headingTwoSemiBold,
-          ),
-          InkWell(
-            onTap: () => context.push('/notifications'),
-            child: bell.copyWith(color: neutralBase),
-          ),
-        ],
-      ),
-    );
+    return BlocBuilder<HomePageBloc, HomePageState>(
+        buildWhen: (previous, current) => previous.user != current.user,
+        builder: (context, state) {
+          return Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  'Halo ${state.user?.firstName}, Selamat Datang!',
+                  style: headingTwoSemiBold,
+                ),
+                InkWell(
+                  onTap: () => context.push('/notifications'),
+                  child: bell.copyWith(color: neutralBase),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

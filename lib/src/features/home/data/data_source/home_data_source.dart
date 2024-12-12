@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:mesran_app/src/core/api/dio_client.dart';
 import 'package:mesran_app/src/features/home/domain/entity/event.dart';
+import 'package:mesran_app/src/features/home/domain/entity/user.dart';
 
 class HomeDataSource {
   final DioClient _dioClient;
@@ -16,6 +17,22 @@ class HomeDataSource {
         return Right((response.data['data']['events'] as List)
             .map((e) => EventHome.fromJson(e))
             .toList());
+      } else {
+        return Left(null);
+      }
+    } on DioException {
+      return Left(null);
+    } catch (error) {
+      return Left(null);
+    }
+  }
+
+  Future<Either<Null, User>> fetchUserProfile() async {
+    try {
+      final response = await _dioClient.get('/api/users/me');
+
+      if (response.statusCode == 200) {
+        return Right(User.fromJson(response.data['data']));
       } else {
         return Left(null);
       }

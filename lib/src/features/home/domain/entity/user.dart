@@ -10,4 +10,13 @@ class User {
     required this.firstName,
     required this.lastName,
   });
+
+  factory User.fromJson(Map<String, dynamic> json) {
+    return User(
+      id: json['id'],
+      username: json['profile']['username'],
+      firstName: json['profile']['firstname'],
+      lastName: json['profile']['lastname'] ?? '',
+    );
+  }
 }
