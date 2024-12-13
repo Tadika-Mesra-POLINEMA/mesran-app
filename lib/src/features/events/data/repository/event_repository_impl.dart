@@ -39,4 +39,13 @@ class EventRepositoryImpl extends AbstractEventRepository {
       return Left(null);
     }
   }
+
+  @override
+  Future<bool> cancelEvent(String eventId) async {
+    try {
+      return await _eventDataSource.cancelEvent(eventId);
+    } catch (error) {
+      return false;
+    }
+  }
 }

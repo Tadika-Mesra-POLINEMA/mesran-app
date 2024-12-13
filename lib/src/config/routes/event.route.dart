@@ -6,6 +6,7 @@ import 'package:mesran_app/src/features/events/presentation/pages/create_event_p
 import 'package:mesran_app/src/features/events/presentation/pages/edit_event_page.dart';
 import 'package:mesran_app/src/features/events/presentation/pages/event_detail_page.dart';
 import 'package:mesran_app/src/features/events/presentation/pages/event_dresscode_page.dart';
+import 'package:mesran_app/src/features/events/presentation/pages/event_participant_page.dart';
 import 'package:mesran_app/src/features/events/presentation/pages/verify_face_page.dart';
 
 List<GoRoute> eventRoutes = [
@@ -39,6 +40,12 @@ List<GoRoute> eventRoutes = [
     builder: (context, state) {
       final eventId = state.pathParameters['eventId'];
       return EditEventPage(eventId: eventId!,);
+    }
+  ),
+  GoRoute(path: '/events/:eventId/participants',
+    builder: (context, state) {
+      final eventId = state.pathParameters['eventId'];
+      return const EventParticipantPage();
     }
   ),
   GoRoute(

@@ -17,6 +17,7 @@ import 'package:mesran_app/src/features/events/data/data_source/event_data_sourc
 import 'package:mesran_app/src/features/events/data/data_source/verify_face_data_source.dart';
 import 'package:mesran_app/src/features/events/data/repository/event_repository_impl.dart';
 import 'package:mesran_app/src/features/events/data/repository/verify_face_repository_impl.dart';
+import 'package:mesran_app/src/features/events/domain/use_case/cancel_event_use_case.dart';
 import 'package:mesran_app/src/features/events/domain/use_case/create_event_use_case.dart';
 import 'package:mesran_app/src/features/events/domain/use_case/get_event_by_id_use_case.dart';
 import 'package:mesran_app/src/features/events/domain/use_case/verify_face_use_case.dart';
@@ -103,7 +104,8 @@ Future<void> setupInjection() async {
 
   //==> Event Detail <==//
   getIt.registerLazySingleton(() => GetEventByIdUseCase(getIt<EventRepositoryImpl>()));
-  getIt.registerFactory(() => EventDetailBloc(getIt<GetEventByIdUseCase>()));
+  getIt.registerLazySingleton(() => CancelEventUseCase(getIt<EventRepositoryImpl>()));
+  getIt.registerFactory(() => EventDetailBloc(getIt<GetEventByIdUseCase>(), getIt<CancelEventUseCase>()));
 
   //==> Event Verify Face <==//
   getIt.registerLazySingleton(() => VerifyFaceDataSource(getIt<DioClient>()));

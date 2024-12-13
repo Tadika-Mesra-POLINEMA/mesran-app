@@ -86,9 +86,9 @@ const Icon instagram = Icon(
 const Icon tiktok = Icon(
   assetName: 'assets/icons/tiktok.svg',
 );
-const Icon twitter = Icon(
-  assetName: 'assets/icons/twitter.svg',
-);
 const Icon whatsapp = Icon(
   assetName: 'assets/icons/whatsapp.svg',
+);
+const Icon telegram = Icon(
+  assetName: 'assets/icons/telegram.svg',
 );

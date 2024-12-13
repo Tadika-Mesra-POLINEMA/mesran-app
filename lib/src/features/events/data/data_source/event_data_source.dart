@@ -52,4 +52,21 @@ class EventDataSource {
       return Left(null);
     }
   }
+
+  Future<bool> cancelEvent(String eventId) async {
+    try {
+      final response =
+          await _dioClient.client.delete('/api/events/$eventId/cancel');
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } on DioException {
+      return false;
+    } catch (error) {
+      return false;
+    }
+  }
 }

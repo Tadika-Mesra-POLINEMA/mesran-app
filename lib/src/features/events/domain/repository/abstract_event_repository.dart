@@ -9,4 +9,6 @@ abstract class AbstractEventRepository {
       CreateEventRequest request);
 
   Future<Either<Null, Event>> getEvent(String eventId);
+
+  Future<bool> cancelEvent(String eventId);
 }

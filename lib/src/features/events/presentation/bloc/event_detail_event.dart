@@ -7,3 +7,9 @@ class EventDetailLoad extends EventDetailEvent {
 
   EventDetailLoad(this.id);
 }
+
+class EventDetailCancel extends EventDetailEvent {
+  final String id;
+
+  EventDetailCancel(this.id);
+}
