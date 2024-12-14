@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 
@@ -38,12 +39,12 @@ class InvitationContent extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Happy birthday', style: titleOne.copyWith(color: neutralBase)),
+        Text(name, style: titleOne.copyWith(color: neutralBase)),
         Gap(4),
-        Text('11 Agusturs cak', style: titleTwo.copyWith(color: neutral40)),
+        Text(DateFormat('dd MMMM yyyy', 'id').format(date),
+            style: titleTwo.copyWith(color: neutral40)),
         Gap(4),
-        Text('ulang tahu l kihhhhhhh',
-            style: titleTwo.copyWith(color: neutral40))
+        Text(desc, style: titleTwo.copyWith(color: neutral40))
       ],
     );
   }

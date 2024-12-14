@@ -21,6 +21,10 @@ List<GoRoute> profileRoutes = [
       path: '/account/history',
       builder: (context, state) => const HistoryPage()),
   GoRoute(
-      path: '/account/invitation',
-      builder: (context, state) => const InvitationPage()),
+      path: '/account/:id/invitation',
+      builder: (context, state) {
+        final String eventId = state.pathParameters['id']!;
+        print(eventId);
+        return InvitationPage(eventId: eventId);
+      }),
 ];

@@ -31,9 +31,14 @@ import 'package:mesran_app/src/features/home/data/repository/home_repository_imp
 import 'package:mesran_app/src/features/home/domain/use_case/get_home_events_use_case.dart';
 import 'package:mesran_app/src/features/home/domain/use_case/get_user_profile_use_case.dart';
 import 'package:mesran_app/src/features/home/presentation/bloc/home_page_bloc.dart';
+import 'package:mesran_app/src/features/profiles/data/data_source/invitation_data_source.dart';
 import 'package:mesran_app/src/features/profiles/data/data_source/profile_data_source.dart';
+import 'package:mesran_app/src/features/profiles/data/repository/invitation_repository_impl.dart';
 import 'package:mesran_app/src/features/profiles/data/repository/profile_repository_impl.dart';
+import 'package:mesran_app/src/features/profiles/domain/use_case/get_invitation_use_case.dart';
+import 'package:mesran_app/src/features/profiles/domain/use_case/get_invitations_use_case.dart';
 import 'package:mesran_app/src/features/profiles/domain/use_case/get_profile_use_case.dart';
+import 'package:mesran_app/src/features/profiles/presentation/bloc/invitation_bloc.dart';
 import 'package:mesran_app/src/features/profiles/presentation/bloc/profile_bloc.dart';
 import 'package:mesran_app/src/features/users/data/data_source/user_data_source.dart';
 import 'package:mesran_app/src/features/users/data/repository/user_repository_impl.dart';
@@ -125,8 +130,21 @@ Future<void> setupInjection() async {
   /*****************************************************************/
   /***************************** PROFILE ***************************/
   /*****************************************************************/
+ 
+  //==> Data Sources <==//
   getIt.registerLazySingleton(() => ProfileDataSource(getIt<DioClient>()));
+  getIt.registerLazySingleton(() => InvitationDataSource(getIt<DioClient>()));
+
+  //==> Repositories <==//
   getIt.registerLazySingleton(() => ProfileRepositoryImpl(getIt<ProfileDataSource>()));
+  getIt.registerLazySingleton(() => InvitationRepositoryImpl(getIt<InvitationDataSource>()));
+
+  //==> Use Cases <==//
   getIt.registerLazySingleton(() => GetProfileUseCase(getIt<ProfileRepositoryImpl>()));
+  getIt.registerLazySingleton(() => GetInvitationUseCase(getIt<InvitationRepositoryImpl>()));
+  getIt.registerLazySingleton(() => GetInvitationsUseCase(getIt<InvitationRepositoryImpl>()));
+
+
   getIt.registerFactory(() => ProfileBloc(getIt<GetProfileUseCase>()));
+  getIt.registerFactory(() => InvitationBloc(getIt<GetInvitationUseCase>(),getIt<GetInvitationsUseCase>()));
 }

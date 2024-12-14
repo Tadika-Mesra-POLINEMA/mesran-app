@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:intl/intl.dart';
+import 'package:mesran_app/src/config/injector.dart';
 import 'package:mesran_app/src/config/styles/icons/custom.dart';
 import 'package:mesran_app/src/config/styles/texts/medium.dart';
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
@@ -8,11 +11,53 @@ import 'package:mesran_app/src/config/styles/texts/semibold.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/error.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
+import 'package:mesran_app/src/features/profiles/presentation/bloc/invitation_bloc.dart';
+import 'package:mesran_app/src/features/profiles/presentation/bloc/invitation_event.dart';
+import 'package:mesran_app/src/features/profiles/presentation/bloc/invitation_state.dart';
+import 'package:mesran_app/src/features/profiles/presentation/bloc/profile_bloc.dart';
+import 'package:mesran_app/src/features/profiles/presentation/bloc/profile_event.dart';
+import 'package:mesran_app/src/features/profiles/presentation/bloc/profile_state.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/form/button.dart';
 
 class InvitationPage extends StatelessWidget {
-  const InvitationPage({super.key});
+  final String eventId;
+  const InvitationPage({super.key, required this.eventId});
+
+  @override
+  Widget build(BuildContext context) {
+    return MultiBlocProvider(providers: [
+      BlocProvider(create: (_) => getIt<ProfileBloc>()),
+      BlocProvider(create: (_) => getIt<InvitationBloc>())
+    ], child: InvitationContent(eventId: eventId));
+  }
+}
+
+class InvitationContent extends StatefulWidget {
+  final String eventId;
+  const InvitationContent({super.key, required this.eventId});
+
+  @override
+  State<InvitationContent> createState() => _InvitationContentState();
+}
+
+class _InvitationContentState extends State<InvitationContent> {
+  @override
+  void initState() {
+    super.initState();
+    print('test menjalankan init state invitation');
+    Future.microtask(() {
+      if (mounted) {
+        context.read<ProfileBloc>().add(ProfileLoad());
+        context.read<InvitationBloc>().add(InvitationLoad(widget.eventId));
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -115,289 +160,338 @@ class InvitationPage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: double.infinity,
-                padding: EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: neutral10,
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: Expanded(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Undangan untuk:',
-                        style: titleOne.copyWith(color: neutral40),
+              BlocBuilder<ProfileBloc, ProfileState>(
+                  buildWhen: (previous, current) {
+                return previous.user != current.user;
+              }, builder: (context, state) {
+                if (state.user != null) {
+                  return Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: neutral10,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      Gap(8),
-                      Text(
-                        'Valentina Sherina',
-                        style: headingThree.copyWith(color: neutralBase),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
+                      child: Expanded(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Undangan untuk:',
+                              style: titleOne.copyWith(color: neutral40),
+                            ),
+                            Gap(8),
+                            Text(
+                              state.user!.firstName,
+                              style: headingThree.copyWith(color: neutralBase),
+                            ),
+                          ],
+                        ),
+                      ));
+                } else {
+                  return CircularProgressIndicator();
+                }
+              }),
               Gap(16),
-              SizedBox(
-                width: double.infinity,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Ulang Tahun',
-                        style: headingOneSemiBold.copyWith(color: neutralBase)),
-                    Gap(8),
-                    Text(
-                      'Jangan lupa datang di acara ulang tahunku ya! aku menanti kehadiran kalian semuanya. See you',
-                      style: titleOneRegular.copyWith(color: neutral40),
-                    ),
-                    Gap(8),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  // SizedBox(height: 16),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Tanggal',
-                          style: titleOneRegular.copyWith(color: neutral40),
-                        ),
-                        Gap(4),
-                        Row(
+              BlocBuilder<InvitationBloc, InvitationState>(
+                  buildWhen: (previous, current) =>
+                      previous.event != current.event,
+                  builder: (context, state) {
+                    return Column(children: [
+                      SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            date.copyWith(
-                              color: neutralBase,
-                              width: 20,
-                              height: 20,
+                            Text(state.event!.name,
+                                style: headingOneSemiBold.copyWith(
+                                    color: neutralBase)),
+                            Gap(8),
+                            Text(
+                              state.event!.description,
+                              style: titleOneRegular.copyWith(color: neutral40),
                             ),
                             Gap(8),
-                            Text('20/10/2024',
-                                style: titleOneMedium.copyWith(
-                                    color: neutralBase)),
                           ],
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Waktu',
-                          style: titleOneRegular.copyWith(color: neutral40),
                         ),
-                        Gap(4),
-                        Row(
-                          children: [
-                            date.copyWith(
-                              color: neutralBase,
-                              width: 20,
-                              height: 20,
-                            ),
-                            Gap(8),
-                            Text('20/10/2024',
-                                style: titleOneMedium.copyWith(
-                                    color: neutralBase)),
-                            // SizedBox(height: 16)
-                          ],
-                        )
-                      ],
-                    ),
-                  )
-                ],
-              ),
-              Divider(
-                color: neutral20,
-                height: 44,
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Gap(16),
-                  Text(
-                    'Alamat',
-                    style: titleOneRegular.copyWith(
-                      color: neutral40,
-                    ),
-                  ),
-                  Gap(4),
-                  Text(
-                    'Jl. Soekarno Hatta No. 1, Malang, Jawa Timur, Indonesia',
-                    style: titleOneMedium.copyWith(color: neutralBase),
-                  ),
-                  Gap(4),
-                  Container(
-                    width: double.infinity,
-                    height: 180,
-                    decoration: BoxDecoration(
-                      color: neutral10,
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                  // Gap(4),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Gap(16),
-                  Text(
-                    'Tambahan',
-                    style: titleOneMedium.copyWith(color: neutralBase),
-                  ),
-                  Column(
-                    children: [
-                      Column(
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const SizedBox(height: 8),
-                          Container(
-                            width: double.infinity,
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                                color: white,
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(
-                                  color: neutral20,
-                                )),
+                          // SizedBox(height: 16),
+                          Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
+                                Text(
+                                  'Tanggal',
+                                  style: titleOneRegular.copyWith(
+                                      color: neutral40),
+                                ),
+                                Gap(4),
                                 Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text(
-                                      'Aktivitas',
-                                      style: titleOneMedium.copyWith(
-                                          color: neutralBase),
+                                    date.copyWith(
+                                      color: neutralBase,
+                                      width: 20,
+                                      height: 20,
                                     ),
+                                    Gap(8),
                                     Text(
-                                      'Lihat Lainnya',
-                                      style: titleTwoRegular.copyWith(
-                                        color: primaryBase,
-                                        decoration: TextDecoration.underline,
-                                        decorationColor: primaryBase,
-                                        decorationThickness: 1.0,
-                                      ),
-                                    ),
+                                        DateFormat('dd MMMM yyyy', 'id')
+                                            .format(state.event!.date),
+                                        style: titleOneMedium.copyWith(
+                                            color: neutralBase)),
                                   ],
-                                ),
-                                Divider(
-                                  color: neutral20,
-                                  height: 16,
-                                ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Lari dari kenyataan',
-                                      style: titleOneMedium.copyWith(
-                                          color: neutralBase),
-                                    ),
-                                    Gap(4),
-                                    Text(
-                                      '07:00 - 08:00',
-                                      style: titleTwoRegular.copyWith(
-                                          color: neutral40),
-                                    ),
-                                    Gap(4),
-                                    Text(
-                                      'Lorem ipsum dolor sit amet consectetur. Nullam t...',
-                                      style: titleTwoRegular.copyWith(
-                                          color: neutral40),
-                                    ),
-                                  ],
-                                ),
+                                )
                               ],
                             ),
                           ),
-                          Column(
-                            children: [
-                              const SizedBox(height: 8),
-                              Container(
-                                width: double.infinity,
-                                padding: const EdgeInsets.all(12),
-                                decoration: BoxDecoration(
-                                    color: white,
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                      color: neutral20,
-                                    )),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      'Pakaian dan Tema',
-                                      style: titleOneMedium.copyWith(
-                                          color: neutralBase),
-                                    ),
-                                    Divider(
-                                      color: neutral20,
-                                      height: 24,
-                                    ),
-                                    Row(
-                                      // mainAxisAlignment:
-                                      // MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'Tema',
-                                                style: titleTwoRegular.copyWith(
-                                                    color: neutral40),
-                                              ),
-                                              Gap(4),
-                                              Text(
-                                                'Formal',
-                                                style: titleOneMedium.copyWith(
-                                                    color: neutralBase),
-                                              )
-                                            ],
-                                          ),
-                                        ),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'Pakaian',
-                                                style: titleTwoRegular.copyWith(
-                                                    color: neutral40),
-                                              ),
-                                              Gap(4),
-                                              Text(
-                                                'Formal',
-                                                style: titleOneMedium.copyWith(
-                                                    color: neutralBase),
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ],
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Waktu',
+                                  style: titleOneRegular.copyWith(
+                                      color: neutral40),
                                 ),
-                              ),
-                            ],
+                                Gap(4),
+                                Row(
+                                  children: [
+                                    date.copyWith(
+                                      color: neutralBase,
+                                      width: 20,
+                                      height: 20,
+                                    ),
+                                    Gap(8),
+                                    Text(
+                                        DateFormat('EEEE, HH:mm')
+                                            .format(state.event!.start),
+                                        style: titleOneMedium.copyWith(
+                                            color: neutralBase)),
+                                    // SizedBox(height: 16)
+                                  ],
+                                )
+                              ],
+                            ),
                           )
                         ],
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                      ),
+                      Divider(
+                        color: neutral20,
+                        height: 44,
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Gap(16),
+                          Text(
+                            'Alamat',
+                            style: titleOneRegular.copyWith(
+                              color: neutral40,
+                            ),
+                          ),
+                          Gap(4),
+                          Text(
+                            state.event!.location,
+                            style: titleOneMedium.copyWith(color: neutralBase),
+                          ),
+                          Gap(4),
+                          Container(
+                            width: double.infinity,
+                            height: 180,
+                            decoration: BoxDecoration(
+                              color: neutral10,
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          // Gap(4),
+                        ],
+                      ),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Gap(16),
+                          Text(
+                            'Tambahan',
+                            style: titleOneMedium.copyWith(color: neutralBase),
+                          ),
+                          Column(
+                            children: [
+                              Column(
+                                children: [
+                                  const SizedBox(height: 8),
+                                  Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                        color: white,
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(
+                                          color: neutral20,
+                                        )),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              'Aktivitas',
+                                              style: titleOneMedium.copyWith(
+                                                  color: neutralBase),
+                                            ),
+                                            Text(
+                                              'Lihat Lainnya',
+                                              style: titleTwoRegular.copyWith(
+                                                color: primaryBase,
+                                                decoration:
+                                                    TextDecoration.underline,
+                                                decorationColor: primaryBase,
+                                                decorationThickness: 1.0,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        Divider(
+                                          color: neutral20,
+                                          height: 16,
+                                        ),
+                                        // Render aktivitas berdasarkan list
+                                        Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: state.event!.activities
+                                              .map((activity) {
+                                            return Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  activity.name,
+                                                  style:
+                                                      titleOneMedium.copyWith(
+                                                          color: neutralBase),
+                                                ),
+                                                Gap(4),
+                                                Text(
+                                                  '${activity.start} - ${activity.end}',
+                                                  style:
+                                                      titleTwoRegular.copyWith(
+                                                          color: neutral40),
+                                                ),
+                                                Gap(4),
+                                                Text(
+                                                  activity.description,
+                                                  style:
+                                                      titleTwoRegular.copyWith(
+                                                          color: neutral40),
+                                                ),
+                                                Gap(8),
+                                              ],
+                                            );
+                                          }).toList(),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Column(
+                                    children: [
+                                      const SizedBox(height: 8),
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.all(12),
+                                        decoration: BoxDecoration(
+                                            color: white,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            border: Border.all(
+                                              color: neutral20,
+                                            )),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              'Pakaian dan Tema',
+                                              style: titleOneMedium.copyWith(
+                                                  color: neutralBase),
+                                            ),
+                                            Divider(
+                                              color: neutral20,
+                                              height: 24,
+                                            ),
+                                            Row(
+                                              // mainAxisAlignment:
+                                              // MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        'Tema',
+                                                        style: titleTwoRegular
+                                                            .copyWith(
+                                                                color:
+                                                                    neutral40),
+                                                      ),
+                                                      Gap(4),
+                                                      Text(
+                                                        state.event!.theme,
+                                                        style: titleOneMedium
+                                                            .copyWith(
+                                                                color:
+                                                                    neutralBase),
+                                                      )
+                                                    ],
+                                                  ),
+                                                ),
+                                                Expanded(
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        'Pakaian',
+                                                        style: titleTwoRegular
+                                                            .copyWith(
+                                                                color:
+                                                                    neutral40),
+                                                      ),
+                                                      Gap(4),
+                                                      Text(
+                                                        state.event!.dresscode,
+                                                        style: titleOneMedium
+                                                            .copyWith(
+                                                                color:
+                                                                    neutralBase),
+                                                      )
+                                                    ],
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                        ],
+                      ),
+                    ]);
+                  }),
               Gap(16),
             ],
           ),
