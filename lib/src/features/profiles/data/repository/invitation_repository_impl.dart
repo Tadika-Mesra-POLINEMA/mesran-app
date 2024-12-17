@@ -12,7 +12,7 @@ class InvitationRepositoryImpl extends AbstractInvitationRepository {
   Future<Either<Null, Event>> getEvent(String id) async {
     return await _invitationDataSource.fetchEvent(id);
   }
-  
+
   @override
   Future<Either<Null, List<Event>>> getEvents() async {
     return await _invitationDataSource.fetchEvents();

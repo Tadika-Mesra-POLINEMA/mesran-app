@@ -13,10 +13,10 @@ List<GoRoute> profileRoutes = [
       builder: (context, state) => const AccountProfilePage()),
   GoRoute(
       path: '/account/update',
-      builder: (context, state) => const CreateProfileAkun()),
+      builder: (context, state) =>  CreateProfileAkun()),
   GoRoute(
       path: '/account/profile/update',
-      builder: (context, state) => const CreateProfilePribadi()),
+      builder: (context, state) => CreateProfilePribadi()),
   GoRoute(
       path: '/account/history',
       builder: (context, state) => const HistoryPage()),
