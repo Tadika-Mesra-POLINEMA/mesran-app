@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mesran_app/src/config/styles/texts/regular.dart';
+import 'package:mesran_app/src/config/styles/texts/semibold.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/form/button.dart';
-import 'package:mesran_app/utils/themes.dart';
 
 class VerificationSuccessPage extends StatelessWidget {
   const VerificationSuccessPage({super.key});

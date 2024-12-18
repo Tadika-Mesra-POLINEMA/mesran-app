@@ -8,9 +8,10 @@ class ProfileState {
 }
 
 class ProfileLoaded extends ProfileState {
-  final User user;
+  final User loadedUserProfile;
 
-  ProfileLoaded(this.user) : super(isLoading: false, user: user);
+  ProfileLoaded(this.loadedUserProfile)
+      : super(isLoading: false, user: loadedUserProfile);
 }
 
 class ProfileLoading extends ProfileState {
@@ -20,5 +21,5 @@ class ProfileLoading extends ProfileState {
 class ProfileLoadError extends ProfileState {
   final String message;
 
-  ProfileLoadError(this.message):super(isLoading: false,user: null);
+  ProfileLoadError(this.message) : super(isLoading: false, user: null);
 }

@@ -10,7 +10,7 @@ import 'package:mesran_app/src/features/profiles/presentation/pages/invitation_p
 List<GoRoute> profileRoutes = [
   GoRoute(
       path: '/account/profile',
-      builder: (context, state) => const AccountProfilePage()),
+      pageBuilder: (context, state) => NoTransitionPage(child: const AccountProfilePage())),
   GoRoute(
       path: '/account/update',
       builder: (context, state) =>  CreateProfileAkun()),
@@ -24,7 +24,6 @@ List<GoRoute> profileRoutes = [
       path: '/account/:id/invitation',
       builder: (context, state) {
         final String eventId = state.pathParameters['id']!;
-        print(eventId);
         return InvitationPage(eventId: eventId);
       }),
 ];

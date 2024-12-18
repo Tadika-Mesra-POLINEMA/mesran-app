@@ -80,6 +80,7 @@ class ShareBottomSheetContent extends StatelessWidget {
           await Share.share(shareMessage);
       }
     } catch (e) {
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Gagal membagikan: $e')),
       );
@@ -166,48 +167,50 @@ class ShareBottomSheetContent extends StatelessWidget {
               ),
             ),
             Gap(16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                SocialMediaIcon(
-                  onTap: () => _shareContent(context, 'whatsapp'),
-                  icon: whatsapp.copyWith(padding: EdgeInsets.all(12)),
-                ),
-                SocialMediaIcon(
-                  onTap: () => _shareContent(context, 'facebook'),
-                  icon: facebook.copyWith(padding: EdgeInsets.all(12)),
-                ),
-                SocialMediaIcon(
-                  onTap: () => _shareContent(context, 'tiktok'),
-                  icon: tiktok.copyWith(padding: EdgeInsets.all(16)),
-                ),
-                SocialMediaIcon(
-                  onTap: () => _shareContent(context, 'instagram'),
-                  icon: instagram.copyWith(padding: EdgeInsets.all(16)),
-                ),
-                SocialMediaIcon(
-                  onTap: () => _shareContent(context, 'telegram'),
-                  icon: telegram.copyWith(padding: EdgeInsets.all(16)),
-                ),
-                GestureDetector(
-                  onTap: () => Share.share(shareUrl),
-                  child: SizedBox(
-                    width: 60,
-                    height: 60,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: neutral10,
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Icon(
-                        Icons.more_horiz,
-                        size: 24,
-                        color: neutralBase,
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  SocialMediaIcon(
+                    onTap: () => _shareContent(context, 'whatsapp'),
+                    icon: whatsapp.copyWith(padding: EdgeInsets.all(12)),
+                  ),
+                  SocialMediaIcon(
+                    onTap: () => _shareContent(context, 'facebook'),
+                    icon: facebook.copyWith(padding: EdgeInsets.all(12)),
+                  ),
+                  SocialMediaIcon(
+                    onTap: () => _shareContent(context, 'tiktok'),
+                    icon: tiktok.copyWith(padding: EdgeInsets.all(16)),
+                  ),
+                  SocialMediaIcon(
+                    onTap: () => _shareContent(context, 'instagram'),
+                    icon: instagram.copyWith(padding: EdgeInsets.all(16)),
+                  ),
+                  SocialMediaIcon(
+                    onTap: () => _shareContent(context, 'telegram'),
+                    icon: telegram.copyWith(padding: EdgeInsets.all(16)),
+                  ),
+                  GestureDetector(
+                    onTap: () => Share.share(shareUrl),
+                    child: SizedBox(
+                      width: 60,
+                      height: 60,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: neutral10,
+                          borderRadius: BorderRadius.circular(100),
+                        ),
+                        child: Icon(
+                          Icons.more_horiz,
+                          size: 24,
+                          color: neutralBase,
+                        ),
                       ),
                     ),
-                  ),
-                )
-              ],
+                  )
+                ],
+              ),
             ),
             Spacer(),
             Button(

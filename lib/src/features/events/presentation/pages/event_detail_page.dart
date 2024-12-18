@@ -1,15 +1,15 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/src/config/injector.dart';
+import 'package:mesran_app/src/config/injectors/injector.dart';
+import 'package:mesran_app/src/config/routes/event.route.dart';
 import 'package:mesran_app/src/config/styles/icons/custom.dart';
 import 'package:mesran_app/src/config/styles/texts/medium.dart';
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/custom.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/error.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
@@ -22,37 +22,16 @@ import 'package:mesran_app/src/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/form/button.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class EventDetailPage extends StatefulWidget {
+class EventDetailPage extends StatelessWidget {
   final String eventId;
 
   const EventDetailPage({super.key, required this.eventId});
 
   @override
-  State<EventDetailPage> createState() => _EventDetailPageState();
-}
-
-class _EventDetailPageState extends State<EventDetailPage> {
-  @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
-      if (mounted) {
-        context.read<EventDetailBloc>().add(EventDetailLoad(widget.eventId));
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) =>
-          getIt<EventDetailBloc>()..add(EventDetailLoad(widget.eventId)),
-      child: _EventDetailContent(id: widget.eventId),
+      create: (_) => getIt<EventDetailBloc>()..add(EventDetailLoad(eventId)),
+      child: _EventDetailContent(id: eventId),
     );
   }
 }
@@ -68,6 +47,31 @@ class _EventDetailContent extends StatefulWidget {
 
 class _EventDetailContentState extends State<_EventDetailContent> {
   @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      if (mounted) {
+        context.read<EventDetailBloc>().add(EventDetailLoad(widget.id));
+      }
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (mounted) {
+      context.read<EventDetailBloc>().add(EventDetailLoad(widget.id));
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    context.read<EventDetailBloc>().close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocBuilder<EventDetailBloc, EventDetailState>(
       buildWhen: (previous, current) => previous.event != current.event,
@@ -82,6 +86,13 @@ class _EventDetailContentState extends State<_EventDetailContent> {
           return Scaffold(
             appBar: CustomAppBar(
               middleText: 'Undangan',
+              onBack: () {
+                if (context.canPop()) {
+                  context.pop();
+                } else {
+                  context.go('/home');
+                }
+              },
               dropdownItems: !state.event!.isCanceled
                   ? [
                       PopupItem(
@@ -377,46 +388,33 @@ class _EventDetailContentState extends State<_EventDetailContent> {
                                         (index) {
                                           if (index <
                                               event.participants.length) {
-                                            return Column(
-                                              children: [
-                                                Container(
-                                                  width: 60,
-                                                  height: 60,
-                                                  decoration: BoxDecoration(
-                                                    color: getRandomColor(),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            100),
-                                                  ),
-                                                  child: Center(
+                                            return Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 4),
+                                              child: Column(
+                                                children: [
+                                                  CircleAvatar(
+                                                    radius: 24,
+                                                    backgroundColor:
+                                                        getRandomColor(),
                                                     child: Text(
-                                                      event
-                                                              .participants[
-                                                                  index]
-                                                              .profile
-                                                              .firstname
-                                                              .isNotEmpty
-                                                          ? event
-                                                              .participants[
-                                                                  index]
-                                                              .profile
-                                                              .firstname[0]
-                                                          : '',
+                                                      event.participants[index]
+                                                          .profile.firstname[0],
                                                       style:
                                                           headingOne.copyWith(
-                                                              color: white,
-                                                              fontSize: 36),
+                                                              color: white),
                                                     ),
                                                   ),
-                                                ),
-                                                Gap(4),
-                                                Text(
-                                                  event.participants[index]
-                                                      .profile.firstname,
-                                                  style: titleTwo.copyWith(
-                                                      color: neutralBase),
-                                                ),
-                                              ],
+                                                  Gap(4),
+                                                  Text(
+                                                    event.participants[index]
+                                                        .profile.firstname,
+                                                    style: titleTwo.copyWith(
+                                                        color: neutralBase),
+                                                  ),
+                                                ],
+                                              ),
                                             );
                                           }
                                           return SizedBox
@@ -427,8 +425,11 @@ class _EventDetailContentState extends State<_EventDetailContent> {
                                     Gap(16),
                                     Button(
                                       onPressed: () {
-                                        context.go(
-                                            '/events/${event.id}/participants');
+                                        context.push(
+                                            '/events/${event.id}/participants',
+                                            extra: EventExtra(
+                                                isEventStart: isEventStarted,
+                                                isOwner: event.isOwner));
                                       },
                                       type: ButtonType.secondary,
                                       child: Text(
@@ -497,16 +498,39 @@ class _EventDetailContentState extends State<_EventDetailContent> {
                                                 style: titleOneMedium.copyWith(
                                                     color: neutralBase),
                                               ),
-                                              Text(
-                                                'Lihat Lainnya',
-                                                style: titleTwoRegular.copyWith(
-                                                  color: primaryBase,
-                                                  decoration:
-                                                      TextDecoration.underline,
-                                                  decorationColor: primaryBase,
-                                                  decorationThickness: 1.0,
+                                              if (!event.isCanceled ||
+                                                  event.isDone)
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    if (event.activities
+                                                        .isNotEmpty) {
+                                                      context.push(
+                                                          '/events/${event.id}/activities',
+                                                          extra: EventExtra(
+                                                              isEventStart:
+                                                                  isEventStarted,
+                                                              isOwner: event
+                                                                  .isOwner));
+                                                    } else {
+                                                      context.push(
+                                                          '/events/${event.id}/activities/add');
+                                                    }
+                                                  },
+                                                  child: Text(
+                                                    event.activities.isNotEmpty
+                                                        ? 'Lihat Lainnya'
+                                                        : 'Tambah',
+                                                    style: titleTwoRegular
+                                                        .copyWith(
+                                                      color: primaryBase,
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                      decorationColor:
+                                                          primaryBase,
+                                                      decorationThickness: 1.0,
+                                                    ),
+                                                  ),
                                                 ),
-                                              ),
                                             ],
                                           ),
                                           if (event.activities.isNotEmpty)
@@ -718,16 +742,6 @@ class _EventDetailContentState extends State<_EventDetailContent> {
 
         return EventDetailSkeleton();
       },
-    );
-  }
-
-  Color getRandomColor() {
-    final random = Random();
-    return Color.fromARGB(
-      255,
-      random.nextInt(256),
-      random.nextInt(256),
-      random.nextInt(256),
     );
   }
 }

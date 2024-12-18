@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/src/config/injector.dart';
+import 'package:mesran_app/src/config/injectors/injector.dart';
 import 'package:mesran_app/src/config/styles/icons/custom.dart';
+import 'package:mesran_app/src/config/styles/texts/regular.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/error.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/create_event_activity_bloc.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/create_event_activity_event.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/create_event_activity_state.dart';
 import 'package:mesran_app/src/features/events/presentation/widgets/not_found_event_activities_page.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/custom_app_bar.dart';
-import 'package:mesran_app/utils/themes.dart';
 import 'package:timeline_tile/timeline_tile.dart';
 
 class ActivitiesEventPage extends StatelessWidget {
@@ -70,7 +73,6 @@ class _EventActivitiesContentState extends State<EventActivitiesContent> {
               child: ListView.builder(
                 itemCount: itemLength,
                 itemBuilder: (BuildContext context, int index) {
-                  print(state.savedTimeRanges[index].startTime);
                   return TimelineTile(
                     isFirst: index == 0,
                     isLast: index == itemLength - 1,

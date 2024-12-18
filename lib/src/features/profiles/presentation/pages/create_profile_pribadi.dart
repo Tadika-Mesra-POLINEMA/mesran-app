@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mesran_app/src/config/injector.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mesran_app/src/config/injectors/injector.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/features/profiles/presentation/bloc/account_bloc.dart';
@@ -22,7 +23,7 @@ class CreateProfilePribadi extends StatelessWidget {
       create: (_) => getIt<AccountBloc>(),
       child: Scaffold(
         appBar: CustomAppBar(
-          leadingText: 'Akun',
+          leadingText: 'Informasi Pribadi',
         ),
         body: Padding(
           padding: EdgeInsets.all(16.0),
@@ -42,6 +43,8 @@ class CreateProfilePribadi extends StatelessWidget {
                           nameController.text,
                           phoneController.text,
                         ));
+
+                    context.go('/account/profile');
                   },
                   child: Text(
                     'Simpan',

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:mesran_app/utils/themes.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 
 class Icon extends StatefulWidget {
   final String assetName;

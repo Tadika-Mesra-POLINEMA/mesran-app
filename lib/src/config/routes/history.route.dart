@@ -4,6 +4,6 @@ import 'package:mesran_app/src/features/history/presentation/pages/history_page.
 List<GoRoute> historyRoutes = [
   GoRoute(
     path: '/history',
-    builder: (context, state) => HistoryPage(),
+    pageBuilder: (context, state) => NoTransitionPage(child: HistoryPage()),
   )
 ];

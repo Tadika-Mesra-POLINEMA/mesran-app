@@ -14,6 +14,6 @@ List<GoRoute> mainRoutes = [
   ),
   GoRoute(
     path: '/home', 
-    builder: (context, state) => const HomePage()
+    pageBuilder: (context, state) => NoTransitionPage(child: const HomePage())
   ),
 ];

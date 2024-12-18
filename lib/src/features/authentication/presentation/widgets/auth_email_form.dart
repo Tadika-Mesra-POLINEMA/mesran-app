@@ -3,6 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mesran_app/src/config/styles/icons/custom.dart';
+import 'package:mesran_app/src/config/styles/texts/medium.dart';
+import 'package:mesran_app/src/config/styles/texts/regular.dart';
+import 'package:mesran_app/src/config/styles/texts/semibold.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/error.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 import 'package:mesran_app/src/features/authentication/domain/entity/auth_request.dart';
 import 'package:mesran_app/src/features/authentication/presentation/blocs/auth_bloc.dart';
 import 'package:mesran_app/src/features/authentication/presentation/blocs/auth_event.dart';
@@ -11,7 +17,6 @@ import 'package:mesran_app/src/shared/presentation/widgets/form/button.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/form/input_field.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/form/input_label.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/form/input_password_field.dart';
-import 'package:mesran_app/utils/themes.dart';
 
 class AuthEmailForm extends StatefulWidget {
   const AuthEmailForm({super.key});

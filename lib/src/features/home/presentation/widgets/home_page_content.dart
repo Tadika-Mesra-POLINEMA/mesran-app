@@ -35,6 +35,20 @@ class _HomePageContentState extends State<HomePageContent> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (mounted) {
+      context.read<HomePageBloc>().add(HomePageEventLoad());
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    context.read<HomePageBloc>().close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return BlocConsumer<HomePageBloc, HomePageState>(
       listener: (_, state) {},

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mesran_app/src/config/injector.dart';
+import 'package:go_router/go_router.dart';
+import 'package:mesran_app/src/config/injectors/injector.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
-import 'package:mesran_app/src/features/profiles/presentation/bloc/account_bloc.dart';
 import 'package:mesran_app/src/features/profiles/presentation/bloc/private_bloc.dart';
 import 'package:mesran_app/src/features/profiles/presentation/bloc/private_event.dart';
 import 'package:mesran_app/src/features/profiles/presentation/bloc/private_state.dart';
@@ -48,6 +48,8 @@ class CreateProfileAkun extends StatelessWidget {
                           passwordKController.text,
                         ),
                       );
+
+                  context.go('/account/profile');
                 },
                 child: Text(
                   'Simpan',

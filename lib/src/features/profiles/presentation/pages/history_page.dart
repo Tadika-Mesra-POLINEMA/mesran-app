@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/src/config/injector.dart';
+import 'package:mesran_app/src/config/injectors/injector.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/features/profiles/presentation/bloc/invitation_bloc.dart';
 import 'package:mesran_app/src/features/profiles/presentation/bloc/invitation_event.dart';
@@ -25,10 +25,7 @@ class HistoryPage extends StatelessWidget {
           padding: EdgeInsets.all(16.0),
           child: BlocBuilder<InvitationBloc, InvitationState>(
             builder: (context, state) {
-              print(state.events);
-
-              // Pastikan state.events adalah sebuah list
-              if (state.events != null && state.events.isNotEmpty) {
+              if (state.events.isNotEmpty) {
                 return ListView.separated(
                   itemCount: state.events.length,
                   itemBuilder: (context, index) {

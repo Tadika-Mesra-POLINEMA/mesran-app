@@ -7,7 +7,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/src/config/injector.dart';
+import 'package:mesran_app/src/config/injectors/injector.dart';
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
@@ -77,7 +77,7 @@ class _RegisterFaceContentState extends State<RegisterFaceContent> {
 
           _cameraController = CameraController(
             frontCamera,
-            ResolutionPreset.medium,
+            ResolutionPreset.ultraHigh,
             enableAudio: false,
             imageFormatGroup: ImageFormatGroup.jpeg,
           );

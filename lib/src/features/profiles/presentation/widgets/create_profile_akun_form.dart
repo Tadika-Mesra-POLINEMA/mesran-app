@@ -16,7 +16,7 @@ class CreateProfileAkunForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<PrivateBloc, PrivateState>(
         listener: (context, state) => {},
-        builder: (context, State) {
+        builder: (context, state) {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

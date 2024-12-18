@@ -120,7 +120,9 @@ class CreateEventState extends Equatable {
 }
 
 class CreateEventSuccess extends CreateEventState {
-  CreateEventSuccess()
+  final String createdEventId;
+
+  CreateEventSuccess(this.createdEventId)
       : super(
           // Reset semua nilai ke default
           name: '',

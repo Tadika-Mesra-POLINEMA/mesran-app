@@ -37,7 +37,7 @@ class _CreateEventFormState extends State<CreateEventForm> {
     return BlocConsumer<CreateEventBloc, CreateEventState>(
         listener: (context, state) {
       if (state is CreateEventSuccess) {
-        context.go('/home');
+        context.go('/events/${state.createdEventId}/created');
       }
 
       if (state is CreateEventFailed || state is CreateEventFormNotValid) {
@@ -238,6 +238,7 @@ class _InputEventDate extends StatelessWidget {
                     initialDate: state.date);
 
                 if (date != null) {
+                  // ignore: use_build_context_synchronously
                   context.read<CreateEventBloc>().add(DateChanged(date));
                 }
               },

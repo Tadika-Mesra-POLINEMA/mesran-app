@@ -34,10 +34,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
+            // Leading section (back button and text)
             Row(
               mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 GestureDetector(
                   onTap: () => onBack != null ? onBack!() : context.pop(),
@@ -56,23 +55,26 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   ),
               ],
             ),
+            // Middle section (text)
             if (middleText != '' && middleText != null)
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: 300,
-                    child: Text(
+              Expanded(
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
                       middleText!,
                       textAlign: TextAlign.center,
                       style: headingTwoSemiBold.copyWith(color: neutralBase),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
+            // Popup menu section (if dropdownItems exists)
             if (dropdownItems != null && dropdownItems!.isNotEmpty)
               PopupMenu(items: dropdownItems!),
+            // End section (if provided)
             if (endSection != null) endSection!,
+            // Spacer when both dropdownItems and endSection are null
             if (dropdownItems == null && endSection == null) const SizedBox(),
           ],
         ),

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/src/config/injector.dart';
+import 'package:mesran_app/src/config/injectors/injector.dart';
 import 'package:mesran_app/src/config/styles/texts/medium.dart';
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
@@ -85,6 +85,7 @@ class RegisterFaceVerifyPage extends StatelessWidget {
     final accessToken = await _secureStorage.read(key: 'accessToken');
 
     if (accessToken != null) {
+      // ignore: use_build_context_synchronously
       context.go('/register/faces');
       return;
     }

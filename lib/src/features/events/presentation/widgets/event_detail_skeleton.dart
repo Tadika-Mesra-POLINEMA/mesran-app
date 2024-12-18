@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
+import 'package:mesran_app/src/shared/presentation/widgets/custom_app_bar.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class EventDetailSkeleton extends StatelessWidget {
@@ -9,15 +10,9 @@ class EventDetailSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Skeletonizer(
-          child: Container(
-            width: 150,
-            height: 20,
-            color: Colors.grey[300],
-          ),
-        ),
-        backgroundColor: white,
+      appBar: CustomAppBar(
+        middleText: 'Undangan',
+        endSection: const SizedBox(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

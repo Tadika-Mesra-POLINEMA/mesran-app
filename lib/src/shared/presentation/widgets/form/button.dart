@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mesran_app/utils/themes.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 
 class Button extends StatelessWidget {
   final Function() onPressed;

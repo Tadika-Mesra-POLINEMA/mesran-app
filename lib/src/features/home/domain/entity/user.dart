@@ -19,4 +19,15 @@ class User {
       lastName: json['profile']['lastname'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'profile': {
+        'username': username,
+        'firstname': firstName,
+        'lastname': lastName,
+      },
+    };
+  }
 }

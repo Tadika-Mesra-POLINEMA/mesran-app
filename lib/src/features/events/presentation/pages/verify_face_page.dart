@@ -5,12 +5,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:mesran_app/src/config/injector.dart';
+import 'package:mesran_app/src/config/injectors/injector.dart';
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/verify_face_bloc.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/verify_face_event.dart';
 import 'package:mesran_app/src/features/events/presentation/bloc/verify_face_state.dart';
+import 'package:mesran_app/src/shared/presentation/widgets/loader.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/config/styles/texts/medium.dart';
@@ -49,7 +50,7 @@ class _VerifyFacePageState extends State<VerifyFacePage> {
           final cameras = await availableCameras();
 
           final frontCamera = cameras.firstWhere(
-            (camera) => camera.lensDirection == CameraLensDirection.back,
+            (camera) => camera.lensDirection == CameraLensDirection.front,
             orElse: () {
               return cameras.first;
             },
@@ -57,7 +58,7 @@ class _VerifyFacePageState extends State<VerifyFacePage> {
 
           _cameraController = CameraController(
             frontCamera,
-            ResolutionPreset.medium,
+            ResolutionPreset.ultraHigh,
             enableAudio: false,
             imageFormatGroup: ImageFormatGroup.jpeg,
           );
@@ -209,8 +210,19 @@ class _VerifyFacePageState extends State<VerifyFacePage> {
                 ),
               ),
               if (state.isLoading)
-                const Center(
-                  child: CircularProgressIndicator(),
+                Positioned.fill(
+                  child: Center(
+                    child: Container(
+                      width: 120,
+                      height: 120,
+                      decoration: BoxDecoration(
+                        color: white,
+                        borderRadius: BorderRadius.circular(
+                            12), // Optional: untuk rounded corners
+                      ),
+                      child: Center(child: Loader()),
+                    ),
+                  ),
                 ),
             ],
           );
@@ -293,7 +305,7 @@ class _VerifyFacePageState extends State<VerifyFacePage> {
               );
             } else {
               return const Center(
-                child: CircularProgressIndicator(),
+                child: Loader(),
               );
             }
           },

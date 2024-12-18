@@ -244,7 +244,7 @@ class CreateEventBloc extends Bloc<CreateEventEvent, CreateEventState> {
         return response.fold((error) {
           emit(CreateEventFailed(error.message));
         }, (success) {
-          emit(CreateEventSuccess());
+          emit(CreateEventSuccess(success.event.id));
         });
       } catch (e) {
         emit(state.copyWith(errorMessage: e.toString()));

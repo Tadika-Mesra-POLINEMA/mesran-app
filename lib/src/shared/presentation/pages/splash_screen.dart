@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/src/config/injector.dart';
+import 'package:mesran_app/src/config/injectors/injector.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 import 'package:mesran_app/src/core/api/dio_client.dart';
 import 'package:shared_preferences/shared_preferences.dart';

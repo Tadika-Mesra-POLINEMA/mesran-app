@@ -57,6 +57,11 @@ const Icon trash = Icon(
 const Icon clock = Icon(
   assetName: 'assets/icons/clock.svg',
 );
+const Icon magnifier = Icon(
+  assetName: 'assets/icons/magnifier.svg',
+);
+
+// Event Themes
 const Icon formalClothes = Icon(
   assetName: 'assets/icons/formal.svg',
 );

@@ -1,13 +1,9 @@
 import 'package:go_router/go_router.dart';
-import 'package:mesran_app/pages/message/personal_message_page.dart';
+import 'package:mesran_app/src/features/chats/presentation/pages/coming_soon_chat_page.dart';
 
 List<GoRoute> chatRoutes = [
   GoRoute(
-    path: '/chatroom/empty', 
-    builder: (context, state) => const ChatPage()
-  ),
-  // GoRoute(
-  //   path: '/chatroom',
-
-  // )
+      path: '/chats',
+      pageBuilder: (context, state) =>
+          NoTransitionPage(child: const ComingSoonChatPage())),
 ];

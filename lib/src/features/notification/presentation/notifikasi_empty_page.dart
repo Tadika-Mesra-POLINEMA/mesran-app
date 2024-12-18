@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:mesran_app/src/config/styles/texts/regular.dart';
+import 'package:mesran_app/src/config/styles/texts/semibold.dart';
+import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
 import 'package:mesran_app/src/shared/presentation/widgets/custom_app_bar.dart';
-import 'package:mesran_app/utils/themes.dart';
 
 class NotifikasiEmptyPage extends StatelessWidget {
   const NotifikasiEmptyPage({super.key});

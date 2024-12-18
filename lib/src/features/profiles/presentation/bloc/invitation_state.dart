@@ -1,5 +1,4 @@
 import 'package:mesran_app/src/features/events/domain/entities/event.dart';
-import 'package:mesran_app/src/features/profiles/domain/entity/user.dart';
 
 class InvitationState {
   final Event? event;
@@ -13,9 +12,9 @@ class InvitationLoading extends InvitationState {
 }
 
 class InvitationLoaded extends InvitationState {
-  final Event? event;
+  final Event? loadedEvent;
 
-  InvitationLoaded(this.event) : super(event: null);
+  InvitationLoaded(this.loadedEvent) : super(event: loadedEvent);
 }
 
 class InvitationsLoading extends InvitationState {
@@ -23,9 +22,9 @@ class InvitationsLoading extends InvitationState {
 }
 
 class InvitationsLoaded extends InvitationState {
-  final List<Event> events;
+  final List<Event> loadedEvents;
 
-  InvitationsLoaded(this.events) : super(event: null);
+  InvitationsLoaded(this.loadedEvents) : super(events: loadedEvents);
 }
 
 class InvitationError extends InvitationState {
@@ -33,6 +32,7 @@ class InvitationError extends InvitationState {
 
   InvitationError(this.massage) : super(event: null);
 }
+
 class InvitationsError extends InvitationState {
   final String massage;
 

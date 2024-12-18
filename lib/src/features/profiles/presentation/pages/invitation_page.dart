@@ -2,15 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/intl.dart';
-import 'package:mesran_app/src/config/injector.dart';
+import 'package:mesran_app/src/config/injectors/injector.dart';
 import 'package:mesran_app/src/config/styles/icons/custom.dart';
-import 'package:mesran_app/src/config/styles/texts/medium.dart';
 import 'package:mesran_app/src/config/styles/texts/regular.dart';
 import 'package:mesran_app/src/config/styles/texts/semibold.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/error.dart';
 import 'package:mesran_app/src/config/styles/themes/colors/neutral.dart';
-import 'package:mesran_app/src/config/styles/themes/colors/primary.dart';
 import 'package:mesran_app/src/features/profiles/presentation/bloc/invitation_bloc.dart';
 import 'package:mesran_app/src/features/profiles/presentation/bloc/invitation_event.dart';
 import 'package:mesran_app/src/features/profiles/presentation/bloc/invitation_state.dart';
@@ -45,7 +42,7 @@ class _InvitationContentState extends State<InvitationContent> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() { 
+    Future.microtask(() {
       if (mounted) {
         context.read<ProfileBloc>().add(ProfileLoad());
         context.read<InvitationBloc>().add(InvitationLoad(widget.eventId));
@@ -197,8 +194,6 @@ class _InvitationContentState extends State<InvitationContent> {
                   buildWhen: (previous, current) =>
                       previous.event != current.event,
                   builder: (context, state) {
-                    print(state is InvitationLoaded);
-                    print(state.event);
                     return CircularProgressIndicator();
                   }),
               Gap(16),

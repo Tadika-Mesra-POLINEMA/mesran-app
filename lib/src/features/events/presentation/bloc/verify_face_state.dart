@@ -41,6 +41,7 @@ class VerifyFaceState extends Equatable {
 
 class VerifyFaceSuccess extends VerifyFaceState {
   @override
+  // ignore: overridden_fields
   final VerifyFaceResponse response;
 
   const VerifyFaceSuccess({required this.response})

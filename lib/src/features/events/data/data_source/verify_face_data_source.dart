@@ -15,7 +15,7 @@ class VerifyFaceDataSource {
       });
 
       final response = await _dioClient.client
-          .post('/api/users/face/predict', data: formData);
+          .post('/api/users/faces/predict', data: formData);
 
       if (response.statusCode == 200) {
         return Right(VerifyFaceResponse.fromJson(response.data['data']));

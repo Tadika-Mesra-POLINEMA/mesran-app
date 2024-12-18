@@ -74,16 +74,16 @@ class BottomNavigation extends StatelessWidget {
   void _setCurrentPath(BuildContext context, BottomNavigationPath path) {
     switch (path) {
       case BottomNavigationPath.home:
-        context.go('/home');
+        context.replace('/home');
         break;
       case BottomNavigationPath.history:
-        context.go('/history');
+        context.replace('/history');
         break;
       case BottomNavigationPath.message:
-        context.go('/messages');
+        context.replace('/chats');
         break;
       case BottomNavigationPath.profile:
-        context.go('/account/profile');
+        context.replace('/account/profile');
         break;
     }
   }

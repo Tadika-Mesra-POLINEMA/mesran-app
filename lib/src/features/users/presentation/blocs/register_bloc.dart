@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mesran_app/src/features/authentication/domain/use_case/auth_use_case.dart';
 import 'package:mesran_app/src/features/users/domain/entity/register_request.dart';
 import 'package:mesran_app/src/features/users/domain/usecases/register_use_case.dart';
 import 'package:mesran_app/src/features/users/presentation/blocs/register_event.dart';
@@ -8,10 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
   final RegisterUseCase registerUseCase;
-  final AuthUseCase authUseCase;
   final SharedPreferences sharedPreferences;
 
-  RegisterBloc(this.registerUseCase, this.authUseCase, this.sharedPreferences)
+  RegisterBloc(this.registerUseCase, this.sharedPreferences)
       : super(const RegisterState()) {
     on<RegisterEmailChanged>(_onEmailChanged);
     on<RegisterPasswordChanged>(_onPasswordChanged);
@@ -110,14 +108,6 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
           ));
           return;
         }
-
-        // Jika register berhasil, selanjutnya bisa dilakukan login
-
-        // This is uneccessary because the user will be automatically logged in after registration
-        // authUseCase.login(AuthRequest(
-        //   email: state.email,
-        //   password: state.password,
-        // ));
 
         sharedPreferences.setBool('is_registered_face', false);
 

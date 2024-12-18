@@ -13,13 +13,22 @@ class Participant {
 
   factory Participant.fromJson(Map<String, dynamic> json) {
     return Participant(
-      id: json['id'] ?? '',
-      email: json['email'] ?? '',
-      phone: json['phone'] ?? '',
-      profile: json['profile'] != null
-          ? Profile.fromJson(json['profile'])
+      id: json['user']['id'] ?? '',
+      email: json['user']['email'] ?? '',
+      phone: json['user']['phone'] ?? '',
+      profile: json['user']['profile'] != null
+          ? Profile.fromJson(json['user']['profile'])
           : Profile(username: '', firstname: '', lastname: ''),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'email': email,
+      'phone': phone,
+      'profile': profile.toJson(),
+    };
   }
 }
 
